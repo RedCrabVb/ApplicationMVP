@@ -22,6 +22,7 @@ public class Server {
 
     private String token = null;
     private String qrCode = null;
+    private JsonObject jsonObjectNews = null;
 
     private Server() {
 
@@ -40,6 +41,10 @@ public class Server {
             server = new Server();
         }
         return server;
+    }
+
+    public boolean tokenActive() {
+        return true;
     }
 
 
@@ -61,6 +66,14 @@ public class Server {
     public String getQrCode() {
         System.out.println(qrCode + " get qr code");
         return qrCode;
+    }
+
+    public JsonObject getNews() throws Exception {
+        if (jsonObjectNews == null) {
+            String result = sendInquiry(apiNews, "");
+            jsonObjectNews = new JsonParser().parse(result).getAsJsonObject();
+        }
+        return jsonObjectNews;
     }
 
     private String sendInquiry(String api, String json) throws Exception {

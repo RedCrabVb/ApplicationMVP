@@ -59,32 +59,25 @@ public class HomeFragment extends Fragment {
         });
 
 
-
-
-/*        String qrCode = "";/
-
-        if (!sharedPref.contains("qrCode") || sharedPref.getString("qrCode", "").isEmpty()) {
-            editor.putString("qrCode", homeViewModel.getQrCode());
-            editor.apply();
-        }
-
-        qrCode = sharedPref.getString("qrCode", "");*/
         String qrCode = homeViewModel.getQrCode();
 
         ListView listView = binding.dynamickList;
         ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(binding.getRoot().getContext(), android.R.layout.simple_list_item_1, homeViewModel.getItemNews());
         listView.setAdapter(arrayAdapter);
+
+        /*show news list*/
         listView.setOnItemClickListener((parent, view, position, id) -> {
-//            Toast.makeText(binding.getRoot().getContext(), item[position], Toast.LENGTH_SHORT).show();
             System.out.println("click item + " + position);
 
             Intent intent = new Intent(binding.getRoot().getContext(), ActivityNews.class);
             Bundle bundle = new Bundle();
             bundle.putString("header", homeViewModel.getItemNews()[position]);
+            bundle.putString("body", homeViewModel.getItemNewsBody()[position]);
             intent.putExtras(bundle);
             startActivity(intent);
         });
 
+        /*create qr code*/
         ImageView image = binding.imageViewQrCode;
         WindowManager manager = (WindowManager) binding.getRoot().getContext().getSystemService(binding.getRoot().getContext().WINDOW_SERVICE);
         Display display = manager.getDefaultDisplay();

@@ -68,5 +68,19 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Enter" />
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="195dp">
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <Button
+            android:id="@+id/buttonDataReset"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Data reset" />
+
     </LinearLayout>
+
 </androidx.constraintlayout.widget.ConstraintLayout>

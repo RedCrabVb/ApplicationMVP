@@ -17,6 +17,7 @@ import com.google.gson.stream.JsonReader;
 import java.io.DataInput;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -37,7 +38,8 @@ public class StartActivity extends AppCompatActivity {
         Thread thread = new Thread(() -> {{
             Server server = Server.getInstance(editTextIp.getText().toString());
 
-            try (DataInputStream inputStream = new DataInputStream(getApplicationContext().openFileInput(FILENAME))) {
+            try (DataInputStream inputStream = new DataInputStream(new FileInputStream(new File(getFilesDir(), "config.json")))) {
+                System.out.println(getFilesDir());
                 String str = inputStream.readUTF();
                 JsonObject json = new JsonParser().parse(str).getAsJsonObject();
                 server.setToken(json.get("token").getAsString());
@@ -51,7 +53,7 @@ public class StartActivity extends AppCompatActivity {
             }
 
 
-            try (DataOutputStream outputStream = new DataOutputStream(getApplicationContext().openFileOutput(FILENAME, Context.MODE_PRIVATE))){
+            try (DataOutputStream outputStream = new DataOutputStream(new FileOutputStream(new File(getFilesDir(), "config.json")))){
                 JsonObject json = new JsonObject();
                 json.addProperty("qrCode", server.getQrCode());
                 json.addProperty("token", server.getToken());

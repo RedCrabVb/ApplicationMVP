@@ -15,11 +15,16 @@ public class ActivityNews extends AppCompatActivity {
 
         Bundle b = getIntent().getExtras();
         String header = "None";
+        String body = "Text not found";
         if (b != null) {
-            header = getIntent().getExtras().getString("header");
+            header = b.getString("header");
+            body = b.getString("body");
         }
 
-        TextView textHeader = findViewById(R.id.textViewHeader);
-        textHeader.setText(header);
+        TextView textViewHeader = findViewById(R.id.textViewHeader);
+        textViewHeader.setText(header);
+
+        TextView textViewBody = findViewById(R.id.textViewNews);
+        textViewBody.setText(body);
     }
 }

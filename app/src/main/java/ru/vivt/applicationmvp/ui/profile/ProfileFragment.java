@@ -12,6 +12,8 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
+import java.io.File;
+
 import ru.vivt.applicationmvp.databinding.FragmentProfileBinding;
 
 public class ProfileFragment extends Fragment {
@@ -34,6 +36,14 @@ public class ProfileFragment extends Fragment {
                 textView.setText(s);
             }
         });
+
+        binding.buttonDataReset.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                new File(binding.getRoot().getContext().getFilesDir(), "config.json").delete();
+            }
+        });
+
         return root;
     }
 
