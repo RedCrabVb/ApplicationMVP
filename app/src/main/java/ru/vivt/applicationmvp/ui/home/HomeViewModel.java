@@ -1,10 +1,22 @@
 package ru.vivt.applicationmvp.ui.home;
 
+import android.content.Context;
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
+
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
+import com.google.gson.JsonObject;
+
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+
 import ru.vivt.applicationmvp.ui.repository.Server;
+
+import static android.provider.Telephony.Mms.Part.FILENAME;
 
 public class HomeViewModel extends ViewModel {
 
@@ -14,10 +26,8 @@ public class HomeViewModel extends ViewModel {
     private String qrCode;
 
     public HomeViewModel() {
-        new Thread(new Runnable() {
-
-            @Override
-            public void run() {
+        new Thread(() -> {
+            {
                 try {
                     server = Server.getInstance();
                     qrCode = server.getQrCode();

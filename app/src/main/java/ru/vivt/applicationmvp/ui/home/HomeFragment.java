@@ -1,6 +1,8 @@
 package ru.vivt.applicationmvp.ui.home;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.Point;
 import android.os.Bundle;
@@ -57,6 +59,18 @@ public class HomeFragment extends Fragment {
         });
 
 
+
+
+/*        String qrCode = "";/
+
+        if (!sharedPref.contains("qrCode") || sharedPref.getString("qrCode", "").isEmpty()) {
+            editor.putString("qrCode", homeViewModel.getQrCode());
+            editor.apply();
+        }
+
+        qrCode = sharedPref.getString("qrCode", "");*/
+        String qrCode = homeViewModel.getQrCode();
+
         ListView listView = binding.dynamickList;
         ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(binding.getRoot().getContext(), android.R.layout.simple_list_item_1, homeViewModel.getItemNews());
         listView.setAdapter(arrayAdapter);
@@ -77,15 +91,13 @@ public class HomeFragment extends Fragment {
         Point point = new Point();
         display.getSize(point);
         int dimen = Math.max(point.x, point.y) * 3 / 4;
-        QRGEncoder qrgEncoder = new QRGEncoder(homeViewModel.getQrCode(), null, QRGContents.Type.TEXT, dimen);
+        QRGEncoder qrgEncoder = new QRGEncoder(qrCode, null, QRGContents.Type.TEXT, dimen);
         try {
             Bitmap bitmap = qrgEncoder.encodeAsBitmap();
             image.setImageBitmap(bitmap);
         } catch (WriterException e) {
-            Log.e("Qr code errore", e.toString());
+            Log.e("Qr code error", e.toString());
         }
-
-        System.out.println("home fragment create");
 
         return root;
     }

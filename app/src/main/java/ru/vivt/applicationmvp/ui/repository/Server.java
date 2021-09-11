@@ -14,14 +14,14 @@ import java.util.Optional;
 public class Server {
     private static Server server;
 
-    private final String url = "http://10.0.2.2:8080/%s?%s";
+    private static String url = "";
     private final String apiNews = "api/news";
     private final String apiQrCode = "api/qrCode";
     private final String apiPersonData = "api/setPersonDate";
     private final String apiRegistration = "api/registration";
 
-    private String token = "";
-    private String qrCode = "";
+    private String token = null;
+    private String qrCode = null;
 
     private Server() {
 
@@ -30,7 +30,14 @@ public class Server {
     public static Server getInstance() {
         if (server == null) {
             server = new Server();
-            server.registration();
+        }
+        return server;
+    }
+
+    public static Server getInstance(String ip) {
+        if (server == null) {
+            url = "http://" + ip + ":8080/%s?%s";
+            server = new Server();
         }
         return server;
     }
@@ -69,14 +76,15 @@ public class Server {
     private HttpURLConnection getResponseServer(URL url) throws Exception {
         URLConnection urlConnection = url.openConnection();
         HttpURLConnection connection = (HttpURLConnection) urlConnection;
+
         return connection;
     }
 
     private String connectionResponseToString(HttpURLConnection connection) throws IOException {
         BufferedReader in = new BufferedReader(new InputStreamReader(connection.getInputStream()));
         String urlString = "";
-        String current;
 
+        String current;
         while ((current = in.readLine()) != null) {
             urlString += current;
         }
@@ -84,6 +92,18 @@ public class Server {
         connection.disconnect();
 
         return urlString;
+    }
+
+    public String getToken() {
+        return token;
+    }
+
+    public void setToken(String token) {
+        this.token = token;
+    }
+
+    public void setQrCode(String qrCode) {
+        this.qrCode = qrCode;
     }
 }
 /*
