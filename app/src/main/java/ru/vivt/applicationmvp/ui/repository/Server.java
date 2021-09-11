@@ -47,6 +47,14 @@ public class Server {
         return true;
     }
 
+    /*
+    Error set data (phoneNumber(Server, DB) - password(Android))
+    */
+    public void setData(String userName, String email, String password) throws Exception {
+        String result = sendInquiry(apiPersonData, String.format("token=%s&username=%s&email=%s&phoneNumber=%s",  token, userName, email, password));
+        System.out.println(result);
+    }
+
 
     public boolean registration() {
         try {
@@ -119,50 +127,3 @@ public class Server {
         this.qrCode = qrCode;
     }
 }
-/*
- private static String token;
-    private static boolean isRunning;
-
-    @BeforeEach
-    void serverStart() throws Exception {
-        if (!isRunning) {
-            Main.main(new String[]{});
-            isRunning = true;
-        }
-    }
-
-    @AfterEach
-    void endTest() throws Exception {
-        Thread.sleep(50);//fix bug java, https://bugs.openjdk.java.net/browse/JDK-8214300
-    }
-
-    @Test
-    void serverNewsGet() throws Exception {
-        String api = "api/news";
-        String result = sendInquiry(api, "");
-        System.out.println(result);
-    }
-
-    @Test
-    void serverRegistration() throws Exception {
-        String api = "api/registration";
-        String result = sendInquiry(api, "");
-        token = JsonParser.parseString(result).getAsJsonObject().get("token").getAsString();
-        System.out.println(result);
-    }
-
-    @Test
-    void getQrCode() throws Exception {
-        String api = "api/qrCode";
-        String result = sendInquiry(api, "token=" + token);
-        System.out.println(result);
-    }
-
-    @Test
-    void setPersonData() throws Exception {
-        String api = "api/setPersonDate";
-        String result = sendInquiry(api, String.format("token=%s&email=cany245",  token));
-        System.out.println(result);
-    }
-
-*/

@@ -15,6 +15,7 @@ import androidx.lifecycle.ViewModelProvider;
 import java.io.File;
 
 import ru.vivt.applicationmvp.databinding.FragmentProfileBinding;
+import ru.vivt.applicationmvp.ui.repository.Server;
 
 public class ProfileFragment extends Fragment {
 
@@ -41,6 +42,29 @@ public class ProfileFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 new File(binding.getRoot().getContext().getFilesDir(), "config.json").delete();
+            }
+        });
+
+        binding.buttonEnter.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String editPass1 = binding.editTextTextPassword.getText().toString();
+                String editPass2 = binding.editTextTextPassword2.getText().toString();
+                if (!editPass1.equals(editPass2)) {
+                    binding.textViewError.setText("Password incorrect");
+                    return;
+                }
+
+                new Thread(() -> {
+                    try {
+                        Server.getInstance().setData(
+                                binding.editTextTextPersonName.getText().toString(),
+                                binding.editTextTextPersonEmail.getText().toString(),
+                                editPass1);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }).start();
             }
         });
 
