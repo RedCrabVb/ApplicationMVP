@@ -73,6 +73,7 @@ public class HomeFragment extends Fragment {
             Bundle bundle = new Bundle();
             bundle.putString("header", homeViewModel.getItemNews()[position]);
             bundle.putString("body", homeViewModel.getItemNewsBody()[position]);
+            bundle.putString("imgPath", homeViewModel.getItemNewsImgPath()[position]);
             intent.putExtras(bundle);
             startActivity(intent);
         });

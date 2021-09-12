@@ -1,10 +1,16 @@
 package ru.vivt.applicationmvp.ui.repository;
 
+import android.app.DownloadManager;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.widget.ImageView;
+
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
 import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
@@ -19,6 +25,7 @@ public class Server {
     private final String apiQrCode = "api/qrCode";
     private final String apiPersonData = "api/setPersonDate";
     private final String apiRegistration = "api/registration";
+    private final String apiImgNews = "src/img";
 
     private String token = null;
     private String qrCode = null;
@@ -45,6 +52,10 @@ public class Server {
 
     public boolean tokenActive() {
         return true;
+    }
+
+    public String getPathUrlToDownloadImgNews(String imgPath) {
+        return String.format(url, apiImgNews, imgPath).replace('?', '/');
     }
 
     /*

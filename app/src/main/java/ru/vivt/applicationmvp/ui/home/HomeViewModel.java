@@ -16,6 +16,7 @@ public class HomeViewModel extends ViewModel {
     private MutableLiveData<String> mText;
     private String[] itemNews = new String[]{};
     private String[] itemNewsBody = new String[]{};
+    private String[] itemNewsImgPath = new String[]{};
     private String qrCode;
 
     public HomeViewModel() {
@@ -28,11 +29,13 @@ public class HomeViewModel extends ViewModel {
                     JsonArray jsonArrayNews = server.getNews().getAsJsonArray("News");
                     itemNews = new String[jsonArrayNews.size()];
                     itemNewsBody = new String[jsonArrayNews.size()];
+                    itemNewsImgPath = new String[jsonArrayNews.size()];
                     AtomicInteger i = new AtomicInteger();
                     jsonArrayNews.forEach(r -> {
                         i.getAndIncrement();
                         itemNews[i.get() - 1] = r.getAsJsonObject().get("title").getAsString();
                         itemNewsBody[i.get() - 1] = r.getAsJsonObject().get("body").getAsString();
+                        itemNewsImgPath[i.get() - 1] = r.getAsJsonObject().get("imgPath").getAsString();
                     });
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -54,6 +57,10 @@ public class HomeViewModel extends ViewModel {
 
     public String getQrCode() {
         return qrCode;
+    }
+
+    public String[] getItemNewsImgPath() {
+        return itemNewsImgPath;
     }
 
     public String[] getItemNewsBody() {
