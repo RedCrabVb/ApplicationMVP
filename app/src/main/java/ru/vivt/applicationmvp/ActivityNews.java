@@ -1,20 +1,14 @@
 package ru.vivt.applicationmvp;
 
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import org.w3c.dom.Text;
+import java.util.concurrent.ExecutionException;
 
-import java.io.InputStream;
-import java.net.HttpURLConnection;
-import java.net.URL;
-
+import ru.vivt.applicationmvp.ui.repository.DownloadImage;
 import ru.vivt.applicationmvp.ui.repository.Server;
 
 public class ActivityNews extends AppCompatActivity {
@@ -33,7 +27,7 @@ public class ActivityNews extends AppCompatActivity {
             imgPath = b.getString("imgPath");
         }
 
-        TextView textViewHeader = findViewById(R.id.textViewHeader);
+        TextView textViewHeader = findViewById(R.id.textViewHeader_list);
         textViewHeader.setText(header);
 
         TextView textViewBody = findViewById(R.id.textViewNews);
@@ -41,30 +35,12 @@ public class ActivityNews extends AppCompatActivity {
 
         ImageView imageViewNews = findViewById(R.id.imageViewNews);
 
-        DownloadImage downloadImage = new DownloadImage();
         try {
-            String url = Server.getInstance().getPathUrlToDownloadImgNews(imgPath);
-            Bitmap bitmap = downloadImage.execute(url).get();
-            imageViewNews.setImageBitmap(bitmap);
-        } catch (Exception e) {
+            imageViewNews.setImageBitmap(new DownloadImage().execute(Server.getInstance().getPathUrlToDownloadImgNews(imgPath)).get());
+        } catch (ExecutionException e) {
             e.printStackTrace();
-        }
-    }
-
-    public class DownloadImage extends AsyncTask<String, Void, Bitmap> {
-        @Override
-        protected Bitmap doInBackground(String... strings) {
-            Bitmap bitmap = null;
-            try {
-                URL url = new URL(strings[0]);
-                HttpURLConnection httpURLConnection = (HttpURLConnection) url.openConnection();
-                InputStream in = httpURLConnection.getInputStream();
-                bitmap = BitmapFactory.decodeStream(in);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-
-            return bitmap;
+        } catch (InterruptedException e) {
+            e.printStackTrace();
         }
     }
 }

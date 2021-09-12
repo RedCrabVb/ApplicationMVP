@@ -5,6 +5,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.widget.ImageView;
 
+import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
@@ -16,6 +17,7 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLConnection;
 import java.util.Optional;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class Server {
     private static Server server;
@@ -58,6 +60,26 @@ public class Server {
         return String.format(url, apiImgNews, imgPath).replace('?', '/');
     }
 
+    public News[] getNews() {
+        try {
+            News news[];
+            JsonArray jsonArrayNews = Server.getInstance().getNewsJson().getAsJsonArray("News");
+            news = new News[jsonArrayNews.size()];
+            AtomicInteger i = new AtomicInteger();
+            jsonArrayNews.forEach(r -> {
+                i.getAndIncrement();
+                JsonObject jsonNews = r.getAsJsonObject();
+                news[i.get() - 1] = new News(jsonNews.get("title").getAsString(),
+                        jsonNews.get("body").getAsString(),
+                        jsonNews.get("imgPath").getAsString());
+            });
+            return news;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new News[]{};
+        }
+    }
+
     /*
     Error set data (phoneNumber(Server, DB) - password(Android))
     */
@@ -87,7 +109,7 @@ public class Server {
         return qrCode;
     }
 
-    public JsonObject getNews() throws Exception {
+    private JsonObject getNewsJson() throws Exception {
         if (jsonObjectNews == null) {
             String result = sendInquiry(apiNews, "");
             jsonObjectNews = new JsonParser().parse(result).getAsJsonObject();

@@ -27,12 +27,18 @@ import androidx.lifecycle.ViewModelProvider;
 
 import com.google.zxing.WriterException;
 
+import java.lang.reflect.Array;
+import java.util.ArrayList;
+import java.util.Arrays;
+
 import androidmads.library.qrgenearator.QRGContents;
 import androidmads.library.qrgenearator.QRGEncoder;
 import ru.vivt.applicationmvp.ActivityNews;
 import ru.vivt.applicationmvp.MainActivity;
 import ru.vivt.applicationmvp.R;
 import ru.vivt.applicationmvp.databinding.FragmentHomeBinding;
+import ru.vivt.applicationmvp.ui.repository.News;
+import ru.vivt.applicationmvp.ui.repository.NewsAdapter;
 
 import static android.content.Context.WINDOW_SERVICE;
 import static androidx.core.content.ContextCompat.getSystemService;
@@ -62,7 +68,8 @@ public class HomeFragment extends Fragment {
         String qrCode = homeViewModel.getQrCode();
 
         ListView listView = binding.dynamickList;
-        ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(binding.getRoot().getContext(), android.R.layout.simple_list_item_1, homeViewModel.getItemNews());
+        ArrayAdapter<News> arrayAdapter = new NewsAdapter(binding.getRoot().getContext(), R.layout.list_news,
+                new ArrayList<>(Arrays.asList(homeViewModel.getNews())));
         listView.setAdapter(arrayAdapter);
 
         /*show news list*/
@@ -71,9 +78,10 @@ public class HomeFragment extends Fragment {
 
             Intent intent = new Intent(binding.getRoot().getContext(), ActivityNews.class);
             Bundle bundle = new Bundle();
-            bundle.putString("header", homeViewModel.getItemNews()[position]);
-            bundle.putString("body", homeViewModel.getItemNewsBody()[position]);
-            bundle.putString("imgPath", homeViewModel.getItemNewsImgPath()[position]);
+            News news = homeViewModel.getNews()[position];
+            bundle.putString("header", news.getTitle());
+            bundle.putString("body", news.getBody());
+            bundle.putString("imgPath", news.getImgPath());
             intent.putExtras(bundle);
             startActivity(intent);
         });
