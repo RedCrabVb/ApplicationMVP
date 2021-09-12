@@ -19,19 +19,19 @@ import ru.vivt.applicationmvp.ui.repository.Server;
 
 public class ProfileFragment extends Fragment {
 
-    private ProfileViewModel notificationsViewModel;
+    private ProfileViewModel profileViewModel;
     private FragmentProfileBinding binding;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
-        notificationsViewModel =
+        profileViewModel =
                 new ViewModelProvider(this).get(ProfileViewModel.class);
 
         binding = FragmentProfileBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
 
         final TextView textView = binding.textNotifications;
-        notificationsViewModel.getText().observe(getViewLifecycleOwner(), new Observer<String>() {
+        profileViewModel.getText().observe(getViewLifecycleOwner(), new Observer<String>() {
             @Override
             public void onChanged(@Nullable String s) {
                 textView.setText(s);
@@ -42,31 +42,56 @@ public class ProfileFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 new File(binding.getRoot().getContext().getFilesDir(), "config.json").delete();
+                System.exit(0);
             }
         });
 
         binding.buttonEnter.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                binding.textViewError.setVisibility(View.GONE);
                 String editPass1 = binding.editTextTextPassword.getText().toString();
                 String editPass2 = binding.editTextTextPassword2.getText().toString();
                 if (!editPass1.equals(editPass2)) {
                     binding.textViewError.setText("Password incorrect");
+                    binding.textViewError.setVisibility(View.VISIBLE);
                     return;
                 }
 
                 new Thread(() -> {
                     try {
+                        String username = binding.editTextTextPersonName.getText().toString();
+                        String email = binding.editTextTextPersonEmail.getText().toString();
                         Server.getInstance().setData(
                                 binding.editTextTextPersonName.getText().toString(),
                                 binding.editTextTextPersonEmail.getText().toString(),
                                 editPass1);
+                        profileViewModel.putUsername(email);
+//                        profileViewModel.getUsername().postValue(username);
+                        profileViewModel.setDataInMemory();
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
                 }).start();
             }
         });
+
+        binding.textViewError.setVisibility(View.GONE);
+
+        profileViewModel.getUsername().observe(getViewLifecycleOwner(), new Observer<String>() {
+            @Override
+            public void onChanged(@Nullable String s) {
+                binding.editTextTextPersonName.setText(s);
+            }
+        });
+
+        profileViewModel.getEmail().observe(getViewLifecycleOwner(), new Observer<String>() {
+            @Override
+            public void onChanged(@Nullable String s) {
+                binding.editTextTextPersonEmail.setText(s);
+            }
+        });
+
 
         return root;
     }

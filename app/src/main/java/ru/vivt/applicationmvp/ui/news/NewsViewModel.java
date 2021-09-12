@@ -15,14 +15,15 @@ import ru.vivt.applicationmvp.ui.repository.Server;
 public class NewsViewModel extends ViewModel {
 
     private MutableLiveData<String> mText;
-    private News[] news = new News[]{};
+    private MutableLiveData<News[]> news;
 
     public NewsViewModel() {
         mText = new MutableLiveData<>();
+        news = new MutableLiveData<>();
         mText.setValue("This is news fragment");
         new Thread(() -> {
             {
-                news = Server.getInstance().getNews();
+                news.postValue(Server.getInstance().getNews());
             }
         }).start();
 
@@ -32,7 +33,7 @@ public class NewsViewModel extends ViewModel {
         return mText;
     }
 
-    public News[] getNews() {
+    public LiveData<News[]> getNews() {
         return news;
     }
 }

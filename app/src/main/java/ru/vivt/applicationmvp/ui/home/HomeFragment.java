@@ -39,6 +39,7 @@ import ru.vivt.applicationmvp.R;
 import ru.vivt.applicationmvp.databinding.FragmentHomeBinding;
 import ru.vivt.applicationmvp.ui.repository.News;
 import ru.vivt.applicationmvp.ui.repository.NewsAdapter;
+import ru.vivt.applicationmvp.ui.repository.ObserverArrayNews;
 
 import static android.content.Context.WINDOW_SERVICE;
 import static androidx.core.content.ContextCompat.getSystemService;
@@ -65,41 +66,27 @@ public class HomeFragment extends Fragment {
         });
 
 
-        String qrCode = homeViewModel.getQrCode();
-
-        ListView listView = binding.dynamickList;
-        ArrayAdapter<News> arrayAdapter = new NewsAdapter(binding.getRoot().getContext(), R.layout.list_news,
-                new ArrayList<>(Arrays.asList(homeViewModel.getNews())));
-        listView.setAdapter(arrayAdapter);
-
-        /*show news list*/
-        listView.setOnItemClickListener((parent, view, position, id) -> {
-            System.out.println("click item + " + position);
-
-            Intent intent = new Intent(binding.getRoot().getContext(), ActivityNews.class);
-            Bundle bundle = new Bundle();
-            News news = homeViewModel.getNews()[position];
-            bundle.putString("header", news.getTitle());
-            bundle.putString("body", news.getBody());
-            bundle.putString("imgPath", news.getImgPath());
-            intent.putExtras(bundle);
-            startActivity(intent);
+        homeViewModel.getQrCode().observe(getViewLifecycleOwner(), new Observer<String>() {
+            @Override
+            public void onChanged(String s) {
+                /*create qr code*/
+                ImageView image = binding.imageViewQrCode;
+                WindowManager manager = (WindowManager) binding.getRoot().getContext().getSystemService(binding.getRoot().getContext().WINDOW_SERVICE);
+                Display display = manager.getDefaultDisplay();
+                Point point = new Point();
+                display.getSize(point);
+                int dimen = Math.max(point.x, point.y) * 3 / 4;
+                QRGEncoder qrgEncoder = new QRGEncoder(s, null, QRGContents.Type.TEXT, dimen);
+                try {
+                    Bitmap bitmap = qrgEncoder.encodeAsBitmap();
+                    image.setImageBitmap(bitmap);
+                } catch (WriterException e) {
+                    Log.e("Qr code error", e.toString());
+                }
+            }
         });
 
-        /*create qr code*/
-        ImageView image = binding.imageViewQrCode;
-        WindowManager manager = (WindowManager) binding.getRoot().getContext().getSystemService(binding.getRoot().getContext().WINDOW_SERVICE);
-        Display display = manager.getDefaultDisplay();
-        Point point = new Point();
-        display.getSize(point);
-        int dimen = Math.max(point.x, point.y) * 3 / 4;
-        QRGEncoder qrgEncoder = new QRGEncoder(qrCode, null, QRGContents.Type.TEXT, dimen);
-        try {
-            Bitmap bitmap = qrgEncoder.encodeAsBitmap();
-            image.setImageBitmap(bitmap);
-        } catch (WriterException e) {
-            Log.e("Qr code error", e.toString());
-        }
+        homeViewModel.getNews().observe(getViewLifecycleOwner(), new ObserverArrayNews(binding.getRoot().getContext(), binding.dynamickList));
 
         return root;
     }

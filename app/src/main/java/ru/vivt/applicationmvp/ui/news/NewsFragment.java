@@ -23,6 +23,7 @@ import ru.vivt.applicationmvp.R;
 import ru.vivt.applicationmvp.databinding.FragmentNewsBinding;
 import ru.vivt.applicationmvp.ui.repository.News;
 import ru.vivt.applicationmvp.ui.repository.NewsAdapter;
+import ru.vivt.applicationmvp.ui.repository.ObserverArrayNews;
 
 public class NewsFragment extends Fragment {
 
@@ -45,26 +46,7 @@ public class NewsFragment extends Fragment {
             }
         });
 
-        ListView listView = binding.listNews;
-        ArrayAdapter<News> arrayAdapter = new NewsAdapter(binding.getRoot().getContext(), R.layout.list_news,
-                new ArrayList<>(Arrays.asList(dashboardViewModel.getNews())));
-        listView.setAdapter(arrayAdapter);
-
-        /*show news list
-        * dry - error
-        * */
-        listView.setOnItemClickListener((parent, view, position, id) -> {
-            System.out.println("click item + " + position);
-
-            Intent intent = new Intent(binding.getRoot().getContext(), ActivityNews.class);
-            Bundle bundle = new Bundle();
-            News news = dashboardViewModel.getNews()[position];
-            bundle.putString("header", news.getTitle());
-            bundle.putString("body", news.getBody());
-            bundle.putString("imgPath", news.getImgPath());
-            intent.putExtras(bundle);
-            startActivity(intent);
-        });
+        dashboardViewModel.getNews().observe(getViewLifecycleOwner(), new ObserverArrayNews(binding.getRoot().getContext(), binding.listNews));
 
         return root;
     }

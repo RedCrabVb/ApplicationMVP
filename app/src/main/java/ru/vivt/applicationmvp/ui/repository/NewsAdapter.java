@@ -40,11 +40,10 @@ public class NewsAdapter extends ArrayAdapter<News> {
 
         ImageView imageView = convertView.findViewById(R.id.imageViewHeader_list);
 
-        DownloadImage downloadImage = new DownloadImage();
+        DownloadImage downloadImage = new DownloadImage(imageView);
         try {
             String url = Server.getInstance().getPathUrlToDownloadImgNews(getItem(position).getImgPath());
-            Bitmap bitmap = downloadImage.execute(url).get();
-            imageView.setImageBitmap(bitmap);
+            downloadImage.execute(url);
         } catch (Exception e) {
             e.printStackTrace();
         }

@@ -1,25 +1,24 @@
 package ru.vivt.applicationmvp.ui.repository;
 
-import android.app.DownloadManager;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.widget.ImageView;
+import android.graphics.Path;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLConnection;
-import java.util.Optional;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class Server {
+    public static final String qrCode = "qrCode", fileNameConfig = "config.json", token = "token";
+    private static File getFilesDir;
+
     private static Server server;
 
     private static String url = "";
@@ -30,8 +29,8 @@ public class Server {
     private final String apiImgNews = "src/img";
     private final String apiStatusToken = "api/getStatusToken";
 
-    private String token = null;
-    private String qrCode = null;
+    private String tokenConnection = null;
+    private String qrCodeConntion = null;
     private JsonObject jsonObjectNews = null;
 
     private Server() {
@@ -53,9 +52,17 @@ public class Server {
         return server;
     }
 
+    public static File getGetFilesDir() {
+        return getFilesDir;
+    }
+
+    public static void setGetFilesDir(File getFilesDir) {
+        Server.getFilesDir = getFilesDir;
+    }
+
     public boolean tokenActive() {
         try {
-            return new JsonParser().parse(sendInquiry(apiStatusToken, String.format("token=%s",  token)))
+            return new JsonParser().parse(sendInquiry(apiStatusToken, String.format("token=%s", tokenConnection)))
                     .getAsJsonObject().get("result").getAsBoolean();
         } catch (Exception e) {
             e.printStackTrace();
@@ -91,7 +98,7 @@ public class Server {
     Error set data (phoneNumber(Server, DB) - password(Android))
     */
     public void setData(String userName, String email, String password) throws Exception {
-        String result = sendInquiry(apiPersonData, String.format("token=%s&username=%s&email=%s&phoneNumber=%s",  token, userName, email, password));
+        String result = sendInquiry(apiPersonData, String.format("token=%s&username=%s&email=%s&phoneNumber=%s", tokenConnection, userName, email, password));
         System.out.println(result);
     }
 
@@ -101,8 +108,8 @@ public class Server {
             String api = "api/registration";
             String result = (sendInquiry(api, ""));
             JsonObject jsonReg =  new JsonParser().parse(result).getAsJsonObject();
-            token = jsonReg.get("token").getAsString();
-            qrCode = jsonReg.get("qrCode").getAsString();
+            tokenConnection = jsonReg.get("token").getAsString();
+            qrCodeConntion = jsonReg.get("qrCode").getAsString();
             System.out.println(result);
             return true;
         } catch (Exception e) {
@@ -111,9 +118,9 @@ public class Server {
         }
     }
 
-    public String getQrCode() {
-        System.out.println(qrCode + " get qr code");
-        return qrCode;
+    public String getQrCodeConntion() {
+        System.out.println(qrCodeConntion + " get qr code");
+        return qrCodeConntion;
     }
 
     private JsonObject getNewsJson() throws Exception {
@@ -155,15 +162,15 @@ public class Server {
         return urlString;
     }
 
-    public String getToken() {
-        return token;
+    public String getTokenConnection() {
+        return tokenConnection;
     }
 
-    public void setToken(String token) {
-        this.token = token;
+    public void setTokenConnection(String tokenConnection) {
+        this.tokenConnection = tokenConnection;
     }
 
-    public void setQrCode(String qrCode) {
-        this.qrCode = qrCode;
+    public void setQrCodeConntion(String qrCodeConntion) {
+        this.qrCodeConntion = qrCodeConntion;
     }
 }
