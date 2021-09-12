@@ -28,6 +28,7 @@ public class Server {
     private final String apiPersonData = "api/setPersonDate";
     private final String apiRegistration = "api/registration";
     private final String apiImgNews = "src/img";
+    private final String apiStatusToken = "api/getStatusToken";
 
     private String token = null;
     private String qrCode = null;
@@ -53,7 +54,13 @@ public class Server {
     }
 
     public boolean tokenActive() {
-        return true;
+        try {
+            return new JsonParser().parse(sendInquiry(apiStatusToken, String.format("token=%s",  token)))
+                    .getAsJsonObject().get("result").getAsBoolean();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
     }
 
     public String getPathUrlToDownloadImgNews(String imgPath) {

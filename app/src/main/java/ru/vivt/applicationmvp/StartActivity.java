@@ -52,6 +52,10 @@ public class StartActivity extends AppCompatActivity {
                 e.printStackTrace();
             }
 
+            if (!server.tokenActive()) {
+                new File(this.getFilesDir(), "config.json").delete();
+                server.registration();
+            }
 
             try (DataOutputStream outputStream = new DataOutputStream(new FileOutputStream(new File(getFilesDir(), "config.json")))){
                 JsonObject json = new JsonObject();
