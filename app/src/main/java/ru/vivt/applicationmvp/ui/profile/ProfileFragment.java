@@ -63,11 +63,11 @@ public class ProfileFragment extends Fragment {
                         String username = binding.editTextTextPersonName.getText().toString();
                         String email = binding.editTextTextPersonEmail.getText().toString();
                         Server.getInstance().setData(
-                                binding.editTextTextPersonName.getText().toString(),
-                                binding.editTextTextPersonEmail.getText().toString(),
+                                username,
+                                email,
                                 editPass1);
-                        profileViewModel.putUsername(email);
-//                        profileViewModel.getUsername().postValue(username);
+                        profileViewModel.putUsername(username);
+                        profileViewModel.putEmail(email);
                         profileViewModel.setDataInMemory();
                     } catch (Exception e) {
                         e.printStackTrace();

@@ -61,7 +61,11 @@ public class ProfileViewModel extends ViewModel {
     }
 
     public void putUsername(String username) {
-        this.username.setValue(username);
+        this.username.postValue(username);
+    }
+
+    public void putEmail(String email) {
+        this.email.postValue(email);
     }
 
     public void setDataInMemory() {
