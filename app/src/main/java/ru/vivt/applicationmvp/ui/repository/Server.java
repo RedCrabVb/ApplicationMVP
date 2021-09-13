@@ -17,7 +17,6 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 public class Server {
     public static final String qrCode = "qrCode", fileNameConfig = "config.json", token = "token";
-    private static File getFilesDir;
 
     private static Server server;
 
@@ -51,14 +50,6 @@ public class Server {
             server = new Server();
         }
         return server;
-    }
-
-    public static File getGetFilesDir() {
-        return getFilesDir;
-    }
-
-    public static void setGetFilesDir(File getFilesDir) {
-        Server.getFilesDir = getFilesDir;
     }
 
     public boolean tokenActive() {
@@ -109,9 +100,10 @@ public class Server {
     /*
     Error set data (phoneNumber(Server, DB) - password(Android))
     */
-    public void setData(String userName, String email, String password) throws Exception {
+    public String setData(String userName, String email, String password) throws Exception {
         String result = sendInquiry(apiPersonData, String.format("token=%s&username=%s&email=%s&password=%s", tokenConnection, userName, email, password));
         System.out.println(result);
+        return result;
     }
 
 

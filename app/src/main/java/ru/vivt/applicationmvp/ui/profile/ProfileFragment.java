@@ -1,5 +1,8 @@
 package ru.vivt.applicationmvp.ui.profile;
 
+import android.graphics.Bitmap;
+import android.graphics.Color;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -46,6 +49,8 @@ public class ProfileFragment extends Fragment {
             }
         });
 
+        profileViewModel.getDataFromFile(binding.getRoot().getContext().getCacheDir());
+
         binding.buttonEnter.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -58,24 +63,8 @@ public class ProfileFragment extends Fragment {
                     return;
                 }
 
-                new Thread(() -> {
-                    try {
-                        String username = binding.editTextTextPersonName.getText().toString();
-                        String email = binding.editTextTextPersonEmail.getText().toString();
-                        Server.getInstance().setData(
-                                username,
-                                email,
-                                editPass1);
-                        profileViewModel.putUsername(username);
-                        profileViewModel.putEmail(email);
-                        profileViewModel.setDataInMemory();
-
-                        binding.textViewError.setText("Data send to server");
-                        binding.textViewError.setVisibility(View.VISIBLE);
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-                }).start();
+                SetDataInUI setDataInUI = new SetDataInUI(editPass1);
+                setDataInUI.execute("");
             }
         });
 
@@ -107,6 +96,8 @@ public class ProfileFragment extends Fragment {
         });
 
 
+
+
         return root;
     }
 
@@ -114,5 +105,43 @@ public class ProfileFragment extends Fragment {
     public void onDestroyView() {
         super.onDestroyView();
         binding = null;
+    }
+
+    class SetDataInUI extends AsyncTask<String, Void, String> {
+        private String status;
+        private String editPass1;
+        private String username;
+        private String email;
+
+        public SetDataInUI(String editPass1) {
+            this.editPass1 = editPass1;
+        }
+
+        @Override
+        protected String doInBackground(String... voids) {
+            String username = binding.editTextTextPersonName.getText().toString();
+            String email = binding.editTextTextPersonEmail.getText().toString();
+            try {
+                status = Server.getInstance().setData(
+                        username,
+                        email,
+                        editPass1);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(String s) {
+            profileViewModel.putUsername(username);
+            profileViewModel.putEmail(email);
+            profileViewModel.setDataInMemory(binding.getRoot().getContext());
+            binding.textViewError.setTextColor(Color.GRAY);
+            binding.textViewError.setText("Data send to server, status: " + status);
+            binding.textViewError.setVisibility(View.VISIBLE);
+            System.out.println("End");
+            super.onPostExecute(s);
+        }
     }
 }

@@ -32,14 +32,13 @@ public class StartActivity extends AppCompatActivity {
         Thread thread = new Thread(() -> {{
             Server server = Server.getInstance(editTextIp.getText().toString());
 
-            Server.setGetFilesDir(getFilesDir());
-            try (DataInputStream inputStream = new DataInputStream(new FileInputStream(new File(Server.getGetFilesDir(), Server.fileNameConfig)))) {
+            try (DataInputStream inputStream = new DataInputStream(new FileInputStream(new File(this.getFilesDir(), Server.fileNameConfig)))) {
                 String str = inputStream.readUTF();
                 JsonObject json = new JsonParser().parse(str).getAsJsonObject();
                 server.setTokenConnection(json.get(Server.token).getAsString());
                 server.setQrCodeConntion(json.get(Server.qrCode).getAsString());
             } catch (Exception e) {
-                new File(Server.getGetFilesDir(), Server.fileNameConfig).delete();
+                new File(getFilesDir(), Server.fileNameConfig).delete();
                 if (!server.registration()) {
                     Toast.makeText(StartActivity.this, "False to connection server", Toast.LENGTH_LONG).show();
                     System.exit(-1);

@@ -1,5 +1,6 @@
 package ru.vivt.applicationmvp.ui.profile;
 
+import android.content.Context;
 import android.widget.Toast;
 
 import androidx.lifecycle.LiveData;
@@ -32,8 +33,10 @@ public class ProfileViewModel extends ViewModel {
         username = new MutableLiveData<>();
         email = new MutableLiveData<>();
         mText.setValue("This is profile fragment");
+    }
 
-        try (DataInputStream inputStream = new DataInputStream(new FileInputStream(new File(Server.getGetFilesDir(), Server.fileNameConfig)))) {
+    public void getDataFromFile(File file) {
+        try (DataInputStream inputStream = new DataInputStream(new FileInputStream(new File(file, Server.fileNameConfig)))) {
             String str = inputStream.readUTF();
             json = new JsonParser().parse(str).getAsJsonObject();
 
@@ -45,6 +48,7 @@ public class ProfileViewModel extends ViewModel {
             }
         } catch (Exception e) {
             e.printStackTrace();
+            json = new JsonObject();
         }
     }
 
@@ -68,8 +72,8 @@ public class ProfileViewModel extends ViewModel {
         this.email.postValue(email);
     }
 
-    public void setDataInMemory() {
-        try (DataOutputStream outputStream = new DataOutputStream(new FileOutputStream(new File(Server.getGetFilesDir(), Server.fileNameConfig)))){
+    public void setDataInMemory(Context context) {
+        try (DataOutputStream outputStream = new DataOutputStream(new FileOutputStream(new File(context.getCacheDir(), Server.fileNameConfig)))){
             if (json.has(usernameKey)) {
                 json.remove(usernameKey);
             }
