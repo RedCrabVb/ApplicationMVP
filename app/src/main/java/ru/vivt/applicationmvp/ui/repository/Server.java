@@ -28,6 +28,7 @@ public class Server {
     private final String apiRegistration = "api/registration";
     private final String apiImgNews = "src/img";
     private final String apiStatusToken = "api/getStatusToken";
+    private final String apiResetPassword = "api/resetPassword";
 
     private String tokenConnection = null;
     private String qrCodeConntion = null;
@@ -74,6 +75,17 @@ public class Server {
         return String.format(url, apiImgNews, imgPath).replace('?', '/');
     }
 
+    public String resetPassword(String email) {
+        String api = "api/resetPassword";
+        String result = "error";
+        try {
+            result = sendInquiry(api, String.format("email=%s", email));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return result;
+    }
+
     public News[] getNews() {
         try {
             News news[];
@@ -98,7 +110,7 @@ public class Server {
     Error set data (phoneNumber(Server, DB) - password(Android))
     */
     public void setData(String userName, String email, String password) throws Exception {
-        String result = sendInquiry(apiPersonData, String.format("token=%s&username=%s&email=%s&phoneNumber=%s", tokenConnection, userName, email, password));
+        String result = sendInquiry(apiPersonData, String.format("token=%s&username=%s&email=%s&password=%s", tokenConnection, userName, email, password));
         System.out.println(result);
     }
 

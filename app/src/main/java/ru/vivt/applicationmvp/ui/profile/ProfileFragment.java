@@ -69,6 +69,9 @@ public class ProfileFragment extends Fragment {
                         profileViewModel.putUsername(username);
                         profileViewModel.putEmail(email);
                         profileViewModel.setDataInMemory();
+
+                        binding.textViewError.setText("Data send to server");
+                        binding.textViewError.setVisibility(View.VISIBLE);
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
@@ -89,6 +92,17 @@ public class ProfileFragment extends Fragment {
             @Override
             public void onChanged(@Nullable String s) {
                 binding.editTextTextPersonEmail.setText(s);
+            }
+        });
+
+        binding.buttonResetPassword.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                new Thread(() -> {
+                    String strResponse = Server.getInstance().resetPassword(profileViewModel.getEmail().getValue());
+                    binding.textViewError.setText(strResponse);
+                    binding.textViewError.setVisibility(View.VISIBLE);
+            }).start();
             }
         });
 

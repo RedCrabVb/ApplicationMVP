@@ -78,9 +78,16 @@
             android:layout_height="wrap_content"
             android:text="Enter" />
 
+        <Button
+            android:id="@+id/buttonResetPassword"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="#F31010"
+            android:text="reset Password" />
+
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="74dp">
+            android:layout_height="45dp">
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

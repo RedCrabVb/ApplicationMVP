@@ -39,6 +39,7 @@ public class StartActivity extends AppCompatActivity {
                 server.setTokenConnection(json.get(Server.token).getAsString());
                 server.setQrCodeConntion(json.get(Server.qrCode).getAsString());
             } catch (Exception e) {
+                new File(Server.getGetFilesDir(), Server.fileNameConfig).delete();
                 if (!server.registration()) {
                     Toast.makeText(StartActivity.this, "False to connection server", Toast.LENGTH_LONG).show();
                     System.exit(-1);
