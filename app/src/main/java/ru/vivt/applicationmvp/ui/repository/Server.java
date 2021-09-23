@@ -77,23 +77,13 @@ public class Server {
         return result;
     }
 
-    public News[] getNews() {
+    public String getNews() {
         try {
-            News news[];
-            JsonArray jsonArrayNews = Server.getInstance().getNewsJson().getAsJsonArray("News");
-            news = new News[jsonArrayNews.size()];
-            AtomicInteger i = new AtomicInteger();
-            jsonArrayNews.forEach(r -> {
-                i.getAndIncrement();
-                JsonObject jsonNews = r.getAsJsonObject();
-                news[i.get() - 1] = new News(jsonNews.get("title").getAsString(),
-                        jsonNews.get("body").getAsString(),
-                        jsonNews.get("imgPath").getAsString());
-            });
-            return news;
+            String linkNews = Server.getInstance().getNewsJson().get("News").getAsString();
+            return linkNews;
         } catch (Exception e) {
             e.printStackTrace();
-            return new News[]{};
+            return "";
         }
     }
 
@@ -109,8 +99,7 @@ public class Server {
 
     public boolean registration() {
         try {
-            String api = "api/registration";
-            String result = (sendInquiry(api, ""));
+            String result = (sendInquiry(apiRegistration, ""));
             JsonObject jsonReg =  new JsonParser().parse(result).getAsJsonObject();
             tokenConnection = jsonReg.get("token").getAsString();
             qrCodeConntion = jsonReg.get("qrCode").getAsString();

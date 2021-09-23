@@ -11,18 +11,16 @@ public class HomeViewModel extends ViewModel {
 
     private Server server;
     private MutableLiveData<String> mText;
-    private MutableLiveData<News[]> news;
+    private MutableLiveData<String> newsLink;
     private MutableLiveData<String> qrCode;
 
     public HomeViewModel() {
-        news = new MutableLiveData<>();
+        newsLink = new MutableLiveData<>();
         qrCode = new MutableLiveData<>();
         new Thread(() -> {
-            {
                 server = Server.getInstance();
                 qrCode.postValue(server.getQrCodeConntion());
-                news.postValue(server.getNews());
-            }
+                newsLink.postValue(Server.getInstance().getNews());
         }).start();
 
         mText = new MutableLiveData<>();
@@ -37,7 +35,7 @@ public class HomeViewModel extends ViewModel {
         return qrCode;
     }
 
-    public LiveData<News[]> getNews() {
-        return news;
+    public LiveData<String> getNewsLink() {
+        return newsLink;
     }
 }

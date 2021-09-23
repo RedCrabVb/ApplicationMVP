@@ -21,11 +21,19 @@
 
     <ListView
         android:id="@+id/list_news"
-        android:layout_width="394dp"
-        android:layout_height="648dp"
+        android:layout_width="393dp"
+        android:layout_height="27dp"
         android:layout_marginStart="7dp"
         android:layout_marginTop="10dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/text_dashboard" />
+
+    <WebView
+        android:id="@+id/webNew"
+        android:layout_width="376dp"
+        android:layout_height="624dp"
+        android:layout_marginStart="14dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/list_news" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

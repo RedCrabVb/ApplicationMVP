@@ -86,8 +86,13 @@ public class HomeFragment extends Fragment {
             }
         });
 
-        homeViewModel.getNews().observe(getViewLifecycleOwner(), new ObserverArrayNews(binding.getRoot().getContext(), binding.dynamickList));
-
+        homeViewModel.getNewsLink().observe(getViewLifecycleOwner(), new Observer<String>() {
+            @Override
+            public void onChanged(String s) {
+                System.out.println(s);
+                binding.webView.loadUrl(s);
+            }
+        });
         return root;
     }
 

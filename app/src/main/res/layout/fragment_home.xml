@@ -21,15 +21,15 @@
             android:textAlignment="center"
             android:textSize="20sp" />
 
-        <ListView
-            android:id="@+id/dynamickList"
+        <WebView
+            android:id="@+id/webView"
             android:layout_width="match_parent"
-            android:layout_height="251dp" />
+            android:layout_height="288dp" />
 
         <ImageView
             android:id="@+id/imageViewQrCode"
             android:layout_width="match_parent"
-            android:layout_height="264dp"
+            android:layout_height="197dp"
             android:src="@drawable/a_guide_to_qr_codes_and_how_to_scan_qr_codes_2"
             app:srcCompat="@drawable/ic_launcher_background" />
     </LinearLayout>
