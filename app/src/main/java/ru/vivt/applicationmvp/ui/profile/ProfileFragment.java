@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -58,6 +59,13 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
 
         binding.buttonAutrization.setOnClickListener(this);
         binding.buttonRegestration.setOnClickListener(this);
+
+        Bundle bundle = getArguments();
+        if (bundle != null) {
+            if (bundle.containsKey("token")) {
+                binding.textView.setText(getArguments().get("token").toString());
+            }
+        }
 
         return root;
     }

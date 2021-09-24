@@ -23,6 +23,8 @@ public class Server {
     private final String apiImgNews = "src/img";
     private final String apiStatusToken = "api/getStatusToken";
     private final String apiResetPassword = "api/resetPassword";
+    private final String apiAuthorization = "api/authorization";
+
 
     private String tokenConnection = null;
     private String qrCodeConntion = null;
@@ -87,6 +89,11 @@ public class Server {
     public String setData(String userName, String email, String password) throws Exception {
         String result = sendInquiry(apiPersonData, String.format("token=%s&username=%s&email=%s&password=%s", tokenConnection, userName, email, password));
         System.out.println(result);
+        return result;
+    }
+
+    public String authorization(String email, String password) throws Exception {
+        String result = sendInquiry(apiAuthorization, String.format("email=%s&password=%s",  email, password));
         return result;
     }
 
