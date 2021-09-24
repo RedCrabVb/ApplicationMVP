@@ -45,7 +45,7 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
             }
         });
 
-        binding.buttonDataReset.setOnClickListener(new View.OnClickListener() {
+        binding.buttonDataReset2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 new File(binding.getRoot().getContext().getFilesDir(), "config.json").delete();
@@ -54,50 +54,6 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
         });
 
         profileViewModel.getDataFromFile(binding.getRoot().getContext().getCacheDir());
-
-        binding.buttonEnter.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                binding.textViewError.setVisibility(View.GONE);
-                String editPass1 = binding.editTextTextPassword.getText().toString();
-                String editPass2 = binding.editTextTextPassword2.getText().toString();
-                if (!editPass1.equals(editPass2)) {
-                    binding.textViewError.setText("Password incorrect");
-                    binding.textViewError.setVisibility(View.VISIBLE);
-                    return;
-                }
-
-                SetDataInUI setDataInUI = new SetDataInUI(editPass1, binding.editTextTextPersonName.getText().toString(), binding.editTextTextPersonEmail.getText().toString());
-                setDataInUI.execute("");
-            }
-        });
-
-        binding.textViewError.setVisibility(View.GONE);
-
-        profileViewModel.getUsername().observe(getViewLifecycleOwner(), new Observer<String>() {
-            @Override
-            public void onChanged(@Nullable String s) {
-                binding.editTextTextPersonName.setText(s);
-            }
-        });
-
-        profileViewModel.getEmail().observe(getViewLifecycleOwner(), new Observer<String>() {
-            @Override
-            public void onChanged(@Nullable String s) {
-                binding.editTextTextPersonEmail.setText(s);
-            }
-        });
-
-        binding.buttonResetPassword.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                new Thread(() -> {
-                    String strResponse = Server.getInstance().resetPassword(profileViewModel.getEmail().getValue());
-                    binding.textViewError.setText(strResponse);
-                    binding.textViewError.setVisibility(View.VISIBLE);
-            }).start();
-            }
-        });
 
 
         binding.buttonAutrization.setOnClickListener(this);
@@ -118,7 +74,7 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
             case R.id.buttonAutrization:
                 replaceFragment(new AuthorizationFragment());
                 break;
-            case R.id.buttonResetPassword:
+            case R.id.buttonDataReset2:
                 replaceFragment(new ProfileFragment());
                 break;
             case R.id.buttonRegestration:
@@ -134,43 +90,4 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
         transaction.commit();
     }
 
-
-    class SetDataInUI extends AsyncTask<String, Void, String> {
-        private String status;
-        private String editPass1;
-        private String username;
-        private String email;
-
-        public SetDataInUI(String editPass1, String username, String email) {
-            this.editPass1 = editPass1;
-            this.username = username;
-            this.email = email;
-        }
-
-        @Override
-        protected String doInBackground(String... voids) {
-            try {
-                status = Server.getInstance().setData(
-                        username,
-                        email,
-                        editPass1);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-            return null;
-        }
-
-        @Override
-        protected void onPostExecute(String s) {
-            profileViewModel.putUsername(username);
-            profileViewModel.putEmail(email);
-            profileViewModel.setDataInMemory(binding.getRoot().getContext());
-            binding.textViewError.setTextColor(Color.GRAY);
-            binding.textViewError.setText("Data send to server, status: " + status);
-            binding.textViewError.setVisibility(View.VISIBLE);
-            super.onPostExecute(s);
-
-
-        }
-    }
 }
