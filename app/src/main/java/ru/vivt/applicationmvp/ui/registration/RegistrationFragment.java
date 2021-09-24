@@ -36,13 +36,13 @@ public class RegistrationFragment extends Fragment {
         View root = binding.getRoot();
 
         binding.buttonRegistration.setOnClickListener(v -> {
-            binding.frameDataEnter.textViewError.setVisibility(View.GONE);
-            String editPass1 = binding.frameDataEnter.editTextTextPassword3.getText().toString();
-            String editPass2 = binding.frameDataEnter.editTextTextPassword4.getText().toString();
+            binding.textViewError.setVisibility(View.GONE);
+            String editPass1 = binding.editTextTextPassword3.getText().toString();
+            String editPass2 = binding.editTextTextPassword4.getText().toString();
 
             if (!editPass1.equals(editPass2)) {
-                binding.frameDataEnter.textViewError.setText("Password incorrect");
-                binding.frameDataEnter.textViewError.setVisibility(View.VISIBLE);
+                binding.textViewError.setText("Password incorrect");
+                binding.textViewError.setVisibility(View.VISIBLE);
                 return;
             }
 
@@ -52,16 +52,16 @@ public class RegistrationFragment extends Fragment {
                     public void run() {
                         String str = null;
                         try {
-                            str = Server.getInstance().setData(binding.frameDataEnter.editTextTextPersonName3.getText().toString(),
-                                    binding.frameDataEnter.editTextTextEmailAddress.getText().toString(),
+                            str = Server.getInstance().setData(binding.editTextTextPersonName3.getText().toString(),
+                                    binding.editTextTextEmailAddress.getText().toString(),
                                     editPass1);
                             JsonObject json = new JsonParser().parse(str).getAsJsonObject();
 
                             if (json.has("error")) {
-                                binding.frameDataEnter.textViewError.setText(json.get("error").getAsString());
+                                binding.textViewError.setText(json.get("error").getAsString());
                                 throw new Exception("error");
                             } else {
-                                binding.frameDataEnter.textViewError.setText(json.get("status").getAsString());
+                                binding.textViewError.setText(json.get("status").getAsString());
                            }
 
                             Thread.sleep(1000);

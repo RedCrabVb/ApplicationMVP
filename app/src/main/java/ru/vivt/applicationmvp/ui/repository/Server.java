@@ -24,6 +24,7 @@ public class Server {
     private final String apiStatusToken = "api/getStatusToken";
     private final String apiResetPassword = "api/resetPassword";
     private final String apiAuthorization = "api/authorization";
+    private final String apiPersonDataGet = "api/personData";
 
 
     private String tokenConnection = null;
@@ -57,6 +58,16 @@ public class Server {
             e.printStackTrace();
             return false;
         }
+    }
+
+    public String getApiPersonData(String token) throws Exception {
+        String result = sendInquiry(apiPersonDataGet, String.format("token=%s",  token));
+        return result;
+    }
+
+    public String getApiPersonData() throws Exception {
+        String result = sendInquiry(apiPersonDataGet, String.format("token=%s",  token));
+        return result;
     }
 
     public String getPathUrlToDownloadImgNews(String imgPath) {

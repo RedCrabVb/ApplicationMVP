@@ -38,8 +38,8 @@ public class AuthorizationFragment extends Fragment {
         binding.buttonAuthorization.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String email = binding.editTextTextEmailAddress2.getText().toString();
-                String password = binding.editTextTextPassword5.getText().toString();
+                String email = binding.editTextTextEmailAddress.getText().toString();
+                String password = binding.editTextTextPassword.getText().toString();
 
                 new Thread(() -> {
                     try {
@@ -58,7 +58,6 @@ public class AuthorizationFragment extends Fragment {
                         e.printStackTrace();
                     }
                 }).start();
-
             }
         });
 

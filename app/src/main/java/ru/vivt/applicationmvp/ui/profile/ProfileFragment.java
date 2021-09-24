@@ -16,6 +16,9 @@ import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
+
 import java.io.File;
 
 import ru.vivt.applicationmvp.R;
@@ -46,7 +49,7 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
             }
         });
 
-        binding.buttonDataReset2.setOnClickListener(new View.OnClickListener() {
+        binding.buttonDataReset.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 new File(binding.getRoot().getContext().getFilesDir(), "config.json").delete();
@@ -55,6 +58,20 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
         });
 
         profileViewModel.getDataFromFile(binding.getRoot().getContext().getCacheDir());
+        profileViewModel.getEmail().observe(getViewLifecycleOwner(), new Observer<String>() {
+            @Override
+            public void onChanged(String s) {
+                binding.textViewEmail.setText(s);
+                profileViewModel.setDataInMemory(binding.getRoot().getContext());
+            }
+        });
+        profileViewModel.getUsername().observe(getViewLifecycleOwner(), new Observer<String>() {
+            @Override
+            public void onChanged(String s) {
+                binding.textViewUsername.setText(s);
+                profileViewModel.setDataInMemory(binding.getRoot().getContext());
+            }
+        });
 
 
         binding.buttonAutrization.setOnClickListener(this);
@@ -63,7 +80,24 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
         Bundle bundle = getArguments();
         if (bundle != null) {
             if (bundle.containsKey("token")) {
-                binding.textView.setText(getArguments().get("token").toString());
+                new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        try {
+                            JsonObject json = new JsonParser().parse(
+                                    Server.getInstance()
+                                            .getApiPersonData(bundle.get(Server.token).toString()))
+                                    .getAsJsonObject();
+                            String email = json.get("email").getAsString();
+                            String username = json.get("username").getAsString();
+
+                            profileViewModel.putEmail(email);
+                            profileViewModel.putUsername(username);
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }).start();
             }
         }
 
@@ -81,9 +115,6 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
         switch (view.getId()) {
             case R.id.buttonAutrization:
                 replaceFragment(new AuthorizationFragment());
-                break;
-            case R.id.buttonDataReset2:
-                replaceFragment(new ProfileFragment());
                 break;
             case R.id.buttonRegestration:
                 replaceFragment(new RegistrationFragment());
