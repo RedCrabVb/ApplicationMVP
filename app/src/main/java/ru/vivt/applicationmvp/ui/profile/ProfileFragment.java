@@ -1,7 +1,5 @@
 package ru.vivt.applicationmvp.ui.profile;
 
-import android.content.Intent;
-import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -13,16 +11,17 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
 import java.io.File;
 
-import ru.vivt.applicationmvp.MainActivity;
 import ru.vivt.applicationmvp.R;
-import ru.vivt.applicationmvp.StartActivity;
 import ru.vivt.applicationmvp.databinding.FragmentProfileBinding;
-import ru.vivt.applicationmvp.ui.accounts.Accounts;
+import ru.vivt.applicationmvp.ui.authorization.AuthorizationFragment;
+import ru.vivt.applicationmvp.ui.home.HomeFragment;
+import ru.vivt.applicationmvp.ui.registration.RegistrationFragment;
 import ru.vivt.applicationmvp.ui.repository.Server;
 
 public class ProfileFragment extends Fragment implements View.OnClickListener {
@@ -68,7 +67,7 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
                     return;
                 }
 
-                SetDataInUI setDataInUI = new SetDataInUI(editPass1);
+                SetDataInUI setDataInUI = new SetDataInUI(editPass1, binding.editTextTextPersonName.getText().toString(), binding.editTextTextPersonEmail.getText().toString());
                 setDataInUI.execute("");
             }
         });
@@ -115,20 +114,26 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
 
     @Override
     public void onClick(View view) {
-        Intent intent = new Intent(getContext(), Accounts.class);
         switch (view.getId()) {
             case R.id.buttonAutrization:
-                intent.putExtra("action", "accounts");
+                replaceFragment(new AuthorizationFragment());
                 break;
             case R.id.buttonResetPassword:
-                intent.putExtra("action", "resetPassword");
+                replaceFragment(new ProfileFragment());
                 break;
             case R.id.buttonRegestration:
-                intent.putExtra("action", "registration");
+                replaceFragment(new RegistrationFragment());
                 break;
         }
-        getContext().startActivity(intent);
     }
+
+    public void replaceFragment(Fragment someFragment) {
+        FragmentTransaction transaction = getFragmentManager().beginTransaction();
+        transaction.replace(R.id.nav_host_fragment_activity_main2, someFragment);
+        transaction.addToBackStack(null);
+        transaction.commit();
+    }
+
 
     class SetDataInUI extends AsyncTask<String, Void, String> {
         private String status;
@@ -136,14 +141,14 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
         private String username;
         private String email;
 
-        public SetDataInUI(String editPass1) {
+        public SetDataInUI(String editPass1, String username, String email) {
             this.editPass1 = editPass1;
+            this.username = username;
+            this.email = email;
         }
 
         @Override
         protected String doInBackground(String... voids) {
-            String username = binding.editTextTextPersonName.getText().toString();
-            String email = binding.editTextTextPersonEmail.getText().toString();
             try {
                 status = Server.getInstance().setData(
                         username,
@@ -163,8 +168,9 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
             binding.textViewError.setTextColor(Color.GRAY);
             binding.textViewError.setText("Data send to server, status: " + status);
             binding.textViewError.setVisibility(View.VISIBLE);
-            System.out.println("End");
             super.onPostExecute(s);
+
+
         }
     }
 }

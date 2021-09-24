@@ -14,7 +14,6 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.ApplicationMVP"
         android:usesCleartextTraffic="true">
-        <activity android:name=".ui.accounts.Accounts"></activity>
         <activity android:name=".MainActivity"></activity>
         <activity android:name=".StartActivity">
             <intent-filter>
