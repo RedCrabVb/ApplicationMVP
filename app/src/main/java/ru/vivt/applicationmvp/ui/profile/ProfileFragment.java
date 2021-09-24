@@ -1,5 +1,6 @@
 package ru.vivt.applicationmvp.ui.profile;
 
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.os.AsyncTask;
@@ -17,10 +18,14 @@ import androidx.lifecycle.ViewModelProvider;
 
 import java.io.File;
 
+import ru.vivt.applicationmvp.MainActivity;
+import ru.vivt.applicationmvp.R;
+import ru.vivt.applicationmvp.StartActivity;
 import ru.vivt.applicationmvp.databinding.FragmentProfileBinding;
+import ru.vivt.applicationmvp.ui.accounts.Accounts;
 import ru.vivt.applicationmvp.ui.repository.Server;
 
-public class ProfileFragment extends Fragment {
+public class ProfileFragment extends Fragment implements View.OnClickListener {
 
     private ProfileViewModel profileViewModel;
     private FragmentProfileBinding binding;
@@ -96,7 +101,8 @@ public class ProfileFragment extends Fragment {
         });
 
 
-
+        binding.buttonAutrization.setOnClickListener(this);
+        binding.buttonRegestration.setOnClickListener(this);
 
         return root;
     }
@@ -105,6 +111,23 @@ public class ProfileFragment extends Fragment {
     public void onDestroyView() {
         super.onDestroyView();
         binding = null;
+    }
+
+    @Override
+    public void onClick(View view) {
+        Intent intent = new Intent(getContext(), Accounts.class);
+        switch (view.getId()) {
+            case R.id.buttonAutrization:
+                intent.putExtra("action", "accounts");
+                break;
+            case R.id.buttonResetPassword:
+                intent.putExtra("action", "resetPassword");
+                break;
+            case R.id.buttonRegestration:
+                intent.putExtra("action", "registration");
+                break;
+        }
+        getContext().startActivity(intent);
     }
 
     class SetDataInUI extends AsyncTask<String, Void, String> {

@@ -1,19 +1,14 @@
 package ru.vivt.applicationmvp.ui.repository;
 
-import android.graphics.Path;
-
-import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
 import java.io.BufferedReader;
-import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLConnection;
-import java.util.concurrent.atomic.AtomicInteger;
 
 public class Server {
     public static final String qrCode = "qrCode", fileNameConfig = "config.json", token = "token";
@@ -67,10 +62,9 @@ public class Server {
     }
 
     public String resetPassword(String email) {
-        String api = "api/resetPassword";
         String result = "error";
         try {
-            result = sendInquiry(api, String.format("email=%s", email));
+            result = sendInquiry(apiResetPassword, String.format("email=%s", email));
         } catch (Exception e) {
             e.printStackTrace();
         }

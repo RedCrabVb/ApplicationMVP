@@ -1,8 +1,5 @@
 package ru.vivt.applicationmvp.ui.home;
 
-import android.content.Context;
-import android.content.Intent;
-import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.Point;
 import android.os.Bundle;
@@ -12,12 +9,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.ImageView;
-import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -27,22 +20,9 @@ import androidx.lifecycle.ViewModelProvider;
 
 import com.google.zxing.WriterException;
 
-import java.lang.reflect.Array;
-import java.util.ArrayList;
-import java.util.Arrays;
-
 import androidmads.library.qrgenearator.QRGContents;
 import androidmads.library.qrgenearator.QRGEncoder;
-import ru.vivt.applicationmvp.ActivityNews;
-import ru.vivt.applicationmvp.MainActivity;
-import ru.vivt.applicationmvp.R;
 import ru.vivt.applicationmvp.databinding.FragmentHomeBinding;
-import ru.vivt.applicationmvp.ui.repository.News;
-import ru.vivt.applicationmvp.ui.repository.NewsAdapter;
-import ru.vivt.applicationmvp.ui.repository.ObserverArrayNews;
-
-import static android.content.Context.WINDOW_SERVICE;
-import static androidx.core.content.ContextCompat.getSystemService;
 
 public class HomeFragment extends Fragment {
 

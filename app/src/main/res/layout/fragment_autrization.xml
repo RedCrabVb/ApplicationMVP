@@ -39,10 +39,10 @@
             android:inputType="textPassword" />
 
         <Button
-            android:id="@+id/buttonRegestartionActivtiy"
+            android:id="@+id/buttonAuthorization"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="autorization"
+            android:text="authorization"
             tools:layout_editor_absoluteX="-157dp"
             tools:layout_editor_absoluteY="237dp" />
     </LinearLayout>

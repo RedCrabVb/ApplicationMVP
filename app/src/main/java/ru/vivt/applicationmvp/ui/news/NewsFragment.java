@@ -13,7 +13,6 @@ import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
 import ru.vivt.applicationmvp.databinding.FragmentNewsBinding;
-import ru.vivt.applicationmvp.ui.repository.ObserverArrayNews;
 
 public class NewsFragment extends Fragment {
 

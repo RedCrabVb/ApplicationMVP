@@ -1,25 +1,8 @@
 package ru.vivt.applicationmvp;
 
-import android.content.Intent;
-import android.content.SharedPreferences;
-import android.graphics.Bitmap;
-import android.graphics.Color;
-import android.graphics.Point;
-import android.media.Image;
 import android.os.Bundle;
-import android.util.Log;
-import android.view.Display;
-import android.view.View;
-import android.view.WindowManager;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.ImageView;
-import android.widget.ListView;
-import android.widget.Toast;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
-import com.google.zxing.WriterException;
-import com.google.zxing.common.BitMatrix;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.navigation.NavController;
@@ -27,8 +10,6 @@ import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
-import androidmads.library.qrgenearator.QRGContents;
-import androidmads.library.qrgenearator.QRGEncoder;
 import ru.vivt.applicationmvp.databinding.ActivityMainBinding;
 
 public class MainActivity extends AppCompatActivity {

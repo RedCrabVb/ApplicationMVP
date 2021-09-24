@@ -4,7 +4,6 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
-import ru.vivt.applicationmvp.ui.repository.News;
 import ru.vivt.applicationmvp.ui.repository.Server;
 
 public class NewsViewModel extends ViewModel {

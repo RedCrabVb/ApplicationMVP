@@ -5,7 +5,6 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
 import ru.vivt.applicationmvp.ui.repository.Server;
-import ru.vivt.applicationmvp.ui.repository.News;
 
 public class HomeViewModel extends ViewModel {
 
