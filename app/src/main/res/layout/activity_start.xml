@@ -7,11 +7,14 @@
     tools:context=".StartActivity">
 
     <LinearLayout
-        android:layout_width="272dp"
-        android:layout_height="288dp"
+        android:layout_width="280dp"
+        android:layout_height="132dp"
         android:layout_marginStart="84dp"
-        android:layout_marginTop="204dp"
+        android:layout_marginTop="148dp"
+        android:layout_marginEnd="55dp"
         android:orientation="vertical"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 

@@ -44,11 +44,26 @@ public class Server {
 
     public static Server getInstance(String ip) {
         if (server == null) {
-            url = "http://" + ip + ":8080/%s?%s";
+            url = "http://" + ip + "/%s?%s";
             server = new Server();
+            server.test();
         }
         return server;
     }
+
+    private void test() {
+        try {
+            URL url = new URL("https://servermvp.ru:49379/api/news/");
+            HttpURLConnection connection = getResponseServer(url);
+            String response = connectionResponseToString(connection);
+
+            System.out.println("URL: " + url.toString());
+            System.out.println(response);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
 
     public boolean tokenActive() {
         try {
@@ -117,7 +132,7 @@ public class Server {
             qrCodeConntion = jsonReg.get("qrCode").getAsString();
             System.out.println(result);
             return true;
-        } catch (Exception e) {
+        } catch (Exception | Error e) {
             e.printStackTrace();
             return  false;
         }

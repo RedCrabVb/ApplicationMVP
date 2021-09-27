@@ -17,6 +17,7 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.net.ConnectException;
 
 import ru.vivt.applicationmvp.ui.repository.Server;
 
@@ -38,12 +39,13 @@ public class StartActivity extends AppCompatActivity {
                 server.setTokenConnection(json.get(Server.token).getAsString());
                 server.setQrCodeConntion(json.get(Server.qrCode).getAsString());
             } catch (FileNotFoundException e) {
-                new File(getFilesDir(), Server.fileNameConfig).delete();
                 if (!server.registration()) {
-                    Toast.makeText(StartActivity.this, "False to connection server", Toast.LENGTH_LONG).show();
-                    System.exit(-1);
+                    runOnUiThread(() ->
+                    Toast.makeText(StartActivity.this, "False to connection server", Toast.LENGTH_LONG).show());
+//                    System.exit(-1);
                 }
-            } catch (IOException e) {
+            } catch (IOException | UnsupportedOperationException e) {
+                new File(getFilesDir(), Server.fileNameConfig).delete();
                 e.printStackTrace();
             }
 
@@ -67,8 +69,10 @@ public class StartActivity extends AppCompatActivity {
         }});
 
         editTextIp = findViewById(R.id.editTextIp);
-        findViewById(R.id.enterIP).setOnClickListener(v -> {
-            thread.start();
-        });
+        editTextIp.setText("servermvp.ru:49379");
+        thread.start();
+//        findViewById(R.id.enterIP).setOnClickListener(v -> {
+//            thread.start();
+//        });
     }
 }
