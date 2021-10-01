@@ -14,6 +14,7 @@ import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
+import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
 import ru.vivt.applicationmvp.R;
@@ -35,30 +36,33 @@ public class AuthorizationFragment extends Fragment {
         binding = FragmentAutrizationBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
 
-        binding.buttonAuthorization.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                String email = binding.editTextTextEmailAddress.getText().toString();
-                String password = binding.editTextTextPassword.getText().toString();
+        binding.buttonAuthorization.setOnClickListener(v -> {
+            new Thread(() -> {
+                try {
+                    String email = binding.editTextTextEmailAddress.getText().toString();
+                    String password = binding.editTextTextPassword.getText().toString();
 
-                new Thread(() -> {
-                    try {
-                        String token = new JsonParser().parse(Server.getInstance().authorization(email, password)).getAsJsonObject().get("token").getAsString();
-
-                        Bundle bundle = new Bundle();
-                        bundle.putString("token", token);
-                        ProfileFragment profileFragment = new ProfileFragment();
-                        profileFragment.setArguments(bundle);
-
-                        FragmentTransaction transaction = getFragmentManager().beginTransaction();
-                        transaction.replace(R.id.nav_host_fragment_activity_main2, profileFragment);
-                        transaction.addToBackStack(null);
-                        transaction.commit();
-                    } catch (Exception e) {
-                        e.printStackTrace();
+                    JsonObject json = new JsonParser().parse(Server.getInstance().authorization(email, password)).getAsJsonObject();
+                    if (json.has("error")) {
+                        binding.textView2.setText(json.get("error").getAsString());
+                        binding.textView2.setVisibility(View.VISIBLE);
+                        return;
                     }
-                }).start();
-            }
+                    String token = json.get("token").getAsString();
+
+                    Bundle bundle = new Bundle();
+                    bundle.putString("token", token);
+                    ProfileFragment profileFragment = new ProfileFragment();
+                    profileFragment.setArguments(bundle);
+
+                    FragmentTransaction transaction = getFragmentManager().beginTransaction();
+                    transaction.replace(R.id.nav_host_fragment_activity_main2, profileFragment);
+                    transaction.addToBackStack(null);
+                    transaction.commit();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }).start();
         });
 
         return root;

@@ -46,22 +46,8 @@ public class Server {
         if (server == null) {
             url = "http://" + ip + "/%s?%s";
             server = new Server();
-            server.test();
         }
         return server;
-    }
-
-    private void test() {
-        try {
-            URL url = new URL("https://servermvp.ru:49379/api/news/");
-            HttpURLConnection connection = getResponseServer(url);
-            String response = connectionResponseToString(connection);
-
-            System.out.println("URL: " + url.toString());
-            System.out.println(response);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
     }
 
 
