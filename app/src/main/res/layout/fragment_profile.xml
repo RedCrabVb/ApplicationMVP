@@ -7,12 +7,14 @@
     tools:context=".ui.profile.ProfileFragment">
 
     <LinearLayout
-        android:layout_width="307dp"
-        android:layout_height="469dp"
+        android:layout_width="355dp"
+        android:layout_height="697dp"
         android:layout_marginStart="20dp"
         android:layout_marginTop="10dp"
         android:layout_marginEnd="20dp"
+        android:layout_marginBottom="24dp"
         android:orientation="vertical"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
@@ -29,42 +31,58 @@
 
         <TextView
             android:id="@+id/textViewEmail"
+            style="@style/custom_input_style"
             android:layout_width="match_parent"
             android:layout_height="42dp"
+            android:background="@drawable/custom_input"
             android:text="TextView" />
 
         <TextView
             android:id="@+id/textViewUsername"
+            style="@style/custom_input_style"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:background="@drawable/custom_input"
             android:text="TextView" />
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="186dp">
+            android:layout_height="70dp">
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <Button
             android:id="@+id/buttonAutrization"
-            android:layout_width="match_parent"
-            android:layout_height="62dp"
+            android:layout_width="257dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="50dp"
+            android:layout_marginTop="25dp"
+            android:layout_marginRight="50dp"
+            android:background="@drawable/custom_button"
             android:onClick="onClick"
-            android:text="autrization" />
+            android:text="@string/authorization_button" />
 
         <Button
             android:id="@+id/buttonRegestration"
-            android:layout_width="match_parent"
-            android:layout_height="59dp"
+            android:layout_width="255dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="50dp"
+            android:layout_marginTop="25dp"
+            android:layout_marginRight="50dp"
+            android:background="@drawable/custom_button"
             android:onClick="onClick"
-            android:text="registration" />
+            android:text="@string/registration_button" />
 
         <Button
             android:id="@+id/buttonDataReset"
-            android:layout_width="match_parent"
+            android:layout_width="253dp"
             android:layout_height="wrap_content"
+            android:layout_marginLeft="50dp"
+            android:layout_marginTop="25dp"
+            android:layout_marginRight="50dp"
+            android:background="@drawable/custom_button"
             android:onClick="onClick"
-            android:text="dataReset" />
+            android:text="@string/data_reset" />
     </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

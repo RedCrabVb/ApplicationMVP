@@ -9,11 +9,11 @@
     <item
         android:id="@+id/navigation_news"
         android:icon="@android:drawable/ic_menu_mapmode"
-        android:title="News" />
+        android:title="@string/title_dashboard" />
 
     <item
         android:id="@+id/navigation_profile"
         android:icon="@android:drawable/ic_menu_manage"
-        android:title="Profile" />
+        android:title="@string/title_notifications" />
 
 </menu>

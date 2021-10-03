@@ -1,24 +1,29 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:textAlignment="viewEnd">
 
     <LinearLayout
         android:id="@+id/linearLayout"
-        android:layout_width="325dp"
-        android:layout_height="243dp"
+        style="@style/custom_input_style"
+        android:layout_width="351dp"
+        android:layout_height="719dp"
         android:layout_marginStart="1dp"
         android:layout_marginTop="50dp"
         android:layout_marginEnd="1dp"
         android:orientation="vertical"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
         <TextView
             android:id="@+id/textViewError"
+            style="@style/custom_input_style"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Error"
@@ -26,39 +31,68 @@
 
         <EditText
             android:id="@+id/editTextTextPersonName3"
+            style="@style/custom_input_style"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:background="@drawable/custom_input"
+            android:drawableLeft="@drawable/feather_zmdi"
+            android:drawablePadding="20dp"
             android:ems="10"
+            android:hint="Имя пользователя"
             android:inputType="textPersonName"
-            android:text="Name" />
+            android:paddingLeft="30dp"
+            android:textColorHint="#5C000000" />
 
         <EditText
             android:id="@+id/editTextTextEmailAddress"
+            style="@style/custom_input_style"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:background="@drawable/custom_input"
+            android:drawableLeft="@drawable/feather_mail"
+            android:drawablePadding="20dp"
             android:ems="10"
+            android:hint="Почта"
             android:inputType="textEmailAddress"
-            android:text="email@email.com" />
+            android:paddingLeft="30dp" />
 
         <EditText
             android:id="@+id/editTextTextPassword3"
+            style="@style/custom_input_style"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:background="@drawable/custom_input"
+            android:drawableLeft="@drawable/feather_lock"
+            android:drawablePadding="20dp"
             android:ems="10"
-            android:inputType="textPassword" />
+            android:hint="Пароль"
+            android:inputType="textPassword"
+            android:paddingLeft="30dp" />
 
         <EditText
             android:id="@+id/editTextTextPassword4"
+            style="@style/custom_input_style"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:background="@drawable/custom_input"
+            android:drawableLeft="@drawable/feather_lock"
+            android:drawablePadding="20dp"
             android:ems="10"
-            android:inputType="textPassword" />
+            android:hint="Пароль"
+            android:inputType="textPassword"
+            android:paddingLeft="30dp" />
 
         <Button
             android:id="@+id/buttonRegistration"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="registration"
+            android:layout_marginLeft="50dp"
+            android:layout_marginTop="25dp"
+            android:layout_marginRight="50dp"
+            android:background="@drawable/custom_button"
+            android:rotationX="360"
+            android:text="Зарегистрироваться"
+            android:textColor="#FFFFFF"
             app:layout_constraintBottom_toBottomOf="@+id/linearLayout"
             app:layout_constraintStart_toStartOf="parent"
             tools:ignore="MissingConstraints" />
