@@ -1,101 +1,100 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
+<LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:textAlignment="viewEnd">
-
-    <LinearLayout
-        android:id="@+id/linearLayout"
+    android:textAlignment="viewEnd"
+    android:orientation="vertical">
+    <TextView
+        android:id="@+id/textViewError"
         style="@style/custom_input_style"
-        android:layout_width="351dp"
-        android:layout_height="719dp"
-        android:layout_marginStart="1dp"
-        android:layout_marginTop="50dp"
-        android:layout_marginEnd="1dp"
-        android:orientation="vertical"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="30dp"
+        android:layout_marginLeft="60dp"
+        android:layout_marginRight="70dp"
+        android:paddingTop="10dp"
+        android:paddingBottom="10dp"
+        android:text=""
+         />
+
+    <EditText
+        android:id="@+id/editTextTextPersonName3"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        style="@style/custom_input_style"
+        android:background="@drawable/custom_input"
+        android:drawableLeft="@drawable/feather_zmdi"
+        android:drawablePadding="20dp"
+        android:ems="10"
+        android:hint="Имя пользователя"
+        android:inputType="textPersonName"
+        android:paddingLeft="30dp"
+        android:layout_marginTop="40dp"
+        android:layout_marginLeft="70dp"
+        android:layout_marginRight="70dp"
+        android:textColorHint="#5C000000">
+    </EditText>
+
+    <EditText
+        android:id="@+id/editTextTextEmailAddress"
+        style="@style/custom_input_style"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/custom_input"
+        android:drawableLeft="@drawable/feather_mail"
+        android:drawablePadding="20dp"
+        android:ems="10"
+        android:hint="Почта"
+        android:inputType="textEmailAddress"
+        android:layout_marginLeft="70dp"
+        android:layout_marginRight="70dp"
+        android:paddingLeft="30dp" />
+    <EditText
+        android:layout_marginLeft="70dp"
+        android:layout_marginRight="70dp"
+        android:id="@+id/editTextTextPassword3"
+        style="@style/custom_input_style"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/custom_input"
+        android:drawableLeft="@drawable/feather_lock"
+        android:drawablePadding="20dp"
+        android:ems="10"
+        android:hint="Пароль"
+        android:inputType="textPassword"
+        android:paddingLeft="30dp" />
+    <EditText
+        android:id="@+id/editTextTextPassword4"
+        style="@style/custom_input_style"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/custom_input"
+        android:drawableLeft="@drawable/feather_lock"
+        android:drawablePadding="20dp"
+        android:ems="10"
+        android:hint="Пароль"
+        android:layout_marginLeft="70dp"
+        android:layout_marginRight="70dp"
+        android:inputType="textPassword"
+        android:paddingLeft="30dp" />
+    <Button
+        android:id="@+id/buttonRegistration"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="130dp"
+        android:layout_marginTop="25dp"
+        android:layout_marginRight="130dp"
+
+        android:background="@drawable/custom_button"
+        android:rotationX="360"
+        android:text="Ввести"
+        android:textColor="#FFFFFF"
+        app:layout_constraintBottom_toBottomOf="@+id/linearLayout"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        tools:ignore="MissingConstraints" />
 
-        <TextView
-            android:id="@+id/textViewError"
-            style="@style/custom_input_style"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Error"
-            tools:visibility="gone" />
 
-        <EditText
-            android:id="@+id/editTextTextPersonName3"
-            style="@style/custom_input_style"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@drawable/custom_input"
-            android:drawableLeft="@drawable/feather_zmdi"
-            android:drawablePadding="20dp"
-            android:ems="10"
-            android:hint="Имя пользователя"
-            android:inputType="textPersonName"
-            android:paddingLeft="30dp"
-            android:textColorHint="#5C000000" />
-
-        <EditText
-            android:id="@+id/editTextTextEmailAddress"
-            style="@style/custom_input_style"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@drawable/custom_input"
-            android:drawableLeft="@drawable/feather_mail"
-            android:drawablePadding="20dp"
-            android:ems="10"
-            android:hint="Почта"
-            android:inputType="textEmailAddress"
-            android:paddingLeft="30dp" />
-
-        <EditText
-            android:id="@+id/editTextTextPassword3"
-            style="@style/custom_input_style"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@drawable/custom_input"
-            android:drawableLeft="@drawable/feather_lock"
-            android:drawablePadding="20dp"
-            android:ems="10"
-            android:hint="Пароль"
-            android:inputType="textPassword"
-            android:paddingLeft="30dp" />
-
-        <EditText
-            android:id="@+id/editTextTextPassword4"
-            style="@style/custom_input_style"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@drawable/custom_input"
-            android:drawableLeft="@drawable/feather_lock"
-            android:drawablePadding="20dp"
-            android:ems="10"
-            android:hint="Пароль"
-            android:inputType="textPassword"
-            android:paddingLeft="30dp" />
-
-        <Button
-            android:id="@+id/buttonRegistration"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="50dp"
-            android:layout_marginTop="25dp"
-            android:layout_marginRight="50dp"
-            android:background="@drawable/custom_button"
-            android:rotationX="360"
-            android:text="Зарегистрироваться"
-            android:textColor="#FFFFFF"
-            app:layout_constraintBottom_toBottomOf="@+id/linearLayout"
-            app:layout_constraintStart_toStartOf="parent"
-            tools:ignore="MissingConstraints" />
-    </LinearLayout>
-
-</androidx.constraintlayout.widget.ConstraintLayout>
+</LinearLayout>
