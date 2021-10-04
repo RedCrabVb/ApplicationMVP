@@ -23,6 +23,7 @@ import java.io.File;
 
 import ru.vivt.applicationmvp.R;
 import ru.vivt.applicationmvp.databinding.FragmentProfileBinding;
+import ru.vivt.applicationmvp.ui.account_reset.AccountResetFragment;
 import ru.vivt.applicationmvp.ui.authorization.AuthorizationFragment;
 import ru.vivt.applicationmvp.ui.home.HomeFragment;
 import ru.vivt.applicationmvp.ui.registration.RegistrationFragment;
@@ -76,6 +77,7 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
 
         binding.buttonAutrization.setOnClickListener(this);
         binding.buttonRegestration.setOnClickListener(this);
+        binding.buttonResetPassword.setOnClickListener(this);
 
         Bundle bundle = getArguments();
         if (bundle != null) {
@@ -118,6 +120,9 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
                 break;
             case R.id.buttonRegestration:
                 replaceFragment(new RegistrationFragment());
+                break;
+            case R.id.buttonResetPassword:
+                replaceFragment(new AccountResetFragment());
                 break;
         }
     }

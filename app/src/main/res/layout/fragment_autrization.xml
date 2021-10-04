@@ -19,22 +19,21 @@
             android:text="" />
 
         <EditText
-            android:paddingLeft="30dp"
-            android:layout_marginTop="70dp"
-            android:layout_marginLeft="70dp"
-            android:layout_marginRight="70dp"
-
             android:id="@+id/editTextTextEmailAddress"
             style="@style/custom_input_style"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+
+            android:layout_marginLeft="70dp"
+            android:layout_marginTop="70dp"
+            android:layout_marginRight="70dp"
             android:background="@drawable/custom_input"
             android:drawableLeft="@drawable/feather_mail"
             android:drawablePadding="20dp"
             android:ems="10"
             android:hint="Почта"
             android:inputType="textEmailAddress"
-            android:rotationX="10"
+            android:paddingLeft="30dp"
             android:textDirection="anyRtl" />
 
         <EditText

@@ -78,6 +78,17 @@
             android:text="@string/registration_button" />
 
         <Button
+            android:id="@+id/buttonResetPassword"
+            android:layout_width="255dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="50dp"
+            android:layout_marginTop="25dp"
+            android:layout_marginRight="50dp"
+            android:background="@drawable/custom_button"
+            android:onClick="onClick"
+            android:text="@string/restore_password" />
+
+        <Button
             android:id="@+id/buttonDataReset"
             android:layout_width="253dp"
             android:layout_height="wrap_content"
