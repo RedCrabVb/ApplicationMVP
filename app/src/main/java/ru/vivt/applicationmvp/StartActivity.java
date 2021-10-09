@@ -76,8 +76,5 @@ public class StartActivity extends AppCompatActivity {
         editTextIp.setText("servermvp.ru:49379");
 //        editTextIp.setText("10.0.2.2:8082");
         thread.start();
-//        findViewById(R.id.enterIP).setOnClickListener(v -> {
-//            thread.start();
-//        });
     }
 }

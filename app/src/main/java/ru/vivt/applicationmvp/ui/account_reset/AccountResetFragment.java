@@ -9,9 +9,13 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
+
 import ru.vivt.applicationmvp.R;
 import ru.vivt.applicationmvp.databinding.FragmentAccountResetBinding;
 import ru.vivt.applicationmvp.ui.profile.ProfileFragment;
+import ru.vivt.applicationmvp.ui.repository.Server;
 
 public class AccountResetFragment extends Fragment {
 
@@ -23,16 +27,30 @@ public class AccountResetFragment extends Fragment {
         binding = FragmentAccountResetBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
 
-        binding.buttonReset.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                ProfileFragment profileFragment = new ProfileFragment();
+        binding.buttonReset.setOnClickListener(v -> {
+            new Thread(() -> {
+                try {
+                    JsonObject json = new JsonParser().parse(Server.getInstance().resetPassword(binding.editTextTextEmailAddress.getText().toString())).getAsJsonObject();
+                    if (json.has("error")) {
+                        binding.textView2.setText(json.get("error").getAsString());
+                        return;
+                    }
 
-                FragmentTransaction transaction = getFragmentManager().beginTransaction();
-                transaction.replace(R.id.nav_host_fragment_activity_main2, profileFragment);
-                transaction.addToBackStack(null);
-                transaction.commit();
-            }
+                    if (json != null) {
+                        binding.textView2.setText(json.get("status").getAsString());
+                        Thread.sleep(2000);
+                    }
+
+
+                    ProfileFragment profileFragment = new ProfileFragment();
+
+                    FragmentTransaction transaction = getFragmentManager().beginTransaction();
+                    transaction.replace(R.id.nav_host_fragment_activity_main2, profileFragment);
+                    transaction.commit();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }).start();
         });
 
         return root;
