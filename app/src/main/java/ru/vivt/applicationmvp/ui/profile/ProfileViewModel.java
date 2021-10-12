@@ -29,23 +29,6 @@ public class ProfileViewModel extends ViewModel {
         }
     }
 
-/*    public void getDataFromFile(File file) {
-        try (DataInputStream inputStream = new DataInputStream(new FileInputStream(new File(file, Server.fileNameConfig)))) {
-            String str = inputStream.readUTF();
-            json = new JsonParser().parse(str).getAsJsonObject();
-
-            boolean conJson = json.has(usernameKey) && json.has(emailKey);
-            if (conJson) {
-                username.setValue(json.get(usernameKey).getAsString());
-                email.setValue(json.get(emailKey).getAsString());
-            } else {
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-            json = new JsonObject();
-        }
-    }*/
-
     public LiveData<String> getText() {
         return mText;
     }
@@ -59,30 +42,11 @@ public class ProfileViewModel extends ViewModel {
     }
 
     public void putUsername(String username) {
-        memoryValues.setUsername(username);
         this.username.postValue(username);
     }
 
     public void putEmail(String email) {
-        memoryValues.setEmail(email);
         this.email.postValue(email);
     }
 
-/*    public void setDataInMemory(Context context) {
-        try (DataOutputStream outputStream = new DataOutputStream(new FileOutputStream(new File(context.getCacheDir(), Server.fileNameConfig)))){
-            if (json.has(usernameKey)) {
-                json.remove(usernameKey);
-            }
-            if (json.has(emailKey)) {
-                json.remove(emailKey);
-            }
-            json.addProperty(usernameKey, username.getValue());
-            json.addProperty(emailKey, email.getValue());
-            outputStream.writeUTF(json.toString());
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }*/
 }

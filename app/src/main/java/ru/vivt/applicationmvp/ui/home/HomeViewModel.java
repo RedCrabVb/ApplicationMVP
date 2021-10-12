@@ -22,7 +22,7 @@ public class HomeViewModel extends ViewModel {
         new Thread(() -> {
                 server = Server.getInstance();
                 qrCode.postValue(memoryValues.getQrCode());
-                newsLink.postValue(server.getInstance().getNews());
+                newsLink.postValue(server.getNews());
         }).start();
 
         mText = new MutableLiveData<>();

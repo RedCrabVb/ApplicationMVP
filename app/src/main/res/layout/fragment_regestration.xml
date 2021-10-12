@@ -7,18 +7,18 @@
     android:layout_height="match_parent"
     android:textAlignment="viewEnd"
     android:orientation="vertical">
+
     <TextView
         android:id="@+id/textViewError"
         style="@style/custom_input_style"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="30dp"
         android:layout_marginLeft="60dp"
+        android:layout_marginTop="30dp"
         android:layout_marginRight="70dp"
         android:paddingTop="10dp"
         android:paddingBottom="10dp"
-        android:text=""
-         />
+        android:textColor="#980000" />
 
     <EditText
         android:id="@+id/editTextTextPersonName3"

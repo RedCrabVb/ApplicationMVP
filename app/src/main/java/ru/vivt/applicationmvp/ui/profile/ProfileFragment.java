@@ -41,20 +41,15 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
         profileViewModel.getText().observe(getViewLifecycleOwner(), s -> textView.setText(s));
 
         binding.buttonDataReset.setOnClickListener(v -> {
-//            new File(binding.getRoot().getContext().getCacheDir(), Server.fileNameConfig).delete();
-//                new File(binding.getRoot().getContext().getFilesDir(), "config.json").delete();
             MemoryValues.getInstance().resetData();
             System.exit(0);
         });
 
-//        profileViewModel.getDataFromFile(binding.getRoot().getContext().getCacheDir());
         profileViewModel.getEmail().observe(getViewLifecycleOwner(), s -> {
             binding.textViewEmail.setText(s);
-//            profileViewModel.setDataInMemory(binding.getRoot().getContext());
         });
         profileViewModel.getUsername().observe(getViewLifecycleOwner(), s -> {
             binding.textViewUsername.setText(s);
-//            profileViewModel.setDataInMemory(binding.getRoot().getContext());
         });
 
 
@@ -62,26 +57,18 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
         binding.buttonRegestration.setOnClickListener(this);
         binding.buttonResetPassword.setOnClickListener(this);
 
-/*        Bundle bundle = getArguments();
-        if (bundle != null) {
-            if (bundle.containsKey("token")) {
-                new Thread(() -> {
-                    try {
-                        JsonObject json = new JsonParser().parse(
-                                Server.getInstance()
-                                        .getApiPersonData(bundle.get("token").toString()))
-                                .getAsJsonObject();
-                        String email = json.get("email").getAsString();
-                        String username = json.get("username").getAsString();
+        MemoryValues memoryValues = MemoryValues.getInstance();
 
-                        profileViewModel.putEmail(email);
-                        profileViewModel.putUsername(username);
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-                }).start();
+        profileViewModel.putUsername(memoryValues.getUsername());
+        profileViewModel.putEmail(memoryValues.getEmail());
+
+        Bundle bundle = getArguments();
+        if (bundle != null) {
+            if (bundle.containsKey("update")) {
+                profileViewModel.putUsername(memoryValues.getUsername());
+                profileViewModel.putEmail(memoryValues.getEmail());
             }
-        }*/
+        }
 
         return root;
     }

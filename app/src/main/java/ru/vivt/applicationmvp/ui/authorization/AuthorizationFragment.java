@@ -1,5 +1,6 @@
 package ru.vivt.applicationmvp.ui.authorization;
 
+import android.graphics.Color;
 import android.os.Bundle;
 import android.util.JsonReader;
 import android.view.LayoutInflater;
@@ -40,25 +41,31 @@ public class AuthorizationFragment extends Fragment {
         binding.buttonAuthorization.setOnClickListener(v -> {
             new Thread(() -> {
                 try {
+                    Server server = Server.getInstance();
                     String email = binding.editTextTextEmailAddress.getText().toString();
                     String password = binding.editTextTextPassword.getText().toString();
 
-                    JsonObject json = new JsonParser().parse(Server.getInstance().authorization(email, password)).getAsJsonObject();
+                    JsonObject json = new JsonParser().parse(server.authorization(email, password)).getAsJsonObject();
                     if (json.has("error")) {
                         binding.textView2.setText(json.get("error").getAsString());
+                        binding.textView2.setTextColor(Color.red(3));
                         binding.textView2.setVisibility(View.VISIBLE);
                         return;
+                    } else {
+                        binding.textView2.setText("Good");
+                        binding.textView2.setTextColor(Color.GRAY);
+                        binding.textView2.setVisibility(View.VISIBLE);
                     }
                     String token = json.get("token").getAsString();
                     MemoryValues memoryValues = MemoryValues.getInstance();
+                    server.setTokenConnection(token);
                     memoryValues.setToken(token);
-/*                    Bundle bundle = new Bundle();
-                    bundle.putString("token", token);
+                    memoryValues.setQrCode(server.getQrCode());
+
                     ProfileFragment profileFragment = new ProfileFragment();
-                    profileFragment.setArguments(bundle);*/
 
                     FragmentTransaction transaction = getFragmentManager().beginTransaction();
-//                    transaction.replace(R.id.nav_host_fragment_activity_main2, profileFragment);
+                    transaction.replace(R.id.nav_host_fragment_activity_main2, profileFragment);
                     transaction.addToBackStack(null);
                     transaction.commit();
                 } catch (Exception e) {

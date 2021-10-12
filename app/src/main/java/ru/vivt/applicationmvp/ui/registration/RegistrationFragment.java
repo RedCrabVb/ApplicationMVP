@@ -1,5 +1,6 @@
 package ru.vivt.applicationmvp.ui.registration;
 
+import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -24,6 +25,7 @@ import ru.vivt.applicationmvp.databinding.FragmentAutrizationBinding;
 import ru.vivt.applicationmvp.databinding.FragmentRegestrationBinding;
 import ru.vivt.applicationmvp.ui.home.HomeViewModel;
 import ru.vivt.applicationmvp.ui.profile.ProfileFragment;
+import ru.vivt.applicationmvp.ui.repository.MemoryValues;
 import ru.vivt.applicationmvp.ui.repository.Server;
 
 public class RegistrationFragment extends Fragment {
@@ -50,24 +52,35 @@ public class RegistrationFragment extends Fragment {
                 new Thread(new Runnable() {
                     @Override
                     public void run() {
-                        String str = null;
                         try {
-                            str = Server.getInstance().setData(binding.editTextTextPersonName3.getText().toString(),
-                                    binding.editTextTextEmailAddress.getText().toString(),
-                                    editPass1);
-                            JsonObject json = new JsonParser().parse(str).getAsJsonObject();
+                            Server server = Server.getInstance();
+                            String username = binding.editTextTextPersonName3.getText().toString();
+                            String email = binding.editTextTextEmailAddress.getText().toString();
+
+                            String strResponse = server.setData(username, email, editPass1);
+                            JsonObject json = new JsonParser().parse(strResponse).getAsJsonObject();
 
                             if (json.has("error")) {
                                 binding.textViewError.setText(json.get("error").getAsString());
+                                binding.textViewError.setTextColor(Color.RED);
                                 throw new Exception("error");
                             } else {
                                 binding.textViewError.setText(json.get("status").getAsString());
+                                binding.textViewError.setTextColor(Color.GRAY);
+
+                                MemoryValues memoryValues = MemoryValues.getInstance();
+                                memoryValues.setEmail(email);
+                                memoryValues.setUsername(username);
                            }
+                            Bundle bundle = new Bundle();
+                            ProfileFragment profileFragment = new ProfileFragment();
+                            bundle.putBoolean("update", true);
+                            profileFragment.setArguments(bundle);
 
                             Thread.sleep(1000);
 
                             FragmentTransaction transaction = getFragmentManager().beginTransaction();
-                            transaction.replace(R.id.nav_host_fragment_activity_main2, new ProfileFragment());
+                            transaction.replace(R.id.nav_host_fragment_activity_main2, profileFragment);
                             transaction.addToBackStack(null);
                             transaction.commit();
                         } catch (Exception e) {

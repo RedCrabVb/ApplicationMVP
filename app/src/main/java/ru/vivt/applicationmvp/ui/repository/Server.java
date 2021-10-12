@@ -20,7 +20,6 @@ public class Server {
     private final String apiQrCode = "api/qrCode";
     private final String apiPersonData = "api/setPersonDate";
     private final String apiRegistration = "api/registration";
-    private final String apiImgNews = "src/img";
     private final String apiStatusToken = "api/getStatusToken";
     private final String apiResetPassword = "api/resetPassword";
     private final String apiAuthorization = "api/authorization";
@@ -28,7 +27,6 @@ public class Server {
 
 
     private String tokenConnection = null;
-    private String qrCodeConntion = null;
     private JsonObject jsonObjectNews = null;
 
     private Server() {
@@ -85,9 +83,6 @@ public class Server {
         }
     }
 
-    /*
-    Error set data (phoneNumber(Server, DB) - password(Android))
-    */
     public String setData(String userName, String email, String password) throws Exception {
         String result = sendInquiry(apiPersonData, String.format("token=%s&username=%s&email=%s&password=%s", tokenConnection, userName, email, password));
         System.out.println(result);
@@ -105,7 +100,6 @@ public class Server {
             String result = (sendInquiry(apiRegistration, ""));
             JsonObject jsonReg =  new JsonParser().parse(result).getAsJsonObject();
             tokenConnection = jsonReg.get("token").getAsString();
-            qrCodeConntion = jsonReg.get("qrCode").getAsString();
             System.out.println(result);
             return true;
         } catch (Exception | Error e) {
@@ -114,9 +108,15 @@ public class Server {
         }
     }
 
-    public String getQrCodeConntion() {
-        System.out.println(qrCodeConntion + " get qr code");
-        return qrCodeConntion;
+    public String getQrCode() {
+        try {
+            String result = sendInquiry(apiQrCode, String.format("token=%s", tokenConnection));
+            JsonObject json = new JsonParser().parse(result).getAsJsonObject();
+            return json.get("qrCode").getAsString();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return "error";
+        }
     }
 
     private JsonObject getNewsJson() throws Exception {
@@ -164,9 +164,5 @@ public class Server {
 
     public void setTokenConnection(String tokenConnection) {
         this.tokenConnection = tokenConnection;
-    }
-
-    public void setQrCodeConntion(String qrCodeConntion) {
-        this.qrCodeConntion = qrCodeConntion;
     }
 }
