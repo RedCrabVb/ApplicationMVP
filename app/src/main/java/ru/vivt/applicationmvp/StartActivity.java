@@ -4,8 +4,6 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.webkit.WebSettings;
-import android.webkit.WebView;
 import android.widget.EditText;
 import android.widget.Toast;
 
@@ -19,8 +17,9 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.net.ConnectException;
+import java.util.Optional;
 
+import ru.vivt.applicationmvp.ui.repository.MemoryValues;
 import ru.vivt.applicationmvp.ui.repository.Server;
 
 public class StartActivity extends AppCompatActivity {
@@ -32,12 +31,26 @@ public class StartActivity extends AppCompatActivity {
         setContentView(R.layout.activity_start);
 
 
-
-
         Thread thread = new Thread(() -> {{
-            Server server = Server.getInstance(editTextIp.getText().toString());
+            Server server = Server.getInstance(editTextIp.getText().toString(), StartActivity.this.getApplicationContext());
 
-            try (DataInputStream inputStream = new DataInputStream(new FileInputStream(new File(this.getFilesDir(), Server.fileNameConfig)))) {
+            MemoryValues memoryValues = MemoryValues.init(getApplicationContext());
+            String tokenInMemory = memoryValues.getToken();
+            if (tokenInMemory != null) {
+                server.setTokenConnection(tokenInMemory);
+                server.setQrCodeConntion(memoryValues.getQrCode());
+            } else {
+                server.registration();
+            }
+
+            if (!server.tokenActive()) {
+                server.registration();
+            }
+
+            memoryValues.setQrCode(server.getQrCodeConntion());
+            memoryValues.setToken(server.getTokenConnection());
+
+/*            try (DataInputStream inputStream = new DataInputStream(new FileInputStream(new File(this.getFilesDir(), Server.fileNameConfig)))) {
                 String str = inputStream.readUTF();
                 JsonObject json = new JsonParser().parse(str).getAsJsonObject();
                 server.setTokenConnection(json.get(Server.token).getAsString());
@@ -66,7 +79,7 @@ public class StartActivity extends AppCompatActivity {
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
-            }
+            }*/
 
             Intent intent = new Intent(StartActivity.this, MainActivity.class);
             startActivity(intent);

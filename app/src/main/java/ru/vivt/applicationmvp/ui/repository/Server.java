@@ -1,5 +1,7 @@
 package ru.vivt.applicationmvp.ui.repository;
 
+import android.content.Context;
+
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
@@ -11,8 +13,6 @@ import java.net.URL;
 import java.net.URLConnection;
 
 public class Server {
-    public static final String qrCode = "qrCode", fileNameConfig = "config.json", token = "token";
-
     private static Server server;
 
     private static String url = "";
@@ -42,14 +42,13 @@ public class Server {
         return server;
     }
 
-    public static Server getInstance(String ip) {
+    public static Server getInstance(String ip, Context context) {
         if (server == null) {
             url = "http://" + ip + "/%s?%s";
             server = new Server();
         }
         return server;
     }
-
 
     public boolean tokenActive() {
         try {
@@ -64,15 +63,6 @@ public class Server {
     public String getApiPersonData(String token) throws Exception {
         String result = sendInquiry(apiPersonDataGet, String.format("token=%s",  token));
         return result;
-    }
-
-    public String getApiPersonData() throws Exception {
-        String result = sendInquiry(apiPersonDataGet, String.format("token=%s",  token));
-        return result;
-    }
-
-    public String getPathUrlToDownloadImgNews(String imgPath) {
-        return String.format(url, apiImgNews, imgPath).replace('?', '/');
     }
 
     public String resetPassword(String email) {

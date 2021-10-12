@@ -21,6 +21,7 @@ import ru.vivt.applicationmvp.databinding.FragmentProfileBinding;
 import ru.vivt.applicationmvp.ui.account_reset.AccountResetFragment;
 import ru.vivt.applicationmvp.ui.authorization.AuthorizationFragment;
 import ru.vivt.applicationmvp.ui.registration.RegistrationFragment;
+import ru.vivt.applicationmvp.ui.repository.MemoryValues;
 import ru.vivt.applicationmvp.ui.repository.Server;
 
 public class ProfileFragment extends Fragment implements View.OnClickListener {
@@ -40,19 +41,20 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
         profileViewModel.getText().observe(getViewLifecycleOwner(), s -> textView.setText(s));
 
         binding.buttonDataReset.setOnClickListener(v -> {
-            new File(binding.getRoot().getContext().getCacheDir(), Server.fileNameConfig).delete();
+//            new File(binding.getRoot().getContext().getCacheDir(), Server.fileNameConfig).delete();
 //                new File(binding.getRoot().getContext().getFilesDir(), "config.json").delete();
+            MemoryValues.getInstance().resetData();
             System.exit(0);
         });
 
-        profileViewModel.getDataFromFile(binding.getRoot().getContext().getCacheDir());
+//        profileViewModel.getDataFromFile(binding.getRoot().getContext().getCacheDir());
         profileViewModel.getEmail().observe(getViewLifecycleOwner(), s -> {
             binding.textViewEmail.setText(s);
-            profileViewModel.setDataInMemory(binding.getRoot().getContext());
+//            profileViewModel.setDataInMemory(binding.getRoot().getContext());
         });
         profileViewModel.getUsername().observe(getViewLifecycleOwner(), s -> {
             binding.textViewUsername.setText(s);
-            profileViewModel.setDataInMemory(binding.getRoot().getContext());
+//            profileViewModel.setDataInMemory(binding.getRoot().getContext());
         });
 
 
@@ -60,14 +62,14 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
         binding.buttonRegestration.setOnClickListener(this);
         binding.buttonResetPassword.setOnClickListener(this);
 
-        Bundle bundle = getArguments();
+/*        Bundle bundle = getArguments();
         if (bundle != null) {
             if (bundle.containsKey("token")) {
                 new Thread(() -> {
                     try {
                         JsonObject json = new JsonParser().parse(
                                 Server.getInstance()
-                                        .getApiPersonData(bundle.get(Server.token).toString()))
+                                        .getApiPersonData(bundle.get("token").toString()))
                                 .getAsJsonObject();
                         String email = json.get("email").getAsString();
                         String username = json.get("username").getAsString();
@@ -79,7 +81,7 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
                     }
                 }).start();
             }
-        }
+        }*/
 
         return root;
     }

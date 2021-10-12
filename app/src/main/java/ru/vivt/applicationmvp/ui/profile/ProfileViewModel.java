@@ -1,41 +1,35 @@
 package ru.vivt.applicationmvp.ui.profile;
 
-import android.content.Context;
-import android.widget.Toast;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
-
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-
-import ru.vivt.applicationmvp.StartActivity;
-import ru.vivt.applicationmvp.ui.repository.Server;
+import ru.vivt.applicationmvp.ui.repository.MemoryValues;
 
 public class ProfileViewModel extends ViewModel {
 
     private MutableLiveData<String> mText;
     private MutableLiveData<String> username, email;
-    private JsonObject json = null;
+    private MemoryValues memoryValues;
 
-    private static final String usernameKey = "username", emailKey = "email";
     public ProfileViewModel() {
         mText = new MutableLiveData<>();
         username = new MutableLiveData<>();
         email = new MutableLiveData<>();
         mText.setValue("This is profile fragment");
+
+        memoryValues = MemoryValues.getInstance();
+        String _username = memoryValues.getUsername(), _email = memoryValues.getEmail();
+        if (_username != null) {
+            username.setValue(_username);
+        }
+        if (_email != null) {
+            email.setValue(_email);
+        }
     }
 
-    public void getDataFromFile(File file) {
+/*    public void getDataFromFile(File file) {
         try (DataInputStream inputStream = new DataInputStream(new FileInputStream(new File(file, Server.fileNameConfig)))) {
             String str = inputStream.readUTF();
             json = new JsonParser().parse(str).getAsJsonObject();
@@ -50,7 +44,7 @@ public class ProfileViewModel extends ViewModel {
             e.printStackTrace();
             json = new JsonObject();
         }
-    }
+    }*/
 
     public LiveData<String> getText() {
         return mText;
@@ -65,14 +59,16 @@ public class ProfileViewModel extends ViewModel {
     }
 
     public void putUsername(String username) {
+        memoryValues.setUsername(username);
         this.username.postValue(username);
     }
 
     public void putEmail(String email) {
+        memoryValues.setEmail(email);
         this.email.postValue(email);
     }
 
-    public void setDataInMemory(Context context) {
+/*    public void setDataInMemory(Context context) {
         try (DataOutputStream outputStream = new DataOutputStream(new FileOutputStream(new File(context.getCacheDir(), Server.fileNameConfig)))){
             if (json.has(usernameKey)) {
                 json.remove(usernameKey);
@@ -88,5 +84,5 @@ public class ProfileViewModel extends ViewModel {
         } catch (IOException e) {
             e.printStackTrace();
         }
-    }
+    }*/
 }

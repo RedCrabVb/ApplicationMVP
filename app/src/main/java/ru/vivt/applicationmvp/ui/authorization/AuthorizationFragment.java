@@ -22,6 +22,7 @@ import ru.vivt.applicationmvp.databinding.FragmentAutrizationBinding;
 import ru.vivt.applicationmvp.databinding.FragmentHomeBinding;
 import ru.vivt.applicationmvp.ui.home.HomeViewModel;
 import ru.vivt.applicationmvp.ui.profile.ProfileFragment;
+import ru.vivt.applicationmvp.ui.repository.MemoryValues;
 import ru.vivt.applicationmvp.ui.repository.Server;
 
 public class AuthorizationFragment extends Fragment {
@@ -49,14 +50,15 @@ public class AuthorizationFragment extends Fragment {
                         return;
                     }
                     String token = json.get("token").getAsString();
-
-                    Bundle bundle = new Bundle();
+                    MemoryValues memoryValues = MemoryValues.getInstance();
+                    memoryValues.setToken(token);
+/*                    Bundle bundle = new Bundle();
                     bundle.putString("token", token);
                     ProfileFragment profileFragment = new ProfileFragment();
-                    profileFragment.setArguments(bundle);
+                    profileFragment.setArguments(bundle);*/
 
                     FragmentTransaction transaction = getFragmentManager().beginTransaction();
-                    transaction.replace(R.id.nav_host_fragment_activity_main2, profileFragment);
+//                    transaction.replace(R.id.nav_host_fragment_activity_main2, profileFragment);
                     transaction.addToBackStack(null);
                     transaction.commit();
                 } catch (Exception e) {
