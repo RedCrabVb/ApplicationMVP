@@ -14,6 +14,7 @@ import java.net.URLConnection;
 
 public class Server {
     private static Server server;
+    public static String error = "error", status = "status";
 
     private static String url = "";
     private final String apiNews = "api/news";
@@ -58,8 +59,8 @@ public class Server {
         }
     }
 
-    public String getApiPersonData(String token) throws Exception {
-        String result = sendInquiry(apiPersonDataGet, String.format("token=%s",  token));
+    public JsonObject getApiPersonData() throws Exception {
+        JsonObject result = new JsonParser().parse(sendInquiry(apiPersonDataGet, String.format("token=%s",  tokenConnection))).getAsJsonObject();
         return result;
     }
 
@@ -83,7 +84,7 @@ public class Server {
         }
     }
 
-    public String setData(String userName, String email, String password) throws Exception {
+    public String updateDataAboutProfile(String userName, String email, String password) throws Exception {
         String result = sendInquiry(apiPersonData, String.format("token=%s&username=%s&email=%s&password=%s", tokenConnection, userName, email, password));
         System.out.println(result);
         return result;
@@ -108,7 +109,7 @@ public class Server {
         }
     }
 
-    public String getQrCode() {
+    private String getQrCode() {
         try {
             String result = sendInquiry(apiQrCode, String.format("token=%s", tokenConnection));
             JsonObject json = new JsonParser().parse(result).getAsJsonObject();
@@ -125,6 +126,25 @@ public class Server {
             jsonObjectNews = new JsonParser().parse(result).getAsJsonObject();
         }
         return jsonObjectNews;
+    }
+
+    public void setTokenConnection(String tokenConnection) {
+        this.tokenConnection = tokenConnection;
+    }
+
+    public void saveDataInMemory(MemoryValues memoryValues) {
+        memoryValues.setQrCode(getQrCode());
+        memoryValues.setToken(tokenConnection);
+
+        try {
+            JsonObject json = getApiPersonData();
+            String username = json.get(MemoryValues.username).getAsString();
+            String email = json.get(MemoryValues.email).getAsString();
+            memoryValues.setUsername(username.isEmpty() ? "No name" : username);
+            memoryValues.setEmail(email.isEmpty() ? "No name" : email);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     private String sendInquiry(String api, String json) throws Exception {
@@ -156,13 +176,5 @@ public class Server {
         connection.disconnect();
 
         return urlString;
-    }
-
-    public String getTokenConnection() {
-        return tokenConnection;
-    }
-
-    public void setTokenConnection(String tokenConnection) {
-        this.tokenConnection = tokenConnection;
     }
 }

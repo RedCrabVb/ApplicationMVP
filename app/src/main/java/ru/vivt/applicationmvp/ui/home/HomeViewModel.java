@@ -10,7 +10,6 @@ import ru.vivt.applicationmvp.ui.repository.Server;
 public class HomeViewModel extends ViewModel {
 
     private Server server;
-    private MutableLiveData<String> mText;
     private MutableLiveData<String> newsLink;
     private MutableLiveData<String> qrCode;
     private MemoryValues memoryValues;
@@ -25,12 +24,6 @@ public class HomeViewModel extends ViewModel {
                 newsLink.postValue(server.getNews());
         }).start();
 
-        mText = new MutableLiveData<>();
-        mText.setValue("This is home fragment");
-    }
-
-    public LiveData<String> getText() {
-        return mText;
     }
 
     public LiveData<String> getQrCode() {

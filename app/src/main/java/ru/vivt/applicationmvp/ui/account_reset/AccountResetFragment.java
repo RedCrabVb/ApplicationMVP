@@ -30,14 +30,20 @@ public class AccountResetFragment extends Fragment {
         binding.buttonReset.setOnClickListener(v -> {
             new Thread(() -> {
                 try {
-                    JsonObject json = new JsonParser().parse(Server.getInstance().resetPassword(binding.editTextTextEmailAddress.getText().toString())).getAsJsonObject();
-                    if (json.has("error")) {
-                        binding.textView2.setText(json.get("error").getAsString());
+                    String email = binding.editTextTextEmailAddress.getText().toString();
+                    if (email.length() < 4) {
+                        binding.textView2.setText("Error input data");
                         return;
                     }
 
-                    if (json != null) {
-                        binding.textView2.setText(json.get("status").getAsString());
+                    JsonObject json = new JsonParser().parse(Server.getInstance().resetPassword(email)).getAsJsonObject();
+                    if (json.has(Server.error)) {
+                        binding.textView2.setText(json.get(Server.error).getAsString());
+                        return;
+                    }
+
+                    if (json.has(Server.status)) {
+                        binding.textView2.setText(json.get(Server.status).getAsString());
                         Thread.sleep(2000);
                     }
 

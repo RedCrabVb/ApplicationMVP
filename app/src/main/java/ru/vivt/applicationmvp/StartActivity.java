@@ -24,6 +24,8 @@ import ru.vivt.applicationmvp.ui.repository.Server;
 
 public class StartActivity extends AppCompatActivity {
     private EditText editTextIp;
+    private final String server = "servermvp.ru:49379"; // for test 10.0.2.2:8082
+                                                        // for prod servermvp.ru:49379
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,16 +48,14 @@ public class StartActivity extends AppCompatActivity {
                 server.registration();
             }
 
-            memoryValues.setToken(server.getTokenConnection());
-            memoryValues.setQrCode(server.getQrCode());
+            server.saveDataInMemory(memoryValues);
 
             Intent intent = new Intent(StartActivity.this, MainActivity.class);
             startActivity(intent);
         }});
 
         editTextIp = findViewById(R.id.editTextIp);
-        editTextIp.setText("servermvp.ru:49379");
-//        editTextIp.setText("10.0.2.2:8082");
+        editTextIp.setText(server);
         thread.start();
     }
 }

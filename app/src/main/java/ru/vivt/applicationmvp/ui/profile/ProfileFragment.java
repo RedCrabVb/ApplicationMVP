@@ -25,6 +25,7 @@ import ru.vivt.applicationmvp.ui.repository.MemoryValues;
 import ru.vivt.applicationmvp.ui.repository.Server;
 
 public class ProfileFragment extends Fragment implements View.OnClickListener {
+    public static String keyUpdate = "update";
 
     private ProfileViewModel profileViewModel;
     private FragmentProfileBinding binding;
@@ -36,9 +37,6 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
 
         binding = FragmentProfileBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
-
-        final TextView textView = binding.textNotifications;
-        profileViewModel.getText().observe(getViewLifecycleOwner(), s -> textView.setText(s));
 
         binding.buttonDataReset.setOnClickListener(v -> {
             MemoryValues.getInstance().resetData();
@@ -64,7 +62,7 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
 
         Bundle bundle = getArguments();
         if (bundle != null) {
-            if (bundle.containsKey("update")) {
+            if (bundle.containsKey(keyUpdate)) {
                 profileViewModel.putUsername(memoryValues.getUsername());
                 profileViewModel.putEmail(memoryValues.getEmail());
             }

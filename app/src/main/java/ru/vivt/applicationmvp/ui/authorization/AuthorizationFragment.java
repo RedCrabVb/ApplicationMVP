@@ -45,22 +45,25 @@ public class AuthorizationFragment extends Fragment {
                     String email = binding.editTextTextEmailAddress.getText().toString();
                     String password = binding.editTextTextPassword.getText().toString();
 
+                    if (email.length() < 4 || password.length() < 4) {
+                        binding.textView2.setText("Error input data");
+                        return;
+                    }
+
                     JsonObject json = new JsonParser().parse(server.authorization(email, password)).getAsJsonObject();
-                    if (json.has("error")) {
-                        binding.textView2.setText(json.get("error").getAsString());
-                        binding.textView2.setTextColor(Color.red(3));
-                        binding.textView2.setVisibility(View.VISIBLE);
+                    if (json.has(Server.error)) {
+                        binding.textView2.setText(json.get(Server.error).getAsString());
                         return;
                     } else {
                         binding.textView2.setText("Good");
                         binding.textView2.setTextColor(Color.GRAY);
-                        binding.textView2.setVisibility(View.VISIBLE);
                     }
                     String token = json.get("token").getAsString();
                     MemoryValues memoryValues = MemoryValues.getInstance();
                     server.setTokenConnection(token);
-                    memoryValues.setToken(token);
-                    memoryValues.setQrCode(server.getQrCode());
+                    server.saveDataInMemory(memoryValues);
+
+                    Thread.sleep(2000);
 
                     ProfileFragment profileFragment = new ProfileFragment();
 

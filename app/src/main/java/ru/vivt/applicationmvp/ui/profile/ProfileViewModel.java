@@ -9,15 +9,12 @@ import ru.vivt.applicationmvp.ui.repository.MemoryValues;
 
 public class ProfileViewModel extends ViewModel {
 
-    private MutableLiveData<String> mText;
     private MutableLiveData<String> username, email;
     private MemoryValues memoryValues;
 
     public ProfileViewModel() {
-        mText = new MutableLiveData<>();
         username = new MutableLiveData<>();
         email = new MutableLiveData<>();
-        mText.setValue("This is profile fragment");
 
         memoryValues = MemoryValues.getInstance();
         String _username = memoryValues.getUsername(), _email = memoryValues.getEmail();
@@ -27,10 +24,6 @@ public class ProfileViewModel extends ViewModel {
         if (_email != null) {
             email.setValue(_email);
         }
-    }
-
-    public LiveData<String> getText() {
-        return mText;
     }
 
     public LiveData<String> getEmail() {

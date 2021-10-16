@@ -28,12 +28,9 @@ public class NewsFragment extends Fragment {
         View root = binding.getRoot();
 
 
-        dashboardViewModel.getNewsLink().observe(getViewLifecycleOwner(), new Observer<String>() {
-            @Override
-            public void onChanged(String s) {
-                System.out.println(s);
-                binding.webNew.loadUrl(s);
-            }
+        dashboardViewModel.getNewsLink().observe(getViewLifecycleOwner(), s -> {
+            System.out.println(s);
+            binding.webNew.loadUrl(s);
         });
         return root;
     }
