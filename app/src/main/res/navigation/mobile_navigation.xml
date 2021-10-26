@@ -14,18 +14,24 @@
     <fragment
         android:id="@+id/navigation_news"
         android:name="ru.vivt.applicationmvp.ui.news.NewsFragment"
-        android:label="@string/title_dashboard"
+        android:label="@string/title_news"
         tools:layout="@layout/fragment_news" />
 
     <fragment
         android:id="@+id/navigation_profile"
         android:name="ru.vivt.applicationmvp.ui.profile.ProfileFragment"
-        android:label="@string/title_notifications"
+        android:label="@string/title_profile"
         tools:layout="@layout/fragment_profile" />
 
     <fragment
         android:id="@+id/navigation_account"
         android:name="ru.vivt.applicationmvp.ui.authorization.AuthorizationFragment"
-        android:label="@string/title_notifications"
+        android:label="@string/title_profile"
         tools:layout="@layout/fragment_autrization" />
+
+    <fragment
+        android:id="@+id/navigation_qr_code_scanner"
+        android:name="ru.vivt.applicationmvp.ui.ScannerQrFragment"
+        android:label="@string/qr_code"
+        tools:layout="@layout/fragment_scanner_qr" />
 </navigation>
