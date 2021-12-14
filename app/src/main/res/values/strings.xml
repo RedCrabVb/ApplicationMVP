@@ -10,6 +10,7 @@
     <string name="registration_button">Регистрация</string>
     <string name="reset_mail">Сбросить</string>
     <string name="restore_password">Восстановить пароль</string>
+    <string name="go_test">Пройти тест</string>
     <string name="data_reset">Сброс данных</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>

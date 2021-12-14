@@ -1,11 +1,9 @@
 package ru.vivt.applicationmvp.ui;
 
 import android.Manifest;
-import android.app.Activity;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 
-import androidx.annotation.NonNull;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
@@ -17,13 +15,6 @@ import android.widget.Toast;
 
 import com.budiyev.android.codescanner.CodeScanner;
 import com.budiyev.android.codescanner.CodeScannerView;
-import com.budiyev.android.codescanner.DecodeCallback;
-import com.google.zxing.Result;
-
-import ru.vivt.applicationmvp.MainActivity;
-import ru.vivt.applicationmvp.R;
-import ru.vivt.applicationmvp.databinding.ActivityMainBinding;
-import ru.vivt.applicationmvp.databinding.FragmentRegestrationBinding;
 import ru.vivt.applicationmvp.databinding.FragmentScannerQrBinding;
 
 public class ScannerQrFragment extends Fragment {

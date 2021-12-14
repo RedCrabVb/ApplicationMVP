@@ -1,7 +1,7 @@
 package ru.vivt.applicationmvp.ui.repository;
 
-import android.content.Context;
-
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
@@ -11,20 +11,23 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLConnection;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class Server {
     private static Server server;
     public static String error = "error", status = "status";
 
     private static String url = "";
-    private final String apiNews = "api/news";
-    private final String apiQrCode = "api/qrCode";
-    private final String apiPersonData = "api/setPersonDate";
-    private final String apiRegistration = "api/registration";
-    private final String apiStatusToken = "api/getStatusToken";
-    private final String apiResetPassword = "api/resetPassword";
-    private final String apiAuthorization = "api/authorization";
-    private final String apiPersonDataGet = "api/personData";
+    private static final String apiNews = "api/news";
+    private static final String apiTestAll = "api/testAll";
+    private static final String apiTestCurrent = "api/test";
+    private static final String apiQrCode = "api/qrCode";
+    private static final String apiPersonData = "api/setPersonDate";
+    private static final String apiRegistration = "api/registration";
+    private static final String apiStatusToken = "api/getStatusToken";
+    private static final String apiResetPassword = "api/resetPassword";
+    private static final String apiAuthorization = "api/authorization";
+    private static final String apiPersonDataGet = "api/personData";
 
 
     private String tokenConnection = null;
@@ -41,7 +44,7 @@ public class Server {
         return server;
     }
 
-    public static Server getInstance(String ip, Context context) {
+    public static Server getInstance(String ip) {
         if (server == null) {
             url = "http://" + ip + "/%s?%s";
             server = new Server();
@@ -60,8 +63,7 @@ public class Server {
     }
 
     public JsonObject getApiPersonData() throws Exception {
-        JsonObject result = new JsonParser().parse(sendInquiry(apiPersonDataGet, String.format("token=%s",  tokenConnection))).getAsJsonObject();
-        return result;
+        return new JsonParser().parse(sendInquiry(apiPersonDataGet, String.format("token=%s",  tokenConnection))).getAsJsonObject();
     }
 
     public String resetPassword(String email) {
@@ -76,8 +78,7 @@ public class Server {
 
     public String getNews() {
         try {
-            String linkNews = Server.getInstance().getNewsJson().get("News").getAsString();
-            return linkNews;
+            return Server.getInstance().getNewsJson().get("News").getAsString();
         } catch (Exception e) {
             e.printStackTrace();
             return "";
@@ -91,21 +92,41 @@ public class Server {
     }
 
     public String authorization(String email, String password) throws Exception {
-        String result = sendInquiry(apiAuthorization, String.format("email=%s&password=%s",  email, password));
-        return result;
+        return sendInquiry(apiAuthorization, String.format("email=%s&password=%s",  email, password));
+    }
+
+    private JsonObject getTestServer() throws Exception {
+        return new JsonParser().parse(sendInquiry(apiTestAll, "")).getAsJsonObject();
+    }
+
+    public Test[] getTest() {
+        try {
+            Test[] news;
+            JsonArray jsonArrayTest = Server.getInstance().getTestServer().getAsJsonArray("test");
+            news = new Test[jsonArrayTest.size()];
+            AtomicInteger i = new AtomicInteger();
+            for(JsonElement r : jsonArrayTest){
+                i.getAndIncrement();
+                JsonObject jsonNews = r.getAsJsonObject();
+                news[i.get() - 1] = new Test(jsonNews.get("header").getAsString(),
+                        jsonNews.get("description").getAsString());
+            }
+            return news;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new Test[]{};
+        }
     }
 
 
-    public boolean registration() {
+    public void registration() {
         try {
             String result = (sendInquiry(apiRegistration, ""));
             JsonObject jsonReg =  new JsonParser().parse(result).getAsJsonObject();
             tokenConnection = jsonReg.get("token").getAsString();
             System.out.println(result);
-            return true;
         } catch (Exception | Error e) {
             e.printStackTrace();
-            return  false;
         }
     }
 
@@ -149,7 +170,7 @@ public class Server {
 
     private String sendInquiry(String api, String json) throws Exception {
         json = json.replace("+", "%20"); // fix space encoder
-        URL url = new URL(String.format(this.url, api, json));
+        URL url = new URL(String.format(Server.url, api, json));
         HttpURLConnection connection = getResponseServer(url);
         String response = connectionResponseToString(connection);
 
@@ -159,22 +180,21 @@ public class Server {
 
     private HttpURLConnection getResponseServer(URL url) throws Exception {
         URLConnection urlConnection = url.openConnection();
-        HttpURLConnection connection = (HttpURLConnection) urlConnection;
 
-        return connection;
+        return (HttpURLConnection) urlConnection;
     }
 
     private String connectionResponseToString(HttpURLConnection connection) throws IOException {
         BufferedReader in = new BufferedReader(new InputStreamReader(connection.getInputStream()));
-        String urlString = "";
+        StringBuilder urlString = new StringBuilder();
 
         String current;
         while ((current = in.readLine()) != null) {
-            urlString += current;
+            urlString.append(current);
         }
 
         connection.disconnect();
 
-        return urlString;
+        return urlString.toString();
     }
 }

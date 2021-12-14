@@ -1,20 +1,15 @@
 package ru.vivt.applicationmvp.ui.profile;
 
+import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.ViewModelProvider;
-
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
-
-import java.io.File;
 
 import ru.vivt.applicationmvp.R;
 import ru.vivt.applicationmvp.databinding.FragmentProfileBinding;
@@ -22,7 +17,7 @@ import ru.vivt.applicationmvp.ui.account_reset.AccountResetFragment;
 import ru.vivt.applicationmvp.ui.authorization.AuthorizationFragment;
 import ru.vivt.applicationmvp.ui.registration.RegistrationFragment;
 import ru.vivt.applicationmvp.ui.repository.MemoryValues;
-import ru.vivt.applicationmvp.ui.repository.Server;
+import ru.vivt.applicationmvp.ui.test.TestFragment;
 
 public class ProfileFragment extends Fragment implements View.OnClickListener {
     public static String keyUpdate = "update";
@@ -43,12 +38,8 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
             System.exit(0);
         });
 
-        profileViewModel.getEmail().observe(getViewLifecycleOwner(), s -> {
-            binding.textViewEmail.setText(s);
-        });
-        profileViewModel.getUsername().observe(getViewLifecycleOwner(), s -> {
-            binding.textViewUsername.setText(s);
-        });
+        profileViewModel.getEmail().observe(getViewLifecycleOwner(), s -> binding.textViewEmail.setText(s));
+        profileViewModel.getUsername().observe(getViewLifecycleOwner(), s -> binding.textViewUsername.setText(s));
 
 
         binding.buttonAutrization.setOnClickListener(this);
@@ -88,6 +79,9 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
                 break;
             case R.id.buttonResetPassword:
                 replaceFragment(new AccountResetFragment());
+                break;
+            case R.id.buttonGoTest:
+                replaceFragment(new TestFragment());
                 break;
         }
     }
