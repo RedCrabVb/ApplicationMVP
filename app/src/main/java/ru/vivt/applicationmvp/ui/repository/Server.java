@@ -96,21 +96,24 @@ public class Server {
     }
 
     private JsonObject getTestServer() throws Exception {
-        return new JsonParser().parse(sendInquiry(apiTestAll, "")).getAsJsonObject();
+        JsonObject test = new JsonParser().parse(sendInquiry(apiTestAll, "")).getAsJsonObject();
+        System.out.println(test);
+        return test;
     }
 
     public Test[] getTest() {
         try {
             Test[] news;
-            JsonArray jsonArrayTest = Server.getInstance().getTestServer().getAsJsonArray("test");
+            JsonArray jsonArrayTest = getTestServer().getAsJsonArray("test");
             news = new Test[jsonArrayTest.size()];
             AtomicInteger i = new AtomicInteger();
             for(JsonElement r : jsonArrayTest){
-                i.getAndIncrement();
+//                i.getAndIncrement();
                 JsonObject jsonNews = r.getAsJsonObject();
-                news[i.get() - 1] = new Test(jsonNews.get("header").getAsString(),
+                news[i.getAndIncrement()] = new Test(jsonNews.get("test").getAsString(),
                         jsonNews.get("description").getAsString());
             }
+//            System.out.println(jsonArrayTest);
             return news;
         } catch (Exception e) {
             e.printStackTrace();

@@ -1,6 +1,5 @@
 package ru.vivt.applicationmvp.ui.profile;
 
-import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -45,6 +44,7 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
         binding.buttonAutrization.setOnClickListener(this);
         binding.buttonRegestration.setOnClickListener(this);
         binding.buttonResetPassword.setOnClickListener(this);
+        binding.buttonGoTest.setOnClickListener(this);
 
         MemoryValues memoryValues = MemoryValues.getInstance();
 
@@ -83,6 +83,8 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
             case R.id.buttonGoTest:
                 replaceFragment(new TestFragment());
                 break;
+            default:
+                System.out.println("Not found R.id (ProfileFragment)");
         }
     }
 

@@ -7,6 +7,7 @@
     tools:context=".ui.profile.ProfileFragment">
 
     <LinearLayout
+        android:id="@+id/linearLayout2"
         android:layout_width="352dp"
         android:layout_height="644dp"
         android:layout_marginStart="20dp"
@@ -38,7 +39,7 @@
             android:background="@drawable/custom_input"
             android:paddingLeft="30dp"
             android:paddingRight="30dp"
-            android:text="TextView" />
+            android:text="" />
 
         <TextView
             android:id="@+id/textViewUsername"
@@ -48,7 +49,7 @@
             android:background="@drawable/custom_input"
             android:paddingLeft="30dp"
             android:paddingRight="30dp"
-            android:text="TextView" />
+            android:text="" />
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
@@ -58,7 +59,7 @@
 
         <Button
             android:id="@+id/buttonAutrization"
-            android:layout_width="257dp"
+            android:layout_width="255dp"
             android:layout_height="wrap_content"
             android:layout_marginLeft="50dp"
             android:layout_marginTop="25dp"
@@ -66,6 +67,7 @@
             android:background="@drawable/custom_button"
             android:onClick="onClick"
             android:text="@string/authorization_button" />
+
 
         <Button
             android:id="@+id/buttonRegestration"
@@ -89,6 +91,20 @@
             android:onClick="onClick"
             android:text="@string/go_test" />
 
+        <!--
+        <Button
+            android:id="@+id/buttonTest"
+            android:layout_width="255dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="50dp"
+            android:layout_marginTop="25dp"
+            android:layout_marginRight="50dp"
+            android:background="@drawable/custom_button"
+            android:onClick="onClick"
+            android:text="@string/go_test" />
+-->
+
+
         <Button
             android:id="@+id/buttonResetPassword"
             android:layout_width="255dp"
@@ -103,7 +119,7 @@
 
         <Button
             android:id="@+id/buttonDataReset"
-            android:layout_width="253dp"
+            android:layout_width="255dp"
             android:layout_height="wrap_content"
             android:layout_marginLeft="50dp"
             android:layout_marginTop="25dp"
