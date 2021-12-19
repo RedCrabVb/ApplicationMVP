@@ -1,5 +1,6 @@
 package ru.vivt.applicationmvp.ui.repository;
 
+import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
@@ -101,6 +102,30 @@ public class Server {
         return test;
     }
 
+    private JsonObject getQuestionServer(int id) throws Exception {
+        JsonObject test = new JsonParser().parse(sendInquiry(apiTestCurrent, String.format("id=%d", id))).getAsJsonObject();
+        System.out.println(test);
+        return test;
+    }
+
+    public Question[] getQuestion(int id) {
+        try {
+            Gson gson = new Gson();
+            Question[] question;
+            JsonArray jsonArrayQuestion = getQuestionServer(id).getAsJsonArray("question");
+            question = new Question[jsonArrayQuestion.size()];
+            AtomicInteger i = new AtomicInteger();
+            for(JsonElement r : jsonArrayQuestion){
+                JsonObject jsonQuestion = r.getAsJsonObject();
+                question[i.getAndIncrement()] = gson.fromJson(jsonQuestion, Question.class);
+            }
+            return question;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new Question[]{};
+        }
+    }
+
     public Test[] getTest() {
         try {
             Test[] news;
@@ -108,12 +133,13 @@ public class Server {
             news = new Test[jsonArrayTest.size()];
             AtomicInteger i = new AtomicInteger();
             for(JsonElement r : jsonArrayTest){
-//                i.getAndIncrement();
                 JsonObject jsonNews = r.getAsJsonObject();
-                news[i.getAndIncrement()] = new Test(jsonNews.get("test").getAsString(),
-                        jsonNews.get("description").getAsString());
+                news[i.getAndIncrement()] = new Test(
+                        jsonNews.get("idTest").getAsInt(),
+                        jsonNews.get("test").getAsString(),
+                        jsonNews.get("description").getAsString()
+                );
             }
-//            System.out.println(jsonArrayTest);
             return news;
         } catch (Exception e) {
             e.printStackTrace();

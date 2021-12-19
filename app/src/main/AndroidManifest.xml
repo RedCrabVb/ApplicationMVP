@@ -20,6 +20,8 @@
         <activity android:screenOrientation="portrait"
             android:name=".MainActivity"></activity>
         <activity android:screenOrientation="portrait"
+            android:name=".ui.test.TestActivity"></activity>
+        <activity android:screenOrientation="portrait"
             android:name=".StartActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
