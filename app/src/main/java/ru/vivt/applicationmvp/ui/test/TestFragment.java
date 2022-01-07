@@ -55,6 +55,7 @@ public class TestFragment extends Fragment {
                     System.out.println("click item + " + position);
 
                     Intent intent = new Intent(binding.getRoot().getContext(), TestActivity.class);
+                    intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
                     Bundle bundle = new Bundle();
                     new Thread(() -> {
                         Question[] questions = Server.getInstance().getQuestion(testViewModel.getArrayAdapter().getValue().getItem(position).getIdTest());

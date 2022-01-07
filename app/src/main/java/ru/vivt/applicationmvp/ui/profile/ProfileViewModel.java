@@ -24,6 +24,7 @@ public class ProfileViewModel extends ViewModel {
         if (_email != null) {
             email.setValue(_email);
         }
+
     }
 
     public LiveData<String> getEmail() {
