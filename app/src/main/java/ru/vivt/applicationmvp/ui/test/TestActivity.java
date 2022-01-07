@@ -28,8 +28,8 @@ public class TestActivity extends AppCompatActivity {
 
 
         Question[] question = gson.fromJson(getIntent().getExtras().get("questions").toString(), Question[].class);
-        ListView listView = findViewById(R.id.listTestQuestion);
-        listView.setAdapter(new QuestionAdapter(this, R.layout.list_test,
-                new ArrayList(Arrays.asList(question))));
+//        ListView listView = findViewById(R.id.listTestQuestion);
+//        listView.setAdapter(new QuestionAdapter(this, R.layout.list_test,
+//                new ArrayList(Arrays.asList(question))));
     }
 }
