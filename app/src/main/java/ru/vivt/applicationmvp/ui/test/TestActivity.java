@@ -12,6 +12,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 
 import com.google.gson.Gson;
 
@@ -25,6 +26,7 @@ import ru.vivt.applicationmvp.ui.repository.QuestionAdapter;
 import ru.vivt.applicationmvp.ui.repository.Server;
 import ru.vivt.applicationmvp.ui.repository.TestAdapter;
 import ru.vivt.applicationmvp.ui.test.test.TestBlankFragment;
+import ru.vivt.applicationmvp.ui.test.test.TestResultFragment;
 
 public class TestActivity extends AppCompatActivity {
 
@@ -33,8 +35,20 @@ public class TestActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_specific_test);
 
-        FragmentManager manager = getSupportFragmentManager();
-        TestBlankFragment fragment = (TestBlankFragment) manager.findFragmentById(R.id.nav_host_fragment_activity_test);
-        fragment.onCreate(null);
+//        FragmentManager manager = getSupportFragmentManager();
+//        TestBlankFragment fragment = (TestBlankFragment) manager.findFragmentById(R.id.fragment_activity_test);
+//        fragment.onCreate(null);
+
+        replaceFragment(new TestBlankFragment());
+
+    }
+
+    public void replaceFragment(Fragment fragment) {
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        fragmentTransaction.replace(R.id.frameContainer, fragment);
+        fragmentTransaction.addToBackStack(fragment.toString());
+        fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
+        fragmentTransaction.commit();
     }
 }

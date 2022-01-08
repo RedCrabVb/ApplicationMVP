@@ -7,15 +7,14 @@
     tools:context=".ui.account_reset.AccountResetFragment"
     xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <fragment
-        android:name="ru.vivt.applicationmvp.ui.test.test.TestBlankFragment"
-        android:id="@+id/nav_host_fragment_activity_test"
+    <FrameLayout
+        android:id="@+id/frameContainer"
         android:layout_width="380dp"
         android:layout_height="642dp"
+        android:visibility="visible"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        />
+        app:layout_constraintTop_toTopOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

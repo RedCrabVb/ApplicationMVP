@@ -8,20 +8,24 @@
 
     <Button
         android:id="@+id/button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="100dp"
-        android:layout_marginTop="221dp"
-        android:text="Сохранить результаты"
+        android:layout_width="252dp"
+        android:layout_height="45dp"
+        android:layout_marginStart="80dp"
+        android:layout_marginTop="32dp"
+        android:rotationX="2"
+        android:text="@string/saveResultTest"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textViewResult" />
 
     <TextView
         android:id="@+id/textViewResult"
-        android:layout_width="202dp"
-        android:layout_height="175dp"
-        android:layout_marginStart="88dp"
-        android:layout_marginTop="96dp"
+        android:layout_width="377dp"
+        android:layout_height="427dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="16dp"
+        android:background="#FFFFFF"
+        android:paddingStart="60dp"
+        android:paddingTop="100dp"
         android:text="TextView"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />

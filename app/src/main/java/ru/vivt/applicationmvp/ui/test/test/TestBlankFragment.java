@@ -11,6 +11,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
 import com.google.gson.Gson;
@@ -53,10 +54,7 @@ public class TestBlankFragment extends Fragment {
 
             buttonNextQuestion.setOnClickListener(v -> {
                 if (currentPositionQuestion + 1 > questions.length) {
-                    FragmentTransaction transaction = getFragmentManager().beginTransaction();
-                    transaction.replace(R.id.nav_host_fragment_activity_test, new TestResultFragment());
-                    transaction.addToBackStack(null);
-                    transaction.commit();
+                    replaceFragment(new TestResultFragment());
                 } else {
                     loadTestCase(questionText, comment, countQuestion);
                 }
@@ -64,6 +62,15 @@ public class TestBlankFragment extends Fragment {
         }
 
         return root;
+    }
+
+    public void replaceFragment(Fragment fragment) {
+        FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        fragmentTransaction.replace(R.id.frameContainer, fragment);
+        fragmentTransaction.addToBackStack(fragment.toString());
+        fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
+        fragmentTransaction.commit();
     }
 
 }

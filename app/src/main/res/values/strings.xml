@@ -19,4 +19,5 @@
     <string name="comment">Комментраий</string>
     <string name="question">Вопрос</string>
     <string name="nextQuestion">Следующий вопрос</string>
+    <string name="saveResultTest">Сохранить результаты</string>
 </resources>
