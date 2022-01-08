@@ -22,4 +22,6 @@ public class Question {
     public String getComment() {
         return comment;
     }
+
+
 }

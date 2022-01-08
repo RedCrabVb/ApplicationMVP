@@ -12,7 +12,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
@@ -28,13 +27,14 @@ import ru.vivt.applicationmvp.databinding.FragmentTestBlankBinding;
 import ru.vivt.applicationmvp.ui.repository.Question;
 
 public class TestBlankFragment extends Fragment {
-    private Gson gson = new Gson();
+    private final Gson gson = new Gson();
 
     private CodeScanner mCodeScanner;
 
     private FragmentTestBlankBinding binding;
 
     private Question[] questions;
+    private boolean[] questionsAnswer;
     private int currentPositionQuestion = 0;
 
     private void loadTestCase(EditText questionText, EditText comment, TextView countQuestion) {
@@ -42,6 +42,11 @@ public class TestBlankFragment extends Fragment {
         questionText.setText(question.getText());
         comment.setText(question.getComment());
         countQuestion.setText(String.format("%d/%d", currentPositionQuestion, questions.length));
+    }
+
+    private void saveAnswer(EditText answerEditText) {
+        boolean result = answerEditText.getText().toString().equals(questions[currentPositionQuestion].getAnswer());
+        questionsAnswer[currentPositionQuestion] = result;
     }
 
     public View onCreateView(@NonNull LayoutInflater inflater,
@@ -53,9 +58,11 @@ public class TestBlankFragment extends Fragment {
         Bundle questionBundle = getActivity().getIntent().getExtras();
         if (questionBundle != null) {
             questions = gson.fromJson(questionBundle.get("questions").toString(), Question[].class);
+            questionsAnswer = new boolean[questions.length];
 
             EditText questionText = binding.textQuestion;
             EditText comment = binding.textComment;
+            EditText answer = binding.textAnswer;
             TextView countQuestion = binding.countQuestion;
             Button buttonNextQuestion = binding.buttonNextQuestion;
 
@@ -63,8 +70,10 @@ public class TestBlankFragment extends Fragment {
 
             buttonNextQuestion.setOnClickListener(v -> {
                 if (currentPositionQuestion + 1 > questions.length) {
+                    getActivity().getIntent().putExtra("resultTest", gson.toJson(questionsAnswer));
                     replaceFragment(new TestResultFragment());
                 } else {
+                    saveAnswer(answer);
                     loadTestCase(questionText, comment, countQuestion);
                 }
             });
@@ -81,7 +90,13 @@ public class TestBlankFragment extends Fragment {
             if (ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.CAMERA) != PackageManager.PERMISSION_DENIED) {
                 CodeScannerView scannerView = binding.scannerView;
                 mCodeScanner = new CodeScanner(getActivity(), scannerView);
-                mCodeScanner.setDecodeCallback(result -> getActivity().runOnUiThread(() -> Toast.makeText(getActivity(), result.getText(), Toast.LENGTH_SHORT).show()));
+                mCodeScanner.setDecodeCallback(result -> {
+                    for (Question question : questions) {
+                        if (question.getAnswer().hashCode() == Integer.parseInt(result.getText())) {
+                            binding.textAnswer.setText(question.getAnswer());
+                        }
+                    }
+                });
                 scannerView.setOnClickListener(view -> mCodeScanner.startPreview());
             } else {
                 throw new RuntimeException();
