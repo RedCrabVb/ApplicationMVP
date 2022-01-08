@@ -7,7 +7,7 @@
     android:background="#FFFFFF">
 
     <Button
-        android:id="@+id/button"
+        android:id="@+id/saveResultTest"
         android:layout_width="252dp"
         android:layout_height="45dp"
         android:layout_marginStart="80dp"

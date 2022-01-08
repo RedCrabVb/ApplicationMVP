@@ -20,6 +20,9 @@ public class TestResultFragment extends Fragment {
         binding = FragmentTestResultBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
 
+        binding.saveResultTest.setOnClickListener(v -> {
+            getActivity().finish();
+        });
         return root;
     }
 }

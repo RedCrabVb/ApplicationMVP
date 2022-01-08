@@ -82,7 +82,7 @@ public class Server {
             return Server.getInstance().getNewsJson().get("News").getAsString();
         } catch (Exception e) {
             e.printStackTrace();
-            return "";
+            return "https://habr.com/ru/news/";
         }
     }
 
