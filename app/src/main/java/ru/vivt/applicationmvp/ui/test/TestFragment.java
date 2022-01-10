@@ -58,8 +58,10 @@ public class TestFragment extends Fragment {
                     intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
                     Bundle bundle = new Bundle();
                     new Thread(() -> {
-                        Question[] questions = Server.getInstance().getQuestion(testViewModel.getArrayAdapter().getValue().getItem(position).getIdTest());
+                        int idTest = testViewModel.getArrayAdapter().getValue().getItem(position).getIdTest();
+                        Question[] questions = Server.getInstance().getQuestion(idTest);
                         bundle.putString("questions", new Gson().toJson(questions));
+                        bundle.putInt("idTest", idTest);
                         intent.putExtras(bundle);
                         startActivity(intent);
                     }).start();

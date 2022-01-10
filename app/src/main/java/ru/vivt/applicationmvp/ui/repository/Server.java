@@ -12,6 +12,7 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLConnection;
+import java.net.URLEncoder;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class Server {
@@ -29,7 +30,9 @@ public class Server {
     private static final String apiResetPassword = "api/resetPassword";
     private static final String apiAuthorization = "api/authorization";
     private static final String apiPersonDataGet = "api/personData";
+    private static final String apiSaveResultTest = "api/saveResultTest";
 
+//  String.format("token=%s&time=%s&idTest=%s&countRightAnswer=%s&jsonAnswer=%s", token, "1.20", "1", "5", "true,true,false"));
 
     private String tokenConnection = null;
     private JsonObject jsonObjectNews = null;
@@ -147,6 +150,15 @@ public class Server {
         }
     }
 
+    public JsonObject saveResultTest(int idTest,
+                                     String time,
+                                     String countRightAnswer,
+                                     String answerJson) throws Exception {
+        return new JsonParser().parse(sendInquiry(apiSaveResultTest,
+                String.format("token=%s&time=%s&idTest=%s&countRightAnswer=%s&jsonAnswer=%s", this.tokenConnection, time, "" + idTest, countRightAnswer, answerJson)
+        )).getAsJsonObject();
+    }
+
 
     public void registration() {
         try {
@@ -199,6 +211,7 @@ public class Server {
 
     private String sendInquiry(String api, String json) throws Exception {
         json = json.replace("+", "%20"); // fix space encoder
+//        String jsonEncoding = URLEncoder.encode(json, "UTF-8");
         URL url = new URL(String.format(Server.url, api, json));
         HttpURLConnection connection = getResponseServer(url);
         String response = connectionResponseToString(connection);

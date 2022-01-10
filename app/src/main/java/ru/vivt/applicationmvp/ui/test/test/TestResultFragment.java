@@ -8,7 +8,13 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
+import com.google.gson.Gson;
+
+import javax.xml.transform.Result;
+
 import ru.vivt.applicationmvp.databinding.FragmentTestResultBinding;
+import ru.vivt.applicationmvp.ui.repository.ResultTest;
+import ru.vivt.applicationmvp.ui.repository.Server;
 
 public class TestResultFragment extends Fragment {
     private FragmentTestResultBinding binding;
@@ -23,7 +29,24 @@ public class TestResultFragment extends Fragment {
             getActivity().finish();
         });
 
-        binding.textViewResult.setText(getActivity().getIntent().getExtras().get("resultTest").toString());
+        Gson gson = new Gson();
+
+        ResultTest rt = gson.fromJson(getActivity().getIntent().getExtras().get("resultTest").toString(), ResultTest.class);
+
+
+        new Thread(() -> {
+            try {
+                Server.getInstance().saveResultTest(rt.getIdTest(),
+                        rt.getTime(),
+                        rt.getCountRightAnswer(),
+                        rt.getAnswer().replaceAll("\\[|\\]", ""));
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        ).start();
+
+        binding.textViewResult.setText(gson.toJson(rt));
 
         return root;
     }

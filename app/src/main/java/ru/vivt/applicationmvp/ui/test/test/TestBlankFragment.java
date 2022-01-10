@@ -22,9 +22,12 @@ import com.budiyev.android.codescanner.CodeScanner;
 import com.budiyev.android.codescanner.CodeScannerView;
 import com.google.gson.Gson;
 
+import java.util.List;
+
 import ru.vivt.applicationmvp.R;
 import ru.vivt.applicationmvp.databinding.FragmentTestBlankBinding;
 import ru.vivt.applicationmvp.ui.repository.Question;
+import ru.vivt.applicationmvp.ui.repository.ResultTest;
 
 public class TestBlankFragment extends Fragment {
     private final Gson gson = new Gson();
@@ -38,7 +41,7 @@ public class TestBlankFragment extends Fragment {
     private int currentPositionQuestion = 0;
 
     private void loadTestCase(EditText questionText, EditText comment, TextView countQuestion) {
-        Question question = questions[currentPositionQuestion++];
+        Question question = questions[currentPositionQuestion];
         questionText.setText(question.getText());
         comment.setText(question.getComment());
         countQuestion.setText(String.format("%d/%d", currentPositionQuestion, questions.length));
@@ -47,6 +50,7 @@ public class TestBlankFragment extends Fragment {
     private void saveAnswer(EditText answerEditText) {
         boolean result = answerEditText.getText().toString().equals(questions[currentPositionQuestion].getAnswer());
         questionsAnswer[currentPositionQuestion] = result;
+        answerEditText.setText("");
     }
 
     public View onCreateView(@NonNull LayoutInflater inflater,
@@ -58,6 +62,8 @@ public class TestBlankFragment extends Fragment {
         Bundle questionBundle = getActivity().getIntent().getExtras();
         if (questionBundle != null) {
             questions = gson.fromJson(questionBundle.get("questions").toString(), Question[].class);
+            int idTest = questionBundle.getInt("idTest");
+            long timeStart = System.currentTimeMillis();
             questionsAnswer = new boolean[questions.length];
 
             EditText questionText = binding.textQuestion;
@@ -69,11 +75,25 @@ public class TestBlankFragment extends Fragment {
             loadTestCase(questionText, comment, countQuestion);
 
             buttonNextQuestion.setOnClickListener(v -> {
-                if (currentPositionQuestion + 1 > questions.length) {
-                    getActivity().getIntent().putExtra("resultTest", gson.toJson(questionsAnswer));
+                saveAnswer(answer);
+                currentPositionQuestion++;
+                if (currentPositionQuestion == questions.length) {
+                    long timeEnd = System.currentTimeMillis();
+                    long time = timeEnd - timeStart;
+
+                    int countRightAnswer = 0;
+                    for(boolean answerQ : questionsAnswer) {
+                        if (answerQ) {
+                            countRightAnswer++;
+                        }
+                    }
+
+                    String result = "" + countRightAnswer + "/" + questionsAnswer.length;
+
+                    ResultTest resultTest = new ResultTest(idTest, "" + time, result, gson.toJson(questionsAnswer));
+                    getActivity().getIntent().putExtra("resultTest", gson.toJson(resultTest));
                     replaceFragment(new TestResultFragment());
                 } else {
-                    saveAnswer(answer);
                     loadTestCase(questionText, comment, countQuestion);
                 }
             });
@@ -116,5 +136,6 @@ public class TestBlankFragment extends Fragment {
         fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
         fragmentTransaction.commit();
     }
+
 
 }
