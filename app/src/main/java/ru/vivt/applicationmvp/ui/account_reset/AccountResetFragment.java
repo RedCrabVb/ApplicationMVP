@@ -32,7 +32,7 @@ public class AccountResetFragment extends Fragment {
                 try {
                     String email = binding.editTextTextEmailAddress.getText().toString();
                     if (email.length() < 4) {
-                        binding.textView2.setText("Error input data");
+                        binding.textView2.setText("Ошибка при вводе данных, email < 4 символов");
                         return;
                     }
 

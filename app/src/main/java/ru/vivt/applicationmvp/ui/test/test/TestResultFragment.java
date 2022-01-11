@@ -48,6 +48,10 @@ public class TestResultFragment extends Fragment {
 
         binding.textViewResult.setText(gson.toJson(rt));
 
+        binding.textViewResult.setText("Время: " + rt.getTime() + " м\n"
+                + "Количество верных ответов: " + rt.getCountRightAnswer() + "\n"
+        );
+
         return root;
     }
 }

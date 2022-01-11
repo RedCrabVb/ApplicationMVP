@@ -38,23 +38,20 @@ public class HomeFragment extends Fragment {
         binding = FragmentHomeBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
 
-        homeViewModel.getQrCode().observe(getViewLifecycleOwner(), new Observer<String>() {
-            @Override
-            public void onChanged(String s) {
-                /*create qr code*/
-                ImageView image = binding.imageViewQrCode;
-                WindowManager manager = (WindowManager) binding.getRoot().getContext().getSystemService(binding.getRoot().getContext().WINDOW_SERVICE);
-                Display display = manager.getDefaultDisplay();
-                Point point = new Point();
-                display.getSize(point);
-                int dimen = Math.max(point.x, point.y) * 3 / 4;
-                QRGEncoder qrgEncoder = new QRGEncoder(s, null, QRGContents.Type.TEXT, dimen);
-                try {
-                    Bitmap bitmap = qrgEncoder.encodeAsBitmap();
-                    image.setImageBitmap(bitmap);
-                } catch (WriterException e) {
-                    Log.e("Qr code error", e.toString());
-                }
+        homeViewModel.getQrCode().observe(getViewLifecycleOwner(), s -> {
+            /*create qr code*/
+            ImageView image = binding.imageViewQrCode;
+            WindowManager manager = (WindowManager) binding.getRoot().getContext().getSystemService(binding.getRoot().getContext().WINDOW_SERVICE);
+            Display display = manager.getDefaultDisplay();
+            Point point = new Point();
+            display.getSize(point);
+            int dimen = Math.max(point.x, point.y) * 3 / 4;
+            QRGEncoder qrgEncoder = new QRGEncoder(s, null, QRGContents.Type.TEXT, dimen);
+            try {
+                Bitmap bitmap = qrgEncoder.encodeAsBitmap();
+                image.setImageBitmap(bitmap);
+            } catch (WriterException e) {
+                Log.e("Qr code error", e.toString());
             }
         });
 

@@ -45,17 +45,24 @@ public class AuthorizationFragment extends Fragment {
                     String email = binding.editTextTextEmailAddress.getText().toString();
                     String password = binding.editTextTextPassword.getText().toString();
 
-                    if (email.length() < 4 || password.length() < 4) {
-                        binding.textView2.setText("Error input data");
+                    if (email.length() < 4) {
+                        binding.textView2.setText("Email содержит меньше символов");
                         return;
                     }
+
+                    if (password.length() < 4) {
+                        binding.textView2.setText("пароль содержит меньше символов");
+                        return;
+                    }
+
+
 
                     JsonObject json = new JsonParser().parse(server.authorization(email, password)).getAsJsonObject();
                     if (json.has(Server.error)) {
                         binding.textView2.setText(json.get(Server.error).getAsString());
                         return;
                     } else {
-                        binding.textView2.setText("Good");
+                        binding.textView2.setText("Вы авторизованы, подождите");
                         binding.textView2.setTextColor(Color.GRAY);
                     }
                     String token = json.get("token").getAsString();

@@ -23,6 +23,7 @@ import com.budiyev.android.codescanner.CodeScannerView;
 import com.google.gson.Gson;
 
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 import ru.vivt.applicationmvp.R;
 import ru.vivt.applicationmvp.databinding.FragmentTestBlankBinding;
@@ -79,7 +80,8 @@ public class TestBlankFragment extends Fragment {
                 currentPositionQuestion++;
                 if (currentPositionQuestion == questions.length) {
                     long timeEnd = System.currentTimeMillis();
-                    long time = timeEnd - timeStart;
+                    long time = TimeUnit.MILLISECONDS.toMinutes(timeEnd - timeStart);
+                    long second = TimeUnit.MICROSECONDS.toSeconds(timeEnd - timeStart) % 60;
 
                     int countRightAnswer = 0;
                     for(boolean answerQ : questionsAnswer) {
@@ -90,7 +92,7 @@ public class TestBlankFragment extends Fragment {
 
                     String result = "" + countRightAnswer + "/" + questionsAnswer.length;
 
-                    ResultTest resultTest = new ResultTest(idTest, "" + time, result, gson.toJson(questionsAnswer));
+                    ResultTest resultTest = new ResultTest(idTest, "" + time + " " + second, result, gson.toJson(questionsAnswer));
                     getActivity().getIntent().putExtra("resultTest", gson.toJson(resultTest));
                     replaceFragment(new TestResultFragment());
                 } else {

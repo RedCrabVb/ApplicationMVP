@@ -39,7 +39,7 @@ public class RegistrationFragment extends Fragment {
             String email = binding.editTextTextEmailAddress.getText().toString();
 
             if (!editPass1.equals(editPass2) || editPass1.isEmpty() || editPass1.length() < 4) {
-                binding.textViewError.setText("Password incorrect");
+                binding.textViewError.setText("Введите пароль больше 4 символов");
                 binding.textViewError.setVisibility(View.VISIBLE);
                 return;
             }
@@ -59,11 +59,11 @@ public class RegistrationFragment extends Fragment {
                         JsonObject json = new JsonParser().parse(strResponse).getAsJsonObject();
 
                         if (json.has(Server.error)) {
-                            binding.textViewError.setText(json.get(Server.error).getAsString());
+                            binding.textViewError.setText("Ошибка на сервере: " + json.get(Server.error).getAsString());
                             binding.textViewError.setTextColor(Color.RED);
                             throw new Exception(Server.error);
                         } else {
-                            binding.textViewError.setText(json.get(Server.status).getAsString());
+                            binding.textViewError.setText("Статус: " + json.get(Server.status).getAsString());
                             binding.textViewError.setTextColor(Color.GRAY);
 
                             MemoryValues memoryValues = MemoryValues.getInstance();
