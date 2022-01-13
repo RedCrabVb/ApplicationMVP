@@ -52,7 +52,6 @@ public class TestFragment extends Fragment {
             binding.listTest.setAdapter(playerList);
         });
         binding.listTest.setOnItemClickListener((parent, view, position, id) -> {
-                    System.out.println("click item + " + position);
 
                     Intent intent = new Intent(binding.getRoot().getContext(), TestActivity.class);
                     intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);

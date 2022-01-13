@@ -1,6 +1,7 @@
 package ru.vivt.applicationmvp.ui.authorization;
 
 import android.graphics.Color;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.JsonReader;
 import android.view.LayoutInflater;
@@ -10,6 +11,7 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.Observer;
@@ -17,6 +19,8 @@ import androidx.lifecycle.ViewModelProvider;
 
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+
+import java.util.function.Consumer;
 
 import ru.vivt.applicationmvp.R;
 import ru.vivt.applicationmvp.databinding.FragmentAutrizationBinding;
@@ -30,6 +34,7 @@ public class AuthorizationFragment extends Fragment {
     private HomeViewModel homeViewModel;
     private FragmentAutrizationBinding binding;
 
+    @RequiresApi(api = Build.VERSION_CODES.N)
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
         homeViewModel =
@@ -45,25 +50,35 @@ public class AuthorizationFragment extends Fragment {
                     String email = binding.editTextTextEmailAddress.getText().toString();
                     String password = binding.editTextTextPassword.getText().toString();
 
+                    Consumer<String> errorConsumer = (errorText) -> {
+                        binding.textError.setText(errorText);
+                        binding.textError.setVisibility(View.VISIBLE);
+                    };
+
+                    if (password.isEmpty() || email.isEmpty()) {
+                        errorConsumer.accept(getString(R.string.notEmpty));
+                        return;
+                    }
+
+
                     if (email.length() < 4) {
-                        binding.textView2.setText("Email содержит меньше символов");
+                        errorConsumer.accept(getString(R.string.mailMin));
                         return;
                     }
 
                     if (password.length() < 4) {
-                        binding.textView2.setText("пароль содержит меньше символов");
+                        errorConsumer.accept(getString(R.string.passwordMin));
                         return;
                     }
 
 
-
                     JsonObject json = new JsonParser().parse(server.authorization(email, password)).getAsJsonObject();
                     if (json.has(Server.error)) {
-                        binding.textView2.setText(json.get(Server.error).getAsString());
+                        binding.textError.setText(json.get(Server.error).getAsString());
                         return;
                     } else {
-                        binding.textView2.setText("Вы авторизованы, подождите");
-                        binding.textView2.setTextColor(Color.GRAY);
+                        binding.textError.setText("Вы авторизованы, подождите");
+                        binding.textError.setTextColor(Color.GRAY);
                     }
                     String token = json.get("token").getAsString();
                     MemoryValues memoryValues = MemoryValues.getInstance();

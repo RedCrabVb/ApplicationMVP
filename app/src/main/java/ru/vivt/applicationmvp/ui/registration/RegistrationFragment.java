@@ -1,11 +1,13 @@
 package ru.vivt.applicationmvp.ui.registration;
 
+import android.annotation.SuppressLint;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
@@ -13,6 +15,8 @@ import androidx.fragment.app.FragmentTransaction;
 
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+
+import java.util.function.Consumer;
 
 import ru.vivt.applicationmvp.R;
 import ru.vivt.applicationmvp.databinding.FragmentRegestrationBinding;
@@ -25,6 +29,7 @@ import static ru.vivt.applicationmvp.ui.profile.ProfileFragment.keyUpdate;
 public class RegistrationFragment extends Fragment {
     private FragmentRegestrationBinding binding;
 
+    @SuppressLint("NewApi")
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
 
@@ -38,15 +43,29 @@ public class RegistrationFragment extends Fragment {
             String username = binding.editTextTextPersonName3.getText().toString();
             String email = binding.editTextTextEmailAddress.getText().toString();
 
-            if (!editPass1.equals(editPass2) || editPass1.isEmpty() || editPass1.length() < 4) {
-                binding.textViewError.setText("Введите пароль больше 4 символов");
+            Consumer<String> errorConsumer = (errorText) -> {
+                binding.textViewError.setText(errorText);
                 binding.textViewError.setVisibility(View.VISIBLE);
+            };
+
+            if (editPass1.isEmpty() || editPass2.isEmpty() || email.isEmpty() || username.isEmpty()) {
+                errorConsumer.accept(getString(R.string.notEmpty));
                 return;
             }
 
-            if (username.length() < 4 || email.length() < 4) {
-                binding.textViewError.setText("Data incorrect");
-                binding.textViewError.setVisibility(View.VISIBLE);
+            if (!editPass1.equals(editPass2)) {
+                errorConsumer.accept(getString(R.string.passwordIdentity));
+                return;
+            }
+
+
+            if (email.length() < 4) {
+                errorConsumer.accept(getString(R.string.mailMin));
+                return;
+            }
+
+            if (editPass1.length() < 4) {
+                errorConsumer.accept(getString(R.string.passwordMin));
                 return;
             }
 
@@ -59,8 +78,7 @@ public class RegistrationFragment extends Fragment {
                         JsonObject json = new JsonParser().parse(strResponse).getAsJsonObject();
 
                         if (json.has(Server.error)) {
-                            binding.textViewError.setText("Ошибка на сервере: " + json.get(Server.error).getAsString());
-                            binding.textViewError.setTextColor(Color.RED);
+                            errorConsumer.accept(getString(R.string.error) + ": " + json.get(Server.error).getAsString());
                             throw new Exception(Server.error);
                         } else {
                             binding.textViewError.setText("Статус: " + json.get(Server.status).getAsString());
@@ -69,7 +87,7 @@ public class RegistrationFragment extends Fragment {
                             MemoryValues memoryValues = MemoryValues.getInstance();
                             memoryValues.setEmail(email);
                             memoryValues.setUsername(username);
-                       }
+                        }
                         Bundle bundle = new Bundle();
                         ProfileFragment profileFragment = new ProfileFragment();
                         bundle.putBoolean(keyUpdate, true);

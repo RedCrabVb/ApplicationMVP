@@ -80,8 +80,7 @@ public class TestBlankFragment extends Fragment {
                 currentPositionQuestion++;
                 if (currentPositionQuestion == questions.length) {
                     long timeEnd = System.currentTimeMillis();
-                    long time = TimeUnit.MILLISECONDS.toMinutes(timeEnd - timeStart);
-                    long second = TimeUnit.MICROSECONDS.toSeconds(timeEnd - timeStart) % 60;
+
 
                     int countRightAnswer = 0;
                     for(boolean answerQ : questionsAnswer) {
@@ -92,7 +91,7 @@ public class TestBlankFragment extends Fragment {
 
                     String result = "" + countRightAnswer + "/" + questionsAnswer.length;
 
-                    ResultTest resultTest = new ResultTest(idTest, "" + time + " " + second, result, gson.toJson(questionsAnswer));
+                    ResultTest resultTest = new ResultTest(idTest, "" + (timeEnd - timeStart), result, gson.toJson(questionsAnswer));
                     getActivity().getIntent().putExtra("resultTest", gson.toJson(resultTest));
                     replaceFragment(new TestResultFragment());
                 } else {

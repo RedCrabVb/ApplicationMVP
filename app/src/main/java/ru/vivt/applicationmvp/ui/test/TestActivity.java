@@ -35,10 +35,6 @@ public class TestActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_specific_test);
 
-//        FragmentManager manager = getSupportFragmentManager();
-//        TestBlankFragment fragment = (TestBlankFragment) manager.findFragmentById(R.id.fragment_activity_test);
-//        fragment.onCreate(null);
-
         replaceFragment(new TestBlankFragment());
 
     }

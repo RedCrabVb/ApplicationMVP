@@ -1,16 +1,20 @@
 package ru.vivt.applicationmvp.ui.account_reset;
 
+import android.os.Build;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+
+import java.util.function.Consumer;
 
 import ru.vivt.applicationmvp.R;
 import ru.vivt.applicationmvp.databinding.FragmentAccountResetBinding;
@@ -21,6 +25,7 @@ public class AccountResetFragment extends Fragment {
 
     private FragmentAccountResetBinding binding;
 
+    @RequiresApi(api = Build.VERSION_CODES.N)
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
 
@@ -30,20 +35,29 @@ public class AccountResetFragment extends Fragment {
         binding.buttonReset.setOnClickListener(v -> {
             new Thread(() -> {
                 try {
+                    Consumer<String> errorConsumer = (errorText) -> {
+                        binding.textError.setText(errorText);
+                    };
+
                     String email = binding.editTextTextEmailAddress.getText().toString();
+                    if (email.isEmpty()) {
+                        errorConsumer.accept(getString(R.string.notEmpty));
+                    }
+
                     if (email.length() < 4) {
-                        binding.textView2.setText("Ошибка при вводе данных, email < 4 символов");
+                        errorConsumer.accept(getString(R.string.mailMin));
                         return;
                     }
 
+
                     JsonObject json = new JsonParser().parse(Server.getInstance().resetPassword(email)).getAsJsonObject();
                     if (json.has(Server.error)) {
-                        binding.textView2.setText(json.get(Server.error).getAsString());
+                        errorConsumer.accept(getString(R.string.error) + ": " + json.get(Server.error).getAsString());
                         return;
                     }
 
                     if (json.has(Server.status)) {
-                        binding.textView2.setText(json.get(Server.status).getAsString());
+                        errorConsumer.accept("Статус: " + json.get(Server.status).getAsString());
                         Thread.sleep(2000);
                     }
 

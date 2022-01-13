@@ -20,4 +20,10 @@
     <string name="question">Вопрос</string>
     <string name="nextQuestion">Следующий вопрос</string>
     <string name="saveResultTest">Сохранить результаты</string>
+    <!--error-->
+    <string name="passwordMin">Введите пароль больше 4 символов</string>
+    <string name="mailMin">Email должен быть длиннее 4 символов</string>
+    <string name="passwordIdentity">Пароли не одинаковы</string>
+    <string name="error">Ошибка</string>
+    <string name="notEmpty">Не должно быть пустых полей</string>
 </resources>

@@ -10,6 +10,8 @@ import androidx.fragment.app.Fragment;
 
 import com.google.gson.Gson;
 
+import java.util.concurrent.TimeUnit;
+
 import javax.xml.transform.Result;
 
 import ru.vivt.applicationmvp.databinding.FragmentTestResultBinding;
@@ -48,8 +50,12 @@ public class TestResultFragment extends Fragment {
 
         binding.textViewResult.setText(gson.toJson(rt));
 
-        binding.textViewResult.setText("Время: " + rt.getTime() + " м\n"
-                + "Количество верных ответов: " + rt.getCountRightAnswer() + "\n"
+        long timeLong = Long.parseLong(rt.getTime());
+        long time = TimeUnit.MILLISECONDS.toMinutes(timeLong);
+        long second = TimeUnit.MILLISECONDS.toSeconds(timeLong) % 60;
+
+        binding.textViewResult.setText("Время: " + time + " м. " + second + " м\n"
+                + "Количество верных ответов: " + rt.getCountRightAnswer() + " с.\n"
         );
 
         return root;
