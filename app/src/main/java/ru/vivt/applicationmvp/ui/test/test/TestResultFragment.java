@@ -54,8 +54,8 @@ public class TestResultFragment extends Fragment {
         long time = TimeUnit.MILLISECONDS.toMinutes(timeLong);
         long second = TimeUnit.MILLISECONDS.toSeconds(timeLong) % 60;
 
-        binding.textViewResult.setText("Время: " + time + " м. " + second + " м\n"
-                + "Количество верных ответов: " + rt.getCountRightAnswer() + " с.\n"
+        binding.textViewResult.setText("Время: " + time + " м. " + second + " c\n"
+                + "Количество верных ответов: " + rt.getCountRightAnswer() + "\n"
         );
 
         return root;
