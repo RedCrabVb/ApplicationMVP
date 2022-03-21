@@ -29,6 +29,7 @@ import ru.vivt.applicationmvp.R;
 import ru.vivt.applicationmvp.databinding.FragmentTestBlankBinding;
 import ru.vivt.applicationmvp.ui.repository.Question;
 import ru.vivt.applicationmvp.ui.repository.ResultTest;
+import ru.vivt.applicationmvp.ui.test.TestFragment;
 
 public class TestBlankFragment extends Fragment {
     private final Gson gson = new Gson();
@@ -114,7 +115,12 @@ public class TestBlankFragment extends Fragment {
                 mCodeScanner.setDecodeCallback(result -> {
                     for (Question question : questions) {
                         if (question.getAnswer().hashCode() == Integer.parseInt(result.getText())) {
-                            binding.textAnswer.setText(question.getAnswer());
+
+                            this.getActivity().runOnUiThread(() -> {
+                                        Toast.makeText(TestBlankFragment.this.getActivity(), question.getAnswer(), Toast.LENGTH_LONG).show();
+                                        binding.textAnswer.setText(question.getAnswer());
+                                    }
+                            );
                         }
                     }
                 });
