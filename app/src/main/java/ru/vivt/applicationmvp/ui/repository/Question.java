@@ -2,8 +2,8 @@ package ru.vivt.applicationmvp.ui.repository;
 
 public class Question {
     private String idQuestion;
-    private String text;
-    private String answer;
+    private String question;
+    private String response;
     private String comment;
     private int idTest;
 
@@ -12,11 +12,11 @@ public class Question {
     }
 
     public String getText() {
-        return text;
+        return question;
     }
 
     public String getAnswer() {
-        return answer;
+        return response;
     }
 
     public String getComment() {
