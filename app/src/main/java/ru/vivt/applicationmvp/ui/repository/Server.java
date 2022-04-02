@@ -39,7 +39,7 @@ public class Server {
     private static final String apiPersonData = "api/setPersonData";
     private static final String apiRegistration = "api/registration";
     private static final String apiStatusToken = "api/getStatusToken";
-    private static final String apiResetPassword = "api/resetPassword";
+    private static final String apiResetPassword = "api/resetPassword/email";
     private static final String apiAuthorization = "api/authorization";
     private static final String apiPersonDataGet = "api/personData";
     private static final String apiSaveResultTest = "api/saveResultTest";
@@ -86,25 +86,17 @@ public class Server {
         return null;
     }
 
-    public String resetPassword(String email) {
-        return null;
-//        String result = "error";
-//        try {
-//            result = sendInquiry(apiResetPassword, String.format("email=%s", email));
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//        }
-//        return result;
-    }
-
-    public String getNews() {
-//        try {
-//            return Server.getInstance().getNewsJson().get("News").getAsString();
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//            return "https://habr.com/ru/news/";
-//        }
-        return "https://habr.com/ru/news/";
+    public JsonObjectRequest resetPassword(String email,
+                                           Response.Listener<JSONObject> response) {
+        return new JsonObjectRequest(
+                Request.Method.POST,
+                getUrl(apiResetPassword, "email=" + email),
+                null,
+                response,
+                error -> {
+                    System.out.println("error when reset password");
+                }
+        );
     }
 
     public JsonObjectRequest updateDataAboutProfile(String userName, String email, String password,
