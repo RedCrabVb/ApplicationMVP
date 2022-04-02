@@ -36,7 +36,14 @@ public class StartActivity extends AppCompatActivity {
                 requestQueue.add(server.registration2(response -> {
                     System.out.println(response);
                     try {
-                        server.setTokenConnection(response.getString("token"));
+                        server.saveDataInMemory(memoryValues, response);
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }));
+                requestQueue.add(server.getQrCode(response -> {
+                    try {
+                        memoryValues.setQrCode(response.getString("qrCode"));
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }

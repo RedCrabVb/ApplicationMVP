@@ -36,7 +36,7 @@ public class Server {
     private static final String apiTestAll = "api/testAll";
     private static final String apiTestCurrent = "api/test";
     private static final String apiQrCode = "api/qrCode";
-    private static final String apiPersonData = "api/setPersonDate";
+    private static final String apiPersonData = "api/setPersonData";
     private static final String apiRegistration = "api/registration";
     private static final String apiStatusToken = "api/getStatusToken";
     private static final String apiResetPassword = "api/resetPassword";
@@ -107,16 +107,28 @@ public class Server {
         return "https://habr.com/ru/news/";
     }
 
-    public String updateDataAboutProfile(String userName, String email, String password) throws Exception {
-//        String result = sendInquiry(apiPersonData, String.format("token=%s&username=%s&email=%s&password=%s", tokenConnection, userName, email, password));
-//        System.out.println(result);
-//        return result;
-        return null;
+    public JsonObjectRequest updateDataAboutProfile(String userName, String email, String password,
+                                                    Response.Listener<JSONObject> response,
+                                                    Response.ErrorListener errorListener) throws Exception {
+        JSONObject jsonRequest = new JSONObject();
+        jsonRequest.put("token", tokenConnection);
+        return new JsonObjectRequest(Request.Method.POST,
+                getUrl(apiPersonData, String.format("username=%s&email=%s&password=%s", userName, email, password)),
+                jsonRequest,
+                response,
+                errorListener
+        );
     }
 
-    public String authorization(String email, String password) throws Exception {
-//        return sendInquiry(apiAuthorization, String.format("email=%s&password=%s", email, password));
-        return null;
+    public JsonObjectRequest authorization(String email, String password,
+                                           Response.Listener<JSONObject> response,
+                                           Response.ErrorListener errorListener) {
+        return new JsonObjectRequest(Request.Method.POST,
+                getUrl(apiAuthorization, String.format("email=%s&password=%s", email, password)),
+                null,
+                response,
+                errorListener
+        );
     }
 
     private JsonObject getTestServer() throws Exception {
@@ -183,19 +195,6 @@ public class Server {
     }
 
 
-    public void registration() {
-//        try {
-//            String result = (sendInquiry(apiRegistration, ""));
-//            JsonObject jsonReg = new JsonParser().parse(result).getAsJsonObject();
-//            tokenConnection = jsonReg.get("token").getAsString();
-//            System.out.println(result);
-//        } catch (Exception | Error e) {
-//            e.printStackTrace();
-//        }
-        tokenConnection = "test";
-    }
-
-
     public JsonObjectRequest registration2(Response.Listener<JSONObject> response) {
         return new JsonObjectRequest(
                 Request.Method.POST,
@@ -208,20 +207,20 @@ public class Server {
         );
     }
 
-    private String getQrCode() {
-        return "test";
-//        try {
-//            String result = sendInquiry(apiQrCode, String.format("token=%s", tokenConnection));
-//            JsonObject json = new JsonParser().parse(result).getAsJsonObject();
-//            return json.get("qrCode").getAsString();
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//            return "error";
-//        }
+    public JsonObjectRequest getQrCode(Response.Listener<JSONObject> response) {
+        return new JsonObjectRequest(
+                Request.Method.POST,
+                getUrl(apiQrCode, "token=" + tokenConnection),
+                null,
+                response,
+                error -> {
+                    System.out.println("error when getQrCode");
+                }
+        );
     }
 
-    public JsonObjectRequest getNewsRequest(Response.Listener<JSONObject> response) throws Exception {
-        JsonObjectRequest j = new JsonObjectRequest(
+    public JsonObjectRequest getNewsRequest(Response.Listener<JSONObject> response) {
+        return new JsonObjectRequest(
                 Request.Method.GET,
                 getUrl(apiNews, ""),
                 null,
@@ -230,7 +229,6 @@ public class Server {
                     System.out.println("error when get news");;
                 }
         );
-        return j;
     }
 
     public void setTokenConnection(String tokenConnection) {
@@ -238,18 +236,15 @@ public class Server {
     }
 
     public void saveDataInMemory(MemoryValues memoryValues) {
-        memoryValues.setQrCode(getQrCode());
         memoryValues.setToken(tokenConnection);
+    }
 
-        try {
-            JsonObject json = getApiPersonData();
-            String username = json.get(MemoryValues.username).getAsString();
-            String email = json.get(MemoryValues.email).getAsString();
-            memoryValues.setUsername(username.isEmpty() ? "No name" : username);
-            memoryValues.setEmail(email.isEmpty() ? "No name" : email);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+    public void saveDataInMemory(MemoryValues memoryValues, JSONObject json) throws org.json.JSONException {
+        server.setTokenConnection(json.getString(MemoryValues.token));
+        memoryValues.setToken(tokenConnection);
+        memoryValues.setEmail(json.getString(MemoryValues.email));
+        memoryValues.setUsername(json.getString(MemoryValues.username));
+        memoryValues.setQrCode(json.getString(MemoryValues.qrCode));
     }
 
 //    private String sendInquiry(String api, String json) throws Exception {
@@ -261,25 +256,5 @@ public class Server {
 //
 //        System.out.println("URL: " + url.toString());
 //        return response;
-//    }
-//
-//    private HttpURLConnection getResponseServer(URL url) throws Exception {
-//        URLConnection urlConnection = url.openConnection();
-//
-//        return (HttpURLConnection) urlConnection;
-//    }
-//
-//    private String connectionResponseToString(HttpURLConnection connection) throws IOException {
-//        BufferedReader in = new BufferedReader(new InputStreamReader(connection.getInputStream()));
-//        StringBuilder urlString = new StringBuilder();
-//
-//        String current;
-//        while ((current = in.readLine()) != null) {
-//            urlString.append(current);
-//        }
-//
-//        connection.disconnect();
-//
-//        return urlString.toString();
 //    }
 }

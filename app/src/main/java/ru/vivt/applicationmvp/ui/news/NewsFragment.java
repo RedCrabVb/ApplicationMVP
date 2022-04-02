@@ -36,24 +36,16 @@ public class NewsFragment extends Fragment {
 
         RequestQueue requestQueue = Volley.newRequestQueue(getContext());
 
-        try {
-            JsonObjectRequest request = Server.getInstance().getNewsRequest(response -> {
-                try {
-                    binding.webNew.loadUrl(response.getString("News"));
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-            });
-            requestQueue.add(request);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        JsonObjectRequest request = Server.getInstance().getNewsRequest(response -> {
+            try {
+                binding.webNew.loadUrl(response.getString("News"));
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        });
+        requestQueue.add(request);
 
 
-//        dashboardViewModel.getNewsLink().observe(getViewLifecycleOwner(), s -> {
-//            System.out.println(s);
-//            binding.webNew.loadUrl(s);
-//        });
         return root;
     }
 

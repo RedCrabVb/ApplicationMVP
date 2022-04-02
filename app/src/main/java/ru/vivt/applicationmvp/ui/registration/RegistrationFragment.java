@@ -1,5 +1,7 @@
 package ru.vivt.applicationmvp.ui.registration;
 
+import static ru.vivt.applicationmvp.ui.profile.ProfileFragment.keyUpdate;
+
 import android.annotation.SuppressLint;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -7,14 +9,14 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
+import com.android.volley.RequestQueue;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.Volley;
 
 import java.util.function.Consumer;
 
@@ -24,17 +26,16 @@ import ru.vivt.applicationmvp.ui.profile.ProfileFragment;
 import ru.vivt.applicationmvp.ui.repository.MemoryValues;
 import ru.vivt.applicationmvp.ui.repository.Server;
 
-import static ru.vivt.applicationmvp.ui.profile.ProfileFragment.keyUpdate;
-
 public class RegistrationFragment extends Fragment {
     private FragmentRegestrationBinding binding;
 
-    @SuppressLint("NewApi")
+    @SuppressLint({"NewApi", "SetTextI18n"})
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
 
         binding = FragmentRegestrationBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
+        RequestQueue requestQueue = Volley.newRequestQueue(getContext());
 
         binding.buttonRegistration.setOnClickListener(v -> {
             binding.textViewError.setVisibility(View.GONE);
@@ -69,48 +70,43 @@ public class RegistrationFragment extends Fragment {
                 return;
             }
 
-            try {
-                new Thread(() -> {
-                    try {
-                        Server server = Server.getInstance();
+            Server server = Server.getInstance();
 
-                        String strResponse = server.updateDataAboutProfile(username, email, editPass1);
-                        JsonObject json = new JsonParser().parse(strResponse).getAsJsonObject();
-
-                        if (json.has(Server.error)) {
-                            errorConsumer.accept(getString(R.string.error) + ": " + json.get(Server.error).getAsString());
-                            throw new Exception(Server.error);
-                        } else {
-                            binding.textViewError.setText("Статус: " + json.get(Server.status).getAsString());
+            Runnable r = () -> {
+                JsonObjectRequest j = null;
+                try {
+                    j = server.updateDataAboutProfile(username, email, editPass1, response -> {
+                        try {
+                            binding.textViewError.setText("Успешное обновление данных");
                             binding.textViewError.setTextColor(Color.GRAY);
 
                             MemoryValues memoryValues = MemoryValues.getInstance();
-                            memoryValues.setEmail(email);
-                            memoryValues.setUsername(username);
+                            server.saveDataInMemory(memoryValues, response);
+
+                            Bundle bundle = new Bundle();
+                            ProfileFragment profileFragment = new ProfileFragment();
+                            bundle.putBoolean(keyUpdate, true);
+                            profileFragment.setArguments(bundle);
+
+                            Thread.sleep(1000);
+
+                            FragmentTransaction transaction = getFragmentManager().beginTransaction();
+                            transaction.replace(R.id.nav_host_fragment_activity_main2, profileFragment);
+                            transaction.addToBackStack(null);
+                            transaction.commit();
+                        } catch (Exception e) {
+                            e.printStackTrace();
                         }
-                        Bundle bundle = new Bundle();
-                        ProfileFragment profileFragment = new ProfileFragment();
-                        bundle.putBoolean(keyUpdate, true);
-                        profileFragment.setArguments(bundle);
+                    }, error -> errorConsumer.accept(getString(R.string.error)));
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                requestQueue.add(j);
 
-                        Thread.sleep(1000);
+            };
+            new Thread(r).start();
 
-                        FragmentTransaction transaction = getFragmentManager().beginTransaction();
-                        transaction.replace(R.id.nav_host_fragment_activity_main2, profileFragment);
-                        transaction.addToBackStack(null);
-                        transaction.commit();
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                        Log.println(Log.ERROR, "error", e.getMessage());
-                    }
-                }).start();
-
-            } catch (Exception e) {
-                e.printStackTrace();
-                Log.println(Log.ERROR, "error", e.getMessage());
-            }
         });
-
         return root;
     }
 }

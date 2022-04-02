@@ -10,18 +10,14 @@ import ru.vivt.applicationmvp.ui.repository.Server;
 public class HomeViewModel extends ViewModel {
 
     private Server server;
-    private MutableLiveData<String> newsLink;
     private MutableLiveData<String> qrCode;
     private MemoryValues memoryValues;
     public HomeViewModel() {
         memoryValues = MemoryValues.getInstance();
-
-        newsLink = new MutableLiveData<>();
         qrCode = new MutableLiveData<>();
         new Thread(() -> {
                 server = Server.getInstance();
                 qrCode.postValue(memoryValues.getQrCode());
-                newsLink.postValue(server.getNews());
         }).start();
 
     }
@@ -30,7 +26,4 @@ public class HomeViewModel extends ViewModel {
         return qrCode;
     }
 
-    public LiveData<String> getNewsLink() {
-        return newsLink;
-    }
 }
