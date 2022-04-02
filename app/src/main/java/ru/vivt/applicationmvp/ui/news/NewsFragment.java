@@ -12,7 +12,14 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
+import com.android.volley.RequestQueue;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.Volley;
+
+import org.json.JSONException;
+
 import ru.vivt.applicationmvp.databinding.FragmentNewsBinding;
+import ru.vivt.applicationmvp.ui.repository.Server;
 
 public class NewsFragment extends Fragment {
 
@@ -27,11 +34,18 @@ public class NewsFragment extends Fragment {
         binding = FragmentNewsBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
 
+        RequestQueue requestQueue = Volley.newRequestQueue(getContext());
 
-        dashboardViewModel.getNewsLink().observe(getViewLifecycleOwner(), s -> {
-            System.out.println(s);
-            binding.webNew.loadUrl(s);
+        JsonObjectRequest request = Server.getInstance().getNewsRequest(response -> {
+            try {
+                binding.webNew.loadUrl(response.getString("News"));
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
         });
+        requestQueue.add(request);
+
+
         return root;
     }
 

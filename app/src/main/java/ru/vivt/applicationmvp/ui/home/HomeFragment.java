@@ -19,11 +19,17 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
+import com.android.volley.RequestQueue;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.Volley;
 import com.google.zxing.WriterException;
+
+import org.json.JSONException;
 
 import androidmads.library.qrgenearator.QRGContents;
 import androidmads.library.qrgenearator.QRGEncoder;
 import ru.vivt.applicationmvp.databinding.FragmentHomeBinding;
+import ru.vivt.applicationmvp.ui.repository.Server;
 
 public class HomeFragment extends Fragment {
 
@@ -55,14 +61,18 @@ public class HomeFragment extends Fragment {
             }
         });
 
-        homeViewModel.getNewsLink().observe(getViewLifecycleOwner(), new Observer<String>() {
-            @Override
-            public void onChanged(String s) {
-                System.out.println(s);
-                binding.webView.loadUrl(s);
-            }
-        });
+        new Thread(() -> {
+            RequestQueue requestQueue = Volley.newRequestQueue(getContext());
 
+            JsonObjectRequest request = Server.getInstance().getNewsRequest(response -> {
+                try {
+                    binding.webView.loadUrl(response.getString("News"));
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            });
+            requestQueue.add(request);
+        }).start();
         return root;
     }
 

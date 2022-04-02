@@ -17,8 +17,12 @@ import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
+import com.android.volley.RequestQueue;
+import com.android.volley.toolbox.Volley;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+
+import org.json.JSONException;
 
 import java.util.function.Consumer;
 
@@ -43,47 +47,44 @@ public class AuthorizationFragment extends Fragment {
         binding = FragmentAutrizationBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
 
+        RequestQueue requestQueue = Volley.newRequestQueue(getContext());
+
         binding.buttonAuthorization.setOnClickListener(v -> {
-            new Thread(() -> {
+            Server server = Server.getInstance();
+            String email = binding.editTextTextEmailAddress.getText().toString();
+            String password = binding.editTextTextPassword.getText().toString();
+
+            Consumer<String> errorConsumer = (errorText) -> {
+                binding.textError.setText(errorText);
+                binding.textError.setVisibility(View.VISIBLE);
+            };
+
+            if (password.isEmpty() || email.isEmpty()) {
+                errorConsumer.accept(getString(R.string.notEmpty));
+                return;
+            }
+
+
+            if (email.length() < 4) {
+                errorConsumer.accept(getString(R.string.mailMin));
+                return;
+            }
+
+            if (password.length() < 4) {
+                errorConsumer.accept(getString(R.string.passwordMin));
+                return;
+            }
+
+
+            requestQueue.add(server.authorization(email, password, response -> {
                 try {
-                    Server server = Server.getInstance();
-                    String email = binding.editTextTextEmailAddress.getText().toString();
-                    String password = binding.editTextTextPassword.getText().toString();
+                    binding.textError.setText("Вы авторизованы, подождите");
+                    binding.textError.setTextColor(Color.GRAY);
 
-                    Consumer<String> errorConsumer = (errorText) -> {
-                        binding.textError.setText(errorText);
-                        binding.textError.setVisibility(View.VISIBLE);
-                    };
-
-                    if (password.isEmpty() || email.isEmpty()) {
-                        errorConsumer.accept(getString(R.string.notEmpty));
-                        return;
-                    }
-
-
-                    if (email.length() < 4) {
-                        errorConsumer.accept(getString(R.string.mailMin));
-                        return;
-                    }
-
-                    if (password.length() < 4) {
-                        errorConsumer.accept(getString(R.string.passwordMin));
-                        return;
-                    }
-
-
-                    JsonObject json = new JsonParser().parse(server.authorization(email, password)).getAsJsonObject();
-                    if (json.has(Server.error)) {
-                        binding.textError.setText(json.get(Server.error).getAsString());
-                        return;
-                    } else {
-                        binding.textError.setText("Вы авторизованы, подождите");
-                        binding.textError.setTextColor(Color.GRAY);
-                    }
-                    String token = json.get("token").getAsString();
+                    String token = response.getString("token");
                     MemoryValues memoryValues = MemoryValues.getInstance();
                     server.setTokenConnection(token);
-                    server.saveDataInMemory(memoryValues);
+                    server.saveDataInMemory(memoryValues, response);
 
                     Thread.sleep(2000);
 
@@ -96,8 +97,12 @@ public class AuthorizationFragment extends Fragment {
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
-            }).start();
+
+            }, error -> {
+                binding.textError.setText("Ошибка на сервере");
+            }));
         });
+
 
         return root;
     }

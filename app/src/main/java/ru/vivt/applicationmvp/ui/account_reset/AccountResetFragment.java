@@ -11,6 +11,8 @@ import androidx.annotation.RequiresApi;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
+import com.android.volley.RequestQueue;
+import com.android.volley.toolbox.Volley;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
@@ -49,24 +51,23 @@ public class AccountResetFragment extends Fragment {
                         return;
                     }
 
+                    RequestQueue requestQueue = Volley.newRequestQueue(getContext());
+                    requestQueue.add(Server.getInstance().resetPassword(email, response -> {
+                        errorConsumer.accept("Запрос приянт");
+                        try {
+                            Thread.sleep(2000);
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
 
-                    JsonObject json = new JsonParser().parse(Server.getInstance().resetPassword(email)).getAsJsonObject();
-                    if (json.has(Server.error)) {
-                        errorConsumer.accept(getString(R.string.error) + ": " + json.get(Server.error).getAsString());
-                        return;
-                    }
+                        ProfileFragment profileFragment = new ProfileFragment();
 
-                    if (json.has(Server.status)) {
-                        errorConsumer.accept("Статус: " + json.get(Server.status).getAsString());
-                        Thread.sleep(2000);
-                    }
+                        FragmentTransaction transaction = getFragmentManager().beginTransaction();
+                        transaction.replace(R.id.nav_host_fragment_activity_main2, profileFragment);
+                        transaction.commit();
+                    }));
 
-
-                    ProfileFragment profileFragment = new ProfileFragment();
-
-                    FragmentTransaction transaction = getFragmentManager().beginTransaction();
-                    transaction.replace(R.id.nav_host_fragment_activity_main2, profileFragment);
-                    transaction.commit();
+                    //errorConsumer.accept(getString(R.string.error) + ": " + json.get(Server.error).getAsString());
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
