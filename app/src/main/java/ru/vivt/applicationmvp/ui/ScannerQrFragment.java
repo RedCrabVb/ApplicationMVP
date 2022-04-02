@@ -32,10 +32,6 @@ public class ScannerQrFragment extends Fragment {
             if (ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.CAMERA) == PackageManager.PERMISSION_DENIED) {
                 ActivityCompat.requestPermissions(getActivity(), new String[] { Manifest.permission.CAMERA }, 100);
             }
-            else {
-                Toast.makeText(getActivity(), "Permission already granted", Toast.LENGTH_SHORT).show();
-            }
-
             if (ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.CAMERA) != PackageManager.PERMISSION_DENIED) {
                 CodeScannerView scannerView = binding.scannerView;
                 mCodeScanner = new CodeScanner(getActivity(), scannerView);

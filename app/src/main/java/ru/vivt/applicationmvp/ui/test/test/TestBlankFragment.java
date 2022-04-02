@@ -22,6 +22,8 @@ import com.budiyev.android.codescanner.CodeScanner;
 import com.budiyev.android.codescanner.CodeScannerView;
 import com.google.gson.Gson;
 
+import org.w3c.dom.Text;
+
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
@@ -42,14 +44,14 @@ public class TestBlankFragment extends Fragment {
     private boolean[] questionsAnswer;
     private int currentPositionQuestion = 0;
 
-    private void loadTestCase(EditText questionText, EditText comment, TextView countQuestion) {
+    private void loadTestCase(TextView questionText, TextView comment, TextView countQuestion) {
         Question question = questions[currentPositionQuestion];
         questionText.setText(question.getText());
         comment.setText(question.getComment());
         countQuestion.setText(String.format("%d/%d", currentPositionQuestion, questions.length));
     }
 
-    private void saveAnswer(EditText answerEditText) {
+    private void saveAnswer(TextView answerEditText) {
         boolean result = answerEditText.getText().toString().equals(questions[currentPositionQuestion].getAnswer());
         questionsAnswer[currentPositionQuestion] = result;
         answerEditText.setText("");
@@ -68,9 +70,9 @@ public class TestBlankFragment extends Fragment {
             long timeStart = System.currentTimeMillis();
             questionsAnswer = new boolean[questions.length];
 
-            EditText questionText = binding.textQuestion;
-            EditText comment = binding.textComment;
-            EditText answer = binding.textAnswer;
+            TextView questionText = binding.textQuestion;
+            TextView comment = binding.textComment;
+            TextView answer = binding.textAnswer;
             TextView countQuestion = binding.countQuestion;
             Button buttonNextQuestion = binding.buttonNextQuestion;
 
@@ -105,9 +107,6 @@ public class TestBlankFragment extends Fragment {
             if (ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.CAMERA) == PackageManager.PERMISSION_DENIED) {
                 ActivityCompat.requestPermissions(getActivity(), new String[] { Manifest.permission.CAMERA }, 100);
             }
-            else {
-                Toast.makeText(getActivity(), "Permission already granted", Toast.LENGTH_SHORT).show();
-            }
 
             if (ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.CAMERA) != PackageManager.PERMISSION_DENIED) {
                 CodeScannerView scannerView = binding.scannerView;
@@ -117,7 +116,6 @@ public class TestBlankFragment extends Fragment {
                         if (question.getAnswer().hashCode() == Integer.parseInt(result.getText())) {
 
                             this.getActivity().runOnUiThread(() -> {
-                                        Toast.makeText(TestBlankFragment.this.getActivity(), question.getAnswer(), Toast.LENGTH_LONG).show();
                                         binding.textAnswer.setText(question.getAnswer());
                                     }
                             );

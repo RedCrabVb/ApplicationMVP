@@ -17,12 +17,11 @@
         app:layout_constraintTop_toTopOf="parent"
         tools:ignore="MissingConstraints" />
 
-    <EditText
+    <TextView
         android:id="@+id/textQuestion"
         android:layout_width="324dp"
-        android:layout_height="65dp"
+        android:layout_height="wrap_content"
         android:layout_marginStart="20dp"
-        android:editable="false"
         android:ems="10"
         android:gravity="start|top"
         android:inputType="textMultiLine"
@@ -30,13 +29,12 @@
         app:layout_constraintTop_toBottomOf="@+id/textView3"
         tools:ignore="MissingConstraints" />
 
-    <EditText
+    <TextView
         android:id="@+id/textComment"
         android:layout_width="324dp"
-        android:layout_height="40dp"
+        android:layout_height="wrap_content"
         android:layout_marginStart="20dp"
         android:layout_marginTop="2dp"
-        android:editable="false"
         android:ems="10"
         android:gravity="start|top"
         android:inputType="textMultiLine"
@@ -44,16 +42,16 @@
         app:layout_constraintTop_toBottomOf="@+id/textView4"
         tools:ignore="MissingConstraints" />
 
-    <EditText
+    <TextView
         android:id="@+id/textAnswer"
-        android:layout_width="325dp"
-        android:layout_height="41dp"
+        android:layout_width="327dp"
+        android:layout_height="wrap_content"
         android:layout_marginStart="20dp"
-        android:layout_marginTop="3dp"
-        android:editable="true"
+        android:layout_marginTop="12dp"
         android:ems="10"
         android:gravity="start|top"
         android:inputType="textMultiLine"
+        app:autoSizeTextType="uniform"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView5"
         tools:ignore="MissingConstraints" />
@@ -71,7 +69,7 @@
     <TextView
         android:id="@+id/textView5"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="19dp"
         android:layout_marginStart="20dp"
         android:layout_marginTop="8dp"
         android:text="Ответ"
@@ -94,7 +92,7 @@
         android:layout_width="281dp"
         android:layout_height="226dp"
         android:layout_marginStart="40dp"
-        android:layout_marginTop="88dp"
+        android:layout_marginTop="39dp"
         app:autoFocusButtonColor="@android:color/white"
         app:autoFocusButtonVisible="true"
         app:flashButtonColor="@android:color/white"
@@ -107,7 +105,7 @@
         app:frameSize="0.75"
         app:frameThickness="2dp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textComment"
+        app:layout_constraintTop_toBottomOf="@+id/textAnswer"
         app:maskColor="#77000000" />
 
     <Button
