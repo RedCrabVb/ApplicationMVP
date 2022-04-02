@@ -6,6 +6,7 @@ import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.google.gson.Gson;
@@ -14,6 +15,7 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
+import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.io.BufferedReader;
@@ -72,18 +74,6 @@ public class Server {
 
     public boolean tokenActive() {
         return true;
-//        try {
-//            return new JsonParser().parse(sendInquiry(apiStatusToken, String.format("token=%s", tokenConnection)))
-//                    .getAsJsonObject().get("result").getAsBoolean();
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//            return false;
-//        }
-    }
-
-    public JsonObject getApiPersonData() throws Exception {
-//        return new JsonParser().parse(sendInquiry(apiPersonDataGet, String.format("token=%s", tokenConnection))).getAsJsonObject();
-        return null;
     }
 
     public JsonObjectRequest resetPassword(String email,
@@ -123,25 +113,33 @@ public class Server {
         );
     }
 
-    private JsonObject getTestServer() throws Exception {
-//        JsonObject test = new JsonParser().parse(sendInquiry(apiTestAll, "")).getAsJsonObject();
-//        System.out.println(test);
-//        return test;
-        return null;
+    public JsonArrayRequest getTestServer(Response.Listener<JSONArray> response) {
+        return new JsonArrayRequest(Request.Method.GET,
+                getUrl(apiTestAll, ""),
+                null,
+                response,
+                errorListener -> {
+                    System.out.println("error getTestServer: " + errorListener);
+                }
+        );
     }
 
-    private JsonObject getQuestionServer(int id) throws Exception {
-//        JsonObject test = new JsonParser().parse(sendInquiry(apiTestCurrent, String.format("id=%d", id))).getAsJsonObject();
-//        System.out.println(test);
-//        return test;
-        return null;
+    public JsonObjectRequest getQuestionServer(Long id, Response.Listener<JSONObject> response) {
+        return new JsonObjectRequest(Request.Method.GET,
+                getUrl(apiTestCurrent, "id=" + id),
+                null,
+                response,
+                errorListener -> {
+                    System.out.println("error question" + errorListener.networkResponse);
+                }
+        );
     }
 
-    public Question[] getQuestion(int id) {
+    public Question[] getQuestion(JSONObject questionJSON) {
         try {
             Gson gson = new Gson();
             Question[] question;
-            JsonArray jsonArrayQuestion = getQuestionServer(id).getAsJsonArray("question");
+            JsonArray jsonArrayQuestion = new JsonParser().parse(questionJSON.getJSONArray("answerList").toString()).getAsJsonArray();
             question = new Question[jsonArrayQuestion.size()];
             AtomicInteger i = new AtomicInteger();
             for (JsonElement r : jsonArrayQuestion) {
@@ -155,10 +153,11 @@ public class Server {
         }
     }
 
-    public Test[] getTest() {
+    public Test[] getTest(JSONArray test) {
         try {
             Test[] news;
-            JsonArray jsonArrayTest = getTestServer().getAsJsonArray("test");
+            JsonArray jsonArrayTest = new JsonParser().parse(test.toString())
+                    .getAsJsonArray();
             news = new Test[jsonArrayTest.size()];
             AtomicInteger i = new AtomicInteger();
             for (JsonElement r : jsonArrayTest) {
