@@ -6,12 +6,16 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.widget.EditText;
 
+import com.android.volley.RequestQueue;
+import com.android.volley.toolbox.Volley;
+
+import org.json.JSONException;
+
 import ru.vivt.applicationmvp.ui.repository.MemoryValues;
 import ru.vivt.applicationmvp.ui.repository.Server;
 
 public class StartActivity extends AppCompatActivity {
-    private EditText editTextIp;
-    private static final String server = "10.0.2.2:8080";//"servermvp.ru:49207"; // for test 10.0.2.2:8082
+    private static final String serverIP = "10.0.2.2:8080";//"servermvp.ru:49207"; // for test 10.0.2.2:8082
                                                         // for prod servermvp.ru:49207
 
     @Override
@@ -21,19 +25,27 @@ public class StartActivity extends AppCompatActivity {
 
 
         Thread thread = new Thread(() -> {{
-            Server server = Server.getInstance(editTextIp.getText().toString());
+            Server server = Server.getInstance(serverIP);
+            RequestQueue requestQueue = Volley.newRequestQueue(this);
 
             MemoryValues memoryValues = MemoryValues.init(getApplicationContext());
             String tokenInMemory = memoryValues.getToken();
             if (tokenInMemory != null) {
                 server.setTokenConnection(tokenInMemory);
             } else {
-                server.registration();
+                requestQueue.add(server.registration2(response -> {
+                    System.out.println(response);
+                    try {
+                        server.setTokenConnection(response.getString("token"));
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }));
             }
 
-            if (!server.tokenActive()) {
-                server.registration();
-            }
+//            if (!server.tokenActive()) {
+//                server.registration();
+//            }
 
             server.saveDataInMemory(memoryValues);
 
@@ -41,8 +53,6 @@ public class StartActivity extends AppCompatActivity {
             startActivity(intent);
         }});
 
-        editTextIp = findViewById(R.id.editTextIp);
-        editTextIp.setText(server);
         thread.start();
     }
 }

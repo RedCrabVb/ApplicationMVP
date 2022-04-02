@@ -195,6 +195,19 @@ public class Server {
         tokenConnection = "test";
     }
 
+
+    public JsonObjectRequest registration2(Response.Listener<JSONObject> response) {
+        return new JsonObjectRequest(
+                Request.Method.POST,
+                getUrl(apiRegistration, ""),
+                null,
+                response,
+                error -> {
+                    System.out.println("error when registration2");
+                }
+        );
+    }
+
     private String getQrCode() {
         return "test";
 //        try {
