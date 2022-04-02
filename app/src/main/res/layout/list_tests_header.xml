@@ -8,8 +8,10 @@
 
 
     <LinearLayout
+        android:id="@+id/item_test"
         android:layout_width="match_parent"
         android:layout_height="90dp"
+        android:background="#28BCCA"
         android:orientation="vertical">
 
         <TextView

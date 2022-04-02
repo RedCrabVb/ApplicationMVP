@@ -1,13 +1,12 @@
 package ru.vivt.applicationmvp.ui.repository;
 
 import android.content.Context;
-import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.ImageView;
-import android.widget.RelativeLayout;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -39,6 +38,12 @@ public class TestAdapter extends ArrayAdapter<Test> {
 
         textViewTitle.setText(getItem(position).getHeader());
         textViewDescription.setText(getItem(position).getDescription());
+
+        if (!getItem(position).isActive())  {
+            LinearLayout linearLayout = convertView.findViewById(R.id.item_test);
+            linearLayout.setBackgroundColor(Color.GRAY);
+        }
+
         return convertView;
     }
 }

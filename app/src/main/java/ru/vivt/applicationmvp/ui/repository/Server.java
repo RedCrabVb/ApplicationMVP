@@ -1,14 +1,9 @@
 package ru.vivt.applicationmvp.ui.repository;
 
-import android.util.Log;
-
 import com.android.volley.Request;
-import com.android.volley.RequestQueue;
 import com.android.volley.Response;
-import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.JsonObjectRequest;
-import com.android.volley.toolbox.Volley;
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
@@ -18,20 +13,11 @@ import com.google.gson.JsonParser;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
-import java.net.URL;
-import java.net.URLConnection;
-import java.net.URLEncoder;
+import java.io.UnsupportedEncodingException;
 import java.util.concurrent.atomic.AtomicInteger;
-
-import kotlin.RequiresOptIn;
 
 public class Server {
     private static Server server;
-    public static String error = "error", status = "status";
 
     private static String url = "";
     private static final String apiNews = "api/news";
@@ -118,9 +104,7 @@ public class Server {
                 getUrl(apiTestAll, ""),
                 null,
                 response,
-                errorListener -> {
-                    System.out.println("error getTestServer: " + errorListener);
-                }
+                errorListener -> System.out.println("error getTestServer: " + errorListener)
         );
     }
 
@@ -129,9 +113,7 @@ public class Server {
                 getUrl(apiTestCurrent, "id=" + id),
                 null,
                 response,
-                errorListener -> {
-                    System.out.println("error question" + errorListener.networkResponse);
-                }
+                errorListener -> System.out.println("error question" + errorListener.networkResponse)
         );
     }
 
@@ -165,8 +147,8 @@ public class Server {
                 news[i.getAndIncrement()] = new Test(
                         jsonNews.get("idTest").getAsInt(),
                         jsonNews.get("test").getAsString(),
-                        jsonNews.get("description").getAsString()
-                );
+                        jsonNews.get("description").getAsString(),
+                        jsonNews.get("active").getAsBoolean());
             }
             return news;
         } catch (Exception e) {
@@ -175,14 +157,19 @@ public class Server {
         }
     }
 
-    public JsonObject saveResultTest(int idTest,
+    public JsonObjectRequest saveResultTest(int idTest,
                                      String time,
                                      String countRightAnswer,
-                                     String answerJson) throws Exception {
-//        return new JsonParser().parse(sendInquiry(apiSaveResultTest,
-//                String.format("token=%s&time=%s&idTest=%s&countRightAnswer=%s&jsonAnswer=%s", this.tokenConnection, time, "" + idTest, countRightAnswer, answerJson)
-//        )).getAsJsonObject();
-        return null;
+                                     String answerJson,
+                                            Response.Listener<JSONObject> response) throws UnsupportedEncodingException {
+        return new JsonObjectRequest(Request.Method.GET,
+                getUrl(apiSaveResultTest,
+                        String.format("token=%s&time=%s&idTest=%s&countRightAnswer=%s&jsonAnswer=%s",
+                                tokenConnection, time, idTest, countRightAnswer, answerJson)),
+                null,
+                response,
+                errorListener -> System.out.println("error saveResultTest" + errorListener)
+        );
     }
 
 
@@ -217,7 +204,7 @@ public class Server {
                 null,
                 response,
                 error -> {
-                    System.out.println("error when get news");;
+                    System.out.println("error when get news");
                 }
         );
     }
@@ -238,14 +225,4 @@ public class Server {
         memoryValues.setQrCode(json.getString(MemoryValues.qrCode));
     }
 
-//    private String sendInquiry(String api, String json) throws Exception {
-//        json = json.replace("+", "%20"); // fix space encoder
-////        String jsonEncoding = URLEncoder.encode(json, "UTF-8");
-//        URL url = new URL(String.format(Server.url, api, json));
-//        HttpURLConnection connection = getResponseServer(url);
-//        String response = connectionResponseToString(connection);
-//
-//        System.out.println("URL: " + url.toString());
-//        return response;
-//    }
 }

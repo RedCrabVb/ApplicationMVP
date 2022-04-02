@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
@@ -27,7 +28,6 @@ import ru.vivt.applicationmvp.ui.repository.TestAdapter;
 
 public class TestFragment extends Fragment {
     private FragmentTestBinding binding;
-    private TestViewModel testViewModel;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -53,14 +53,17 @@ public class TestFragment extends Fragment {
             Intent intent = new Intent(binding.getRoot().getContext(), TestActivity.class);
             intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
             Bundle bundle = new Bundle();
-            long idTest = (long) testViewModel.getArrayAdapter().getValue().getItem(position).getIdTest();
-            requestQueue.add(Server.getInstance().getQuestionServer(idTest, response -> {
-                Question[] questions = Server.getInstance().getQuestion(response);
-                bundle.putString("questions", new Gson().toJson(questions));
-                bundle.putInt("idTest", (int) idTest);
-                intent.putExtras(bundle);
-                startActivity(intent);
-            }));
+            Test test = testViewModel.getArrayAdapter().getValue().getItem(position);
+            if (test.isActive()) {
+                long idTest = (long) test.getIdTest();
+                requestQueue.add(Server.getInstance().getQuestionServer(idTest, response -> {
+                    Question[] questions = Server.getInstance().getQuestion(response);
+                    bundle.putString("questions", new Gson().toJson(questions));
+                    bundle.putInt("idTest", (int) idTest);
+                    intent.putExtras(bundle);
+                    startActivity(intent);
+                }));
+            }
         });
 
         return root;
