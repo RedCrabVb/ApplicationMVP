@@ -11,7 +11,7 @@ import ru.vivt.applicationmvp.ui.repository.Server;
 
 public class StartActivity extends AppCompatActivity {
     private EditText editTextIp;
-    private static final String server = "servermvp.ru:49207"; // for test 10.0.2.2:8082
+    private static final String server = "10.0.2.2:8080";//"servermvp.ru:49207"; // for test 10.0.2.2:8082
                                                         // for prod servermvp.ru:49207
 
     @Override

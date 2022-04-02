@@ -1,10 +1,20 @@
 package ru.vivt.applicationmvp.ui.repository;
 
+import android.util.Log;
+
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.Volley;
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+
+import org.json.JSONObject;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -14,6 +24,8 @@ import java.net.URL;
 import java.net.URLConnection;
 import java.net.URLEncoder;
 import java.util.concurrent.atomic.AtomicInteger;
+
+import kotlin.RequiresOptIn;
 
 public class Server {
     private static Server server;
@@ -31,8 +43,6 @@ public class Server {
     private static final String apiAuthorization = "api/authorization";
     private static final String apiPersonDataGet = "api/personData";
     private static final String apiSaveResultTest = "api/saveResultTest";
-
-//  String.format("token=%s&time=%s&idTest=%s&countRightAnswer=%s&jsonAnswer=%s", token, "1.20", "1", "5", "true,true,false"));
 
     private String tokenConnection = null;
     private JsonObject jsonObjectNews = null;
@@ -56,59 +66,71 @@ public class Server {
         return server;
     }
 
+    private static String getUrl(String api, String param) {
+        return String.format(Server.url, api, param);
+    }
+
     public boolean tokenActive() {
-        try {
-            return new JsonParser().parse(sendInquiry(apiStatusToken, String.format("token=%s", tokenConnection)))
-                    .getAsJsonObject().get("result").getAsBoolean();
-        } catch (Exception e) {
-            e.printStackTrace();
-            return false;
-        }
+        return true;
+//        try {
+//            return new JsonParser().parse(sendInquiry(apiStatusToken, String.format("token=%s", tokenConnection)))
+//                    .getAsJsonObject().get("result").getAsBoolean();
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//            return false;
+//        }
     }
 
     public JsonObject getApiPersonData() throws Exception {
-        return new JsonParser().parse(sendInquiry(apiPersonDataGet, String.format("token=%s",  tokenConnection))).getAsJsonObject();
+//        return new JsonParser().parse(sendInquiry(apiPersonDataGet, String.format("token=%s", tokenConnection))).getAsJsonObject();
+        return null;
     }
 
     public String resetPassword(String email) {
-        String result = "error";
-        try {
-            result = sendInquiry(apiResetPassword, String.format("email=%s", email));
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return result;
+        return null;
+//        String result = "error";
+//        try {
+//            result = sendInquiry(apiResetPassword, String.format("email=%s", email));
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
+//        return result;
     }
 
     public String getNews() {
-        try {
-            return Server.getInstance().getNewsJson().get("News").getAsString();
-        } catch (Exception e) {
-            e.printStackTrace();
-            return "https://habr.com/ru/news/";
-        }
+//        try {
+//            return Server.getInstance().getNewsJson().get("News").getAsString();
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//            return "https://habr.com/ru/news/";
+//        }
+        return "https://habr.com/ru/news/";
     }
 
     public String updateDataAboutProfile(String userName, String email, String password) throws Exception {
-        String result = sendInquiry(apiPersonData, String.format("token=%s&username=%s&email=%s&password=%s", tokenConnection, userName, email, password));
-        System.out.println(result);
-        return result;
+//        String result = sendInquiry(apiPersonData, String.format("token=%s&username=%s&email=%s&password=%s", tokenConnection, userName, email, password));
+//        System.out.println(result);
+//        return result;
+        return null;
     }
 
     public String authorization(String email, String password) throws Exception {
-        return sendInquiry(apiAuthorization, String.format("email=%s&password=%s",  email, password));
+//        return sendInquiry(apiAuthorization, String.format("email=%s&password=%s", email, password));
+        return null;
     }
 
     private JsonObject getTestServer() throws Exception {
-        JsonObject test = new JsonParser().parse(sendInquiry(apiTestAll, "")).getAsJsonObject();
-        System.out.println(test);
-        return test;
+//        JsonObject test = new JsonParser().parse(sendInquiry(apiTestAll, "")).getAsJsonObject();
+//        System.out.println(test);
+//        return test;
+        return null;
     }
 
     private JsonObject getQuestionServer(int id) throws Exception {
-        JsonObject test = new JsonParser().parse(sendInquiry(apiTestCurrent, String.format("id=%d", id))).getAsJsonObject();
-        System.out.println(test);
-        return test;
+//        JsonObject test = new JsonParser().parse(sendInquiry(apiTestCurrent, String.format("id=%d", id))).getAsJsonObject();
+//        System.out.println(test);
+//        return test;
+        return null;
     }
 
     public Question[] getQuestion(int id) {
@@ -118,7 +140,7 @@ public class Server {
             JsonArray jsonArrayQuestion = getQuestionServer(id).getAsJsonArray("question");
             question = new Question[jsonArrayQuestion.size()];
             AtomicInteger i = new AtomicInteger();
-            for(JsonElement r : jsonArrayQuestion){
+            for (JsonElement r : jsonArrayQuestion) {
                 JsonObject jsonQuestion = r.getAsJsonObject();
                 question[i.getAndIncrement()] = gson.fromJson(jsonQuestion, Question.class);
             }
@@ -135,7 +157,7 @@ public class Server {
             JsonArray jsonArrayTest = getTestServer().getAsJsonArray("test");
             news = new Test[jsonArrayTest.size()];
             AtomicInteger i = new AtomicInteger();
-            for(JsonElement r : jsonArrayTest){
+            for (JsonElement r : jsonArrayTest) {
                 JsonObject jsonNews = r.getAsJsonObject();
                 news[i.getAndIncrement()] = new Test(
                         jsonNews.get("idTest").getAsInt(),
@@ -154,40 +176,48 @@ public class Server {
                                      String time,
                                      String countRightAnswer,
                                      String answerJson) throws Exception {
-        return new JsonParser().parse(sendInquiry(apiSaveResultTest,
-                String.format("token=%s&time=%s&idTest=%s&countRightAnswer=%s&jsonAnswer=%s", this.tokenConnection, time, "" + idTest, countRightAnswer, answerJson)
-        )).getAsJsonObject();
+//        return new JsonParser().parse(sendInquiry(apiSaveResultTest,
+//                String.format("token=%s&time=%s&idTest=%s&countRightAnswer=%s&jsonAnswer=%s", this.tokenConnection, time, "" + idTest, countRightAnswer, answerJson)
+//        )).getAsJsonObject();
+        return null;
     }
 
 
     public void registration() {
-        try {
-            String result = (sendInquiry(apiRegistration, ""));
-            JsonObject jsonReg =  new JsonParser().parse(result).getAsJsonObject();
-            tokenConnection = jsonReg.get("token").getAsString();
-            System.out.println(result);
-        } catch (Exception | Error e) {
-            e.printStackTrace();
-        }
+//        try {
+//            String result = (sendInquiry(apiRegistration, ""));
+//            JsonObject jsonReg = new JsonParser().parse(result).getAsJsonObject();
+//            tokenConnection = jsonReg.get("token").getAsString();
+//            System.out.println(result);
+//        } catch (Exception | Error e) {
+//            e.printStackTrace();
+//        }
+        tokenConnection = "test";
     }
 
     private String getQrCode() {
-        try {
-            String result = sendInquiry(apiQrCode, String.format("token=%s", tokenConnection));
-            JsonObject json = new JsonParser().parse(result).getAsJsonObject();
-            return json.get("qrCode").getAsString();
-        } catch (Exception e) {
-            e.printStackTrace();
-            return "error";
-        }
+        return "test";
+//        try {
+//            String result = sendInquiry(apiQrCode, String.format("token=%s", tokenConnection));
+//            JsonObject json = new JsonParser().parse(result).getAsJsonObject();
+//            return json.get("qrCode").getAsString();
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//            return "error";
+//        }
     }
 
-    private JsonObject getNewsJson() throws Exception {
-        if (jsonObjectNews == null) {
-            String result = sendInquiry(apiNews, "");
-            jsonObjectNews = new JsonParser().parse(result).getAsJsonObject();
-        }
-        return jsonObjectNews;
+    public JsonObjectRequest getNewsRequest(Response.Listener<JSONObject> response) throws Exception {
+        JsonObjectRequest j = new JsonObjectRequest(
+                Request.Method.GET,
+                getUrl(apiNews, ""),
+                null,
+                response,
+                error -> {
+                    System.out.println("error when get news");;
+                }
+        );
+        return j;
     }
 
     public void setTokenConnection(String tokenConnection) {
@@ -209,34 +239,34 @@ public class Server {
         }
     }
 
-    private String sendInquiry(String api, String json) throws Exception {
-        json = json.replace("+", "%20"); // fix space encoder
-//        String jsonEncoding = URLEncoder.encode(json, "UTF-8");
-        URL url = new URL(String.format(Server.url, api, json));
-        HttpURLConnection connection = getResponseServer(url);
-        String response = connectionResponseToString(connection);
-
-        System.out.println("URL: " + url.toString());
-        return response;
-    }
-
-    private HttpURLConnection getResponseServer(URL url) throws Exception {
-        URLConnection urlConnection = url.openConnection();
-
-        return (HttpURLConnection) urlConnection;
-    }
-
-    private String connectionResponseToString(HttpURLConnection connection) throws IOException {
-        BufferedReader in = new BufferedReader(new InputStreamReader(connection.getInputStream()));
-        StringBuilder urlString = new StringBuilder();
-
-        String current;
-        while ((current = in.readLine()) != null) {
-            urlString.append(current);
-        }
-
-        connection.disconnect();
-
-        return urlString.toString();
-    }
+//    private String sendInquiry(String api, String json) throws Exception {
+//        json = json.replace("+", "%20"); // fix space encoder
+////        String jsonEncoding = URLEncoder.encode(json, "UTF-8");
+//        URL url = new URL(String.format(Server.url, api, json));
+//        HttpURLConnection connection = getResponseServer(url);
+//        String response = connectionResponseToString(connection);
+//
+//        System.out.println("URL: " + url.toString());
+//        return response;
+//    }
+//
+//    private HttpURLConnection getResponseServer(URL url) throws Exception {
+//        URLConnection urlConnection = url.openConnection();
+//
+//        return (HttpURLConnection) urlConnection;
+//    }
+//
+//    private String connectionResponseToString(HttpURLConnection connection) throws IOException {
+//        BufferedReader in = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+//        StringBuilder urlString = new StringBuilder();
+//
+//        String current;
+//        while ((current = in.readLine()) != null) {
+//            urlString.append(current);
+//        }
+//
+//        connection.disconnect();
+//
+//        return urlString.toString();
+//    }
 }

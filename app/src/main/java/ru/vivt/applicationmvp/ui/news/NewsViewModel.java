@@ -12,9 +12,10 @@ public class NewsViewModel extends ViewModel {
 
     public NewsViewModel() {
         newsLink = new MutableLiveData<>();
-        new Thread(() -> {
-                newsLink.postValue(Server.getInstance().getNews());
-        }).start();
+//        new Thread(() -> {
+//                newsLink.postValue(Server.getInstance().getNews());
+//
+//        }).start();
 
     }
 
