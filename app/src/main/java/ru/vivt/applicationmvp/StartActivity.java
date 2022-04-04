@@ -15,7 +15,7 @@ import ru.vivt.applicationmvp.ui.repository.MemoryValues;
 import ru.vivt.applicationmvp.ui.repository.Server;
 
 public class StartActivity extends AppCompatActivity {
-    private static final String serverIP = "10.0.2.2:8080";//"servermvp.ru:49207"; // for test 10.0.2.2:8082
+    private static final String serverIP = "servermvp.ru:49207";//"servermvp.ru:49207"; // for test 10.0.2.2:8082
                                                         // for prod servermvp.ru:49207
 
     @Override

@@ -14,6 +14,8 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.io.UnsupportedEncodingException;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class Server {
@@ -137,20 +139,24 @@ public class Server {
 
     public Test[] getTest(JSONArray test) {
         try {
-            Test[] news;
+            ArrayList<Test> tests = new ArrayList<>();
             JsonArray jsonArrayTest = new JsonParser().parse(test.toString())
                     .getAsJsonArray();
-            news = new Test[jsonArrayTest.size()];
-            AtomicInteger i = new AtomicInteger();
             for (JsonElement r : jsonArrayTest) {
-                JsonObject jsonNews = r.getAsJsonObject();
-                news[i.getAndIncrement()] = new Test(
-                        jsonNews.get("idTest").getAsInt(),
-                        jsonNews.get("test").getAsString(),
-                        jsonNews.get("description").getAsString(),
-                        jsonNews.get("active").getAsBoolean());
+                JsonObject j = r.getAsJsonObject();
+                if (j.get("active").getAsBoolean()) {
+                    tests.add(new Test(
+                            j.get("idTest").getAsInt(),
+                            j.get("test").getAsString(),
+                            j.get("description").getAsString(),
+                            true));
+                }
             }
-            return news;
+            Test[] testArr = new Test[tests.size()];
+            for (int i = 0; i < tests.size(); i++) {
+                testArr[i] = tests.get(i);
+            }
+            return testArr;
         } catch (Exception e) {
             e.printStackTrace();
             return new Test[]{};
@@ -159,13 +165,13 @@ public class Server {
 
     public JsonObjectRequest saveResultTest(int idTest,
                                      String time,
-                                     String countRightAnswer,
+                                     String countWrongAnswer,
                                      String answerJson,
                                             Response.Listener<JSONObject> response) throws UnsupportedEncodingException {
         return new JsonObjectRequest(Request.Method.GET,
                 getUrl(apiSaveResultTest,
                         String.format("token=%s&time=%s&idTest=%s&countRightAnswer=%s&jsonAnswer=%s",
-                                tokenConnection, time, idTest, countRightAnswer, answerJson)),
+                                tokenConnection, time, idTest, countWrongAnswer, answerJson)),
                 null,
                 response,
                 errorListener -> System.out.println("error saveResultTest" + errorListener)

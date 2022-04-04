@@ -3,18 +3,20 @@ package ru.vivt.applicationmvp.ui.repository;
 public class ResultTest {
     private int idTest;
     private String time;
-    private String countRightAnswer;
+    private Integer countWrongAnswer;
+    private Integer countAnswer;
     private String answer;
 
-    public ResultTest(int idTest, String time, String countRightAnswer, String answer) {
+    public ResultTest(int idTest, String time, Integer countWrongAnswer, Integer countAnswer, String answer) {
         this.idTest = idTest;
         this.time = time;
-        this.countRightAnswer = countRightAnswer;
+        this.countAnswer = countAnswer;
+        this.countWrongAnswer = countWrongAnswer;
         this.answer = answer;
     }
 
-    public String getCountRightAnswer() {
-        return countRightAnswer;
+    public Integer getCountAnswer() {
+        return countAnswer;
     }
 
     public String getAnswer() {
@@ -27,5 +29,9 @@ public class ResultTest {
 
     public int getIdTest() {
         return idTest;
+    }
+
+    public Integer getCountWrongAnswer() {
+        return countWrongAnswer;
     }
 }

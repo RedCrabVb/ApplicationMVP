@@ -9,17 +9,17 @@
         android:id="@+id/saveResultTest"
         android:layout_width="252dp"
         android:layout_height="45dp"
-        android:layout_marginStart="80dp"
-        android:layout_marginTop="32dp"
+        android:layout_marginStart="76dp"
+        android:layout_marginTop="28dp"
         android:rotationX="2"
         android:text="@string/saveResultTest"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textViewResult" />
+        app:layout_constraintTop_toBottomOf="@+id/imageView" />
 
     <TextView
         android:id="@+id/textViewResult"
-        android:layout_width="318dp"
-        android:layout_height="391dp"
+        android:layout_width="328dp"
+        android:layout_height="249dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="16dp"
         android:layout_marginEnd="8dp"
@@ -29,4 +29,14 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
+        android:id="@+id/imageView"
+        android:layout_width="268dp"
+        android:layout_height="250dp"
+        android:layout_marginStart="76dp"
+        android:layout_marginTop="36dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textViewResult"
+        app:srcCompat="@drawable/final2314" />
 </androidx.constraintlayout.widget.ConstraintLayout>
