@@ -16,8 +16,8 @@
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="countQuestion">1/10</string>
     <string name="qr_code_scan">qr-code scan</string>
-    <string name="comment">Комментарий</string>
-    <string name="question">Вопрос</string>
+    <string name="comment">Комментарий:</string>
+    <string name="question">Вопрос:</string>
     <string name="nextQuestion">Ответить</string>
     <string name="saveResultTest">Сохранить результаты</string>
     <!--error-->

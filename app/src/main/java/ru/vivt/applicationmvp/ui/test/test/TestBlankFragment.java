@@ -56,8 +56,7 @@ public class TestBlankFragment extends Fragment {
     }
 
     private boolean saveAnswer(TextView answerEditText) {
-        boolean result = answerEditText.getText().toString().equals(questions[currentPositionQuestion].getAnswer());
-        return result;
+        return answerEditText.getText().toString().equals(questions[currentPositionQuestion].getAnswer());
     }
 
     public View onCreateView(@NonNull LayoutInflater inflater,
@@ -75,7 +74,6 @@ public class TestBlankFragment extends Fragment {
 
         Vibrator vibrator = (Vibrator) getActivity().getSystemService(Context.VIBRATOR_SERVICE);
 
-        buttonNextQuestion.setEnabled(false);
 
         Bundle questionBundle = getActivity().getIntent().getExtras();
         if (questionBundle != null) {
@@ -90,29 +88,34 @@ public class TestBlankFragment extends Fragment {
 
             buttonNextQuestion.setOnClickListener(v -> {
 
-                currentPositionQuestion++;
-                if (currentPositionQuestion == questions.length) {
-                    long timeEnd = System.currentTimeMillis();
-
-
-                    ResultTest resultTest = new ResultTest(idTest, "" + (timeEnd - timeStart), wrongAnswer, questions.length, "right");
-                    getActivity().getIntent().putExtra("resultTest", gson.toJson(resultTest));
-                    replaceFragment(new TestResultFragment());
+                if (!saveAnswer(answer)) {
+                    wrongAnswer += 1;
+                    error.setText("Ответ не верный");
+                    error.setVisibility(View.VISIBLE);
+                    vibrator.vibrate(1000);
                 } else {
-                    loadTestCase(questionText, comment, countQuestion);
+                    error.setText("");
+                    currentPositionQuestion++;
+                    if (currentPositionQuestion == questions.length) {
+                        long timeEnd = System.currentTimeMillis();
+
+                        ResultTest resultTest = new ResultTest(idTest, "" + (timeEnd - timeStart), wrongAnswer, questions.length, "right");
+                        getActivity().getIntent().putExtra("resultTest", gson.toJson(resultTest));
+                        replaceFragment(new TestResultFragment());
+                    } else {
+                        loadTestCase(questionText, comment, countQuestion);
+                    }
+                    answer.setText("");
+                    error.setVisibility(View.GONE);
                 }
-                answer.setText("");
-                answer.setTextColor(Color.BLACK);
-                error.setVisibility(View.GONE);
-                buttonNextQuestion.setEnabled(false);
+
             });
         }
 
         try {
             if (ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.CAMERA) == PackageManager.PERMISSION_DENIED) {
-                ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.CAMERA}, 100);
+                ActivityCompat.requestPermissions(getActivity(), new String[] { Manifest.permission.CAMERA }, 100);
             }
-
             if (ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.CAMERA) != PackageManager.PERMISSION_DENIED) {
                 CodeScannerView scannerView = binding.scannerView;
                 mCodeScanner = new CodeScanner(getActivity(), scannerView);
@@ -121,25 +124,9 @@ public class TestBlankFragment extends Fragment {
                         if (question.getAnswer().hashCode() == Integer.parseInt(result.getText())) {
                             this.getActivity().runOnUiThread(() -> {
                                 answer.setText(question.getAnswer());
+                                error.setText("");
                             });
 
-                            this.getActivity().runOnUiThread(() -> {
-
-
-                                        if (!saveAnswer(answer)) {
-                                            wrongAnswer += 1;
-                                            answer.setTextColor(Color.BLACK);
-                                            error.setText("Ответ не верный");
-                                            error.setVisibility(View.VISIBLE);
-                                            buttonNextQuestion.setEnabled(false);
-                                            vibrator.vibrate(1000);
-                                        } else {
-                                            answer.setTextColor(Color.GREEN);
-                                            error.setText("");
-                                            buttonNextQuestion.setEnabled(true);
-                                        }
-                                    }
-                            );
                         }
                     }
                 });
@@ -150,7 +137,6 @@ public class TestBlankFragment extends Fragment {
         } catch (Exception | Error e) {
             getActivity().runOnUiThread(() -> Toast.makeText(getActivity(), "Error, разрешите приложению доступ к камере", Toast.LENGTH_SHORT).show());
         }
-
         return root;
     }
 
@@ -163,5 +149,15 @@ public class TestBlankFragment extends Fragment {
         fragmentTransaction.commit();
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        mCodeScanner.startPreview();
+    }
 
+    @Override
+    public void onPause() {
+        mCodeScanner.releaseResources();
+        super.onPause();
+    }
 }
