@@ -46,6 +46,13 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
         binding.buttonResetPassword.setOnClickListener(this);
         binding.buttonGoTest.setOnClickListener(this);
 
+        if (!MemoryValues.getInstance().getEmail().isEmpty()) {
+            binding.buttonRegestration.setVisibility(View.GONE);
+            binding.buttonDataReset.setVisibility(View.VISIBLE);
+        } else {
+            binding.buttonDataReset.setVisibility(View.GONE);
+        }
+
         MemoryValues memoryValues = MemoryValues.getInstance();
 
         profileViewModel.putUsername(memoryValues.getUsername());
