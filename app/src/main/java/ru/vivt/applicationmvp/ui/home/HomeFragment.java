@@ -9,14 +9,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
-import android.webkit.WebSettings;
 import android.widget.ImageView;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.android.volley.RequestQueue;
@@ -61,18 +57,17 @@ public class HomeFragment extends Fragment {
             }
         });
 
-        new Thread(() -> {
-            RequestQueue requestQueue = Volley.newRequestQueue(getContext());
+        RequestQueue requestQueue = Volley.newRequestQueue(getContext());
 
-            JsonObjectRequest request = Server.getInstance().getNewsRequest(response -> {
-                try {
-                    binding.webView.loadUrl(response.getString("News"));
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-            });
-            requestQueue.add(request);
-        }).start();
+        JsonObjectRequest request = Server.getInstance().getNewsRequest(response -> {
+            try {
+                binding.webView.loadUrl(response.getString("News"));
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }, error -> error.printStackTrace());
+        requestQueue.add(request);
+
         return root;
     }
 

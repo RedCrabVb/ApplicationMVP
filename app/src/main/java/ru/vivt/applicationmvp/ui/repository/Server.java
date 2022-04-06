@@ -11,6 +11,7 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.UnsupportedEncodingException;
@@ -79,9 +80,13 @@ public class Server {
 
     public JsonObjectRequest updateDataAboutProfile(String userName, String email, String password,
                                                     Response.Listener<JSONObject> response,
-                                                    Response.ErrorListener errorListener) throws Exception {
+                                                    Response.ErrorListener errorListener) {
         JSONObject jsonRequest = new JSONObject();
-        jsonRequest.put("token", tokenConnection);
+        try {
+            jsonRequest.put("token", tokenConnection);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
         return new JsonObjectRequest(Request.Method.POST,
                 getUrl(apiPersonData, String.format("username=%s&email=%s&password=%s", userName, email, password)),
                 jsonRequest,
@@ -164,9 +169,9 @@ public class Server {
     }
 
     public JsonObjectRequest saveResultTest(int idTest,
-                                     String time,
-                                     String countWrongAnswer,
-                                     String answerJson,
+                                            String time,
+                                            String countWrongAnswer,
+                                            String answerJson,
                                             Response.Listener<JSONObject> response) throws UnsupportedEncodingException {
         return new JsonObjectRequest(Request.Method.GET,
                 getUrl(apiSaveResultTest,
@@ -203,15 +208,13 @@ public class Server {
         );
     }
 
-    public JsonObjectRequest getNewsRequest(Response.Listener<JSONObject> response) {
+    public JsonObjectRequest getNewsRequest(Response.Listener<JSONObject> response, Response.ErrorListener  error) {
         return new JsonObjectRequest(
                 Request.Method.GET,
                 getUrl(apiNews, ""),
                 null,
                 response,
-                error -> {
-                    System.out.println("error when get news");
-                }
+                error
         );
     }
 
@@ -223,12 +226,17 @@ public class Server {
         memoryValues.setToken(tokenConnection);
     }
 
-    public void saveDataInMemory(MemoryValues memoryValues, JSONObject json) throws org.json.JSONException {
-        server.setTokenConnection(json.getString(MemoryValues.token));
-        memoryValues.setToken(tokenConnection);
-        memoryValues.setEmail(json.getString(MemoryValues.email));
-        memoryValues.setUsername(json.getString(MemoryValues.username));
-        memoryValues.setQrCode(json.getString(MemoryValues.qrCode));
+    public void saveDataInMemory(MemoryValues memoryValues, JSONObject json) {
+        try {
+            server.setTokenConnection(json.getString(MemoryValues.token));
+
+            memoryValues.setToken(tokenConnection);
+            memoryValues.setEmail(json.getString(MemoryValues.email));
+            memoryValues.setUsername(json.getString(MemoryValues.username));
+            memoryValues.setQrCode(json.getString(MemoryValues.qrCode));
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
     }
 
 }

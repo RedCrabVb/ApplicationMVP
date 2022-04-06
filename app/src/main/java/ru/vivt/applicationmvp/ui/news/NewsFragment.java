@@ -42,7 +42,7 @@ public class NewsFragment extends Fragment {
             } catch (JSONException e) {
                 e.printStackTrace();
             }
-        });
+        }, error -> error.printStackTrace());
         requestQueue.add(request);
 
 

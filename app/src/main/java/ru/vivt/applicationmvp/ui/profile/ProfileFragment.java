@@ -1,5 +1,7 @@
 package ru.vivt.applicationmvp.ui.profile;
 
+import static android.view.View.GONE;
+
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -46,14 +48,21 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
         binding.buttonResetPassword.setOnClickListener(this);
         binding.buttonGoTest.setOnClickListener(this);
 
-        if (!MemoryValues.getInstance().getEmail().isEmpty()) {
-            binding.buttonRegestration.setVisibility(View.GONE);
+        MemoryValues memoryValues = MemoryValues.getInstance();
+
+
+        if (!memoryValues.getEmail().isEmpty()) {
+            binding.buttonRegestration.setVisibility(GONE);
             binding.buttonDataReset.setVisibility(View.VISIBLE);
         } else {
-            binding.buttonDataReset.setVisibility(View.GONE);
+            binding.buttonDataReset.setVisibility(GONE);
         }
 
-        MemoryValues memoryValues = MemoryValues.getInstance();
+        if (memoryValues.getUsername().isEmpty()) {
+            binding.textViewUsername.setVisibility(GONE);
+            binding.textViewEmail.setVisibility(GONE);
+            binding.textNotifications.setText("Нет данных о профиле");
+        }
 
         profileViewModel.putUsername(memoryValues.getUsername());
         profileViewModel.putEmail(memoryValues.getEmail());
@@ -98,7 +107,6 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
     public void replaceFragment(Fragment someFragment) {
         FragmentTransaction transaction = getFragmentManager().beginTransaction();
         transaction.replace(R.id.nav_host_fragment_activity_main2, someFragment);
-//        transaction.addToBackStack(null);
         transaction.commit();
     }
 

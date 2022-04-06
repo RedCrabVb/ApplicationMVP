@@ -22,21 +22,19 @@
 
     <EditText
         android:id="@+id/editTextTextPersonName3"
+        style="@style/custom_input_style"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        style="@style/custom_input_style"
+        android:layout_marginLeft="70dp"
+        android:layout_marginTop="40dp"
+        android:layout_marginRight="70dp"
         android:background="@drawable/custom_input"
         android:drawableLeft="@drawable/feather_zmdi"
         android:drawablePadding="20dp"
         android:ems="10"
         android:hint="Имя пользователя"
         android:inputType="textPersonName"
-        android:paddingLeft="30dp"
-        android:layout_marginTop="40dp"
-        android:layout_marginLeft="70dp"
-        android:layout_marginRight="70dp"
-        android:textColorHint="#5C000000">
-    </EditText>
+        android:paddingLeft="30dp"></EditText>
 
     <EditText
         android:id="@+id/editTextTextEmailAddress"

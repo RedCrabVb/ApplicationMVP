@@ -29,9 +29,9 @@
         android:label="@string/title_profile"
         tools:layout="@layout/fragment_autrization" />
 
-    <fragment
-        android:id="@+id/navigation_qr_code_scanner"
-        android:name="ru.vivt.applicationmvp.ui.ScannerQrFragment"
-        android:label="@string/qr_code"
-        tools:layout="@layout/fragment_scanner_qr" />
+<!--    <fragment-->
+<!--        android:id="@+id/navigation_qr_code_scanner"-->
+<!--        android:name="ru.vivt.applicationmvp.ui.ScannerQrFragment"-->
+<!--        android:label="@string/qr_code"-->
+<!--        tools:layout="@layout/fragment_scanner_qr" />-->
 </navigation>

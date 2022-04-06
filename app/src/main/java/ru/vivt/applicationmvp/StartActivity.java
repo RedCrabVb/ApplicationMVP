@@ -1,9 +1,12 @@
 package ru.vivt.applicationmvp;
 
+import static android.view.View.GONE;
+
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.EditText;
 
 import com.android.volley.RequestQueue;
@@ -11,55 +14,58 @@ import com.android.volley.toolbox.Volley;
 
 import org.json.JSONException;
 
+import ru.vivt.applicationmvp.databinding.ActivityMainBinding;
+import ru.vivt.applicationmvp.databinding.ActivityStartBinding;
 import ru.vivt.applicationmvp.ui.repository.MemoryValues;
 import ru.vivt.applicationmvp.ui.repository.Server;
 
 public class StartActivity extends AppCompatActivity {
     private static final String serverIP = "servermvp.ru:49207";//"servermvp.ru:49207"; // for test 10.0.2.2:8082
-                                                        // for prod servermvp.ru:49207
+    // for prod servermvp.ru:49207
+
+    private ActivityStartBinding binding;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_start);
+
+        binding = ActivityStartBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
 
 
-        Thread thread = new Thread(() -> {{
-            Server server = Server.getInstance(serverIP);
-            RequestQueue requestQueue = Volley.newRequestQueue(this);
 
-            MemoryValues memoryValues = MemoryValues.init(getApplicationContext());
-            String tokenInMemory = memoryValues.getToken();
-            if (tokenInMemory != null) {
-                server.setTokenConnection(tokenInMemory);
-            } else {
-                requestQueue.add(server.registration2(response -> {
-                    System.out.println(response);
-                    try {
-                        server.saveDataInMemory(memoryValues, response);
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
-                }));
-                requestQueue.add(server.getQrCode(response -> {
-                    try {
-                        memoryValues.setQrCode(response.getString("qrCode"));
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
-                }));
-            }
+        binding.enterIP.setOnClickListener(l -> {
+            connection(binding.enterIP.getText().toString());
+        });
 
-//            if (!server.tokenActive()) {
-//                server.registration();
-//            }
+        connection(serverIP);
+    }
 
-            server.saveDataInMemory(memoryValues);
+    private void connection(String ip) {
+        binding.progressBar.setVisibility(View.VISIBLE);
+        binding.inputIP.setVisibility(GONE);
 
+        Server server = Server.getInstance(ip);
+        MemoryValues memoryValues = MemoryValues.init(getApplicationContext());
+        RequestQueue requestQueue = Volley.newRequestQueue(this);
+
+        String tokenInMemory = memoryValues.getToken();
+        if (tokenInMemory != null) {
+            server.setTokenConnection(tokenInMemory);
+        } else {
+            requestQueue.add(server.registration2(response -> server.saveDataInMemory(memoryValues, response)));
+        }
+
+        server.saveDataInMemory(memoryValues);
+
+        requestQueue.add(server.getNewsRequest(response -> {
             Intent intent = new Intent(StartActivity.this, MainActivity.class);
             startActivity(intent);
-        }});
-
-        thread.start();
+        }, error -> {
+            binding.inputIP.setVisibility(View.VISIBLE);
+            binding.progressBar.setVisibility(GONE);
+        }));
     }
+
+
 }

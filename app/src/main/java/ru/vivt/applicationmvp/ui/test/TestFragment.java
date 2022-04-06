@@ -20,20 +20,20 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 import ru.vivt.applicationmvp.R;
-import ru.vivt.applicationmvp.databinding.FragmentTestBinding;
+import ru.vivt.applicationmvp.databinding.FragmentTest2Binding;
 import ru.vivt.applicationmvp.ui.repository.Question;
 import ru.vivt.applicationmvp.ui.repository.Server;
 import ru.vivt.applicationmvp.ui.repository.Test;
 import ru.vivt.applicationmvp.ui.repository.TestAdapter;
 
 public class TestFragment extends Fragment {
-    private FragmentTestBinding binding;
+    private FragmentTest2Binding binding;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
         TestViewModel testViewModel = new ViewModelProvider(this).get(TestViewModel.class);
 
-        binding = FragmentTestBinding.inflate(inflater, container, false);
+        binding = FragmentTest2Binding.inflate(inflater, container, false);
 
         View root = binding.getRoot();
 
@@ -55,7 +55,7 @@ public class TestFragment extends Fragment {
             Bundle bundle = new Bundle();
             Test test = testViewModel.getArrayAdapter().getValue().getItem(position);
             if (test.isActive()) {
-                long idTest = (long) test.getIdTest();
+                long idTest = test.getIdTest();
                 requestQueue.add(Server.getInstance().getQuestionServer(idTest, response -> {
                     Question[] questions = Server.getInstance().getQuestion(response);
                     bundle.putString("questions", new Gson().toJson(questions));

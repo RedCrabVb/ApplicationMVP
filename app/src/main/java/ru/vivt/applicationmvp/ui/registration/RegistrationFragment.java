@@ -4,13 +4,16 @@ import static ru.vivt.applicationmvp.ui.profile.ProfileFragment.keyUpdate;
 
 import android.annotation.SuppressLint;
 import android.graphics.Color;
+import android.os.Build;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
@@ -44,69 +47,80 @@ public class RegistrationFragment extends Fragment {
             String username = binding.editTextTextPersonName3.getText().toString();
             String email = binding.editTextTextEmailAddress.getText().toString();
 
+
             Consumer<String> errorConsumer = (errorText) -> {
                 binding.textViewError.setText(errorText);
                 binding.textViewError.setVisibility(View.VISIBLE);
             };
 
-            if (editPass1.isEmpty() || editPass2.isEmpty() || email.isEmpty() || username.isEmpty()) {
-                errorConsumer.accept(getString(R.string.notEmpty));
-                return;
-            }
+            CountDownTimer countDownTimer = new CountDownTimer(5000, 1000) {
+                @Override
+                public void onTick(long l) {
 
-            if (!editPass1.equals(editPass2)) {
-                errorConsumer.accept(getString(R.string.passwordIdentity));
-                return;
-            }
+                }
 
+                @Override
+                public void onFinish() {
+                    Bundle bundle = new Bundle();
+                    ProfileFragment profileFragment = new ProfileFragment();
+                    bundle.putBoolean(keyUpdate, true);
+                    profileFragment.setArguments(bundle);
 
-            if (email.length() < 4) {
-                errorConsumer.accept(getString(R.string.mailMin));
-                return;
-            }
+                    FragmentTransaction transaction = getFragmentManager().beginTransaction();
+                    transaction.replace(R.id.nav_host_fragment_activity_main2, profileFragment);
+                    transaction.addToBackStack(null);
+                    transaction.commit();
+                }
+            };
 
-            if (editPass1.length() < 4) {
-                errorConsumer.accept(getString(R.string.passwordMin));
+            if (!checkField(editPass1, editPass2, username, email, errorConsumer)) {
                 return;
             }
 
             Server server = Server.getInstance();
 
-            Runnable r = () -> {
-                JsonObjectRequest j = null;
-                try {
-                    j = server.updateDataAboutProfile(username, email, editPass1, response -> {
-                        try {
-                            binding.textViewError.setText("Успешное обновление данных");
-                            binding.textViewError.setTextColor(Color.GRAY);
+            JsonObjectRequest j = server.updateDataAboutProfile(username, email, editPass1, response -> {
+                binding.textViewError.setText("Успешное обновление данных");
+                binding.textViewError.setTextColor(Color.GRAY);
 
-                            MemoryValues memoryValues = MemoryValues.getInstance();
-                            server.saveDataInMemory(memoryValues, response);
+                MemoryValues memoryValues = MemoryValues.getInstance();
+                server.saveDataInMemory(memoryValues, response);
 
-                            Bundle bundle = new Bundle();
-                            ProfileFragment profileFragment = new ProfileFragment();
-                            bundle.putBoolean(keyUpdate, true);
-                            profileFragment.setArguments(bundle);
+                countDownTimer.start();
+            }, error -> errorConsumer.accept(getString(R.string.error)));
 
-                            Thread.sleep(1000);
-
-                            FragmentTransaction transaction = getFragmentManager().beginTransaction();
-                            transaction.replace(R.id.nav_host_fragment_activity_main2, profileFragment);
-                            transaction.addToBackStack(null);
-                            transaction.commit();
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                        }
-                    }, error -> errorConsumer.accept(getString(R.string.error)));
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-                requestQueue.add(j);
-
-            };
-            new Thread(r).start();
+            requestQueue.add(j);
 
         });
+
         return root;
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.N)
+    private boolean checkField(String editPass1, String editPass2, String username, String email, Consumer<String> errorConsumer) {
+
+
+        if (editPass1.isEmpty() || editPass2.isEmpty() || email.isEmpty() || username.isEmpty()) {
+            errorConsumer.accept(getString(R.string.notEmpty));
+            return false;
+        }
+
+        if (!editPass1.equals(editPass2)) {
+            errorConsumer.accept(getString(R.string.passwordIdentity));
+            return false;
+        }
+
+
+        if (email.length() < 4) {
+            errorConsumer.accept(getString(R.string.mailMin));
+            return false;
+        }
+
+        if (editPass1.length() < 4) {
+            errorConsumer.accept(getString(R.string.passwordMin));
+            return false;
+        }
+
+        return true;
     }
 }
