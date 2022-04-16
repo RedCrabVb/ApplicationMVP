@@ -12,6 +12,7 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.ViewModelProvider;
 
+import ru.vivt.applicationmvp.BuildConfig;
 import ru.vivt.applicationmvp.R;
 import ru.vivt.applicationmvp.databinding.FragmentProfileBinding;
 import ru.vivt.applicationmvp.ui.account_reset.AccountResetFragment;
@@ -74,6 +75,8 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
                 profileViewModel.putEmail(memoryValues.getEmail());
             }
         }
+
+        binding.versionText.setText("Версия ПО: " + BuildConfig.VERSION_NAME);
 
         return root;
     }

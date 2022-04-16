@@ -57,7 +57,8 @@ public class TestResultFragment extends Fragment {
 
 
 
-        binding.textViewResult.setText("Время: " + time + " мин. " + second + " c\n"
+        binding.textViewResult.setText("Время: " + time + " мин. " + second + " c.\n"
+                + "Количество вопросов: " + rt.getCountWrongAnswer() + " \n"
                 + "Количество неверных ответов: " + rt.getCountWrongAnswer()  + "\n"
         );
 

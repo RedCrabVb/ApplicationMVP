@@ -123,4 +123,12 @@
             android:background="@drawable/custom_button"
             android:onClick="onClick"
             android:text="@string/data_reset" />
+
+        <TextView
+            android:id="@+id/versionText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingTop="20dp"
+            android:text="hello"
+            android:textAlignment="center"></TextView>
     </LinearLayout>

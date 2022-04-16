@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.os.Handler;
 import android.os.Vibrator;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -87,12 +88,21 @@ public class TestBlankFragment extends Fragment {
             loadTestCase(questionText, comment, countQuestion);
 
             buttonNextQuestion.setOnClickListener(v -> {
+                buttonNextQuestion.setEnabled(false);
+
+                Handler handler = new Handler();
+
 
                 if (!saveAnswer(answer)) {
                     wrongAnswer += 1;
-                    error.setText("Ответ не верный");
-                    error.setVisibility(View.VISIBLE);
-                    vibrator.vibrate(1000);
+
+                    handler.postDelayed(() -> {
+                        error.setText("Ответ не верный");
+                        error.setVisibility(View.VISIBLE);
+                        vibrator.vibrate(1000);
+                        buttonNextQuestion.setEnabled(true);
+                    }, 1000 * (Math.min(wrongAnswer, 5)));
+
                 } else {
                     error.setText("");
                     currentPositionQuestion++;
@@ -107,6 +117,7 @@ public class TestBlankFragment extends Fragment {
                     }
                     answer.setText("");
                     error.setVisibility(View.GONE);
+                    buttonNextQuestion.setEnabled(true);
                 }
 
             });
