@@ -4,7 +4,7 @@
     <string name="title_home">Главная</string>
     <string name="title_qr_cdoe">QR-сканер</string>
     <string name="qr_code">QR-сканер</string>
-    <string name="title_news">Новости</string>
+    <string name="title_game">Игра</string>
     <string name="title_profile">Профиль</string>
     <string name="authorization_button">Войти</string>
     <string name="registration_button">Регистрация</string>

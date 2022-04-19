@@ -12,9 +12,9 @@
         tools:layout="@layout/fragment_home" />
 
     <fragment
-        android:id="@+id/navigation_news"
+        android:id="@+id/navigation_game"
         android:name="ru.vivt.applicationmvp.ui.news.NewsFragment"
-        android:label="@string/title_news"
+        android:label="@string/title_game"
         tools:layout="@layout/fragment_news" />
 
     <fragment
@@ -29,9 +29,4 @@
         android:label="@string/title_profile"
         tools:layout="@layout/fragment_autrization" />
 
-<!--    <fragment-->
-<!--        android:id="@+id/navigation_qr_code_scanner"-->
-<!--        android:name="ru.vivt.applicationmvp.ui.ScannerQrFragment"-->
-<!--        android:label="@string/qr_code"-->
-<!--        tools:layout="@layout/fragment_scanner_qr" />-->
 </navigation>

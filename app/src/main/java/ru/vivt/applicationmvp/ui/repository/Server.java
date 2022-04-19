@@ -172,14 +172,14 @@ public class Server {
                                             String time,
                                             String countWrongAnswer,
                                             String answerJson,
-                                            Response.Listener<JSONObject> response) throws UnsupportedEncodingException {
+                                            Response.Listener<JSONObject> response, Response.ErrorListener errorListener) throws UnsupportedEncodingException {
         return new JsonObjectRequest(Request.Method.GET,
                 getUrl(apiSaveResultTest,
                         String.format("token=%s&time=%s&idTest=%s&countRightAnswer=%s&jsonAnswer=%s",
                                 tokenConnection, time, idTest, countWrongAnswer, answerJson)),
                 null,
                 response,
-                errorListener -> System.out.println("error saveResultTest" + errorListener)
+                errorListener
         );
     }
 

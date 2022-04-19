@@ -33,6 +33,7 @@
                 android:layout_marginStart="170dp"
                 android:layout_marginTop="18dp"
                 android:text="@string/countQuestion"
+                android:textSize="19dp"
                 app:layout_constraintStart_toEndOf="@+id/simpleDigitalClock"
                 app:layout_constraintTop_toTopOf="parent" />
 
@@ -43,6 +44,7 @@
                 android:layout_marginStart="19dp"
                 android:text="@string/question"
                 android:textColor="#979797"
+                android:textSize="17dp"
                 android:textStyle="italic"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
@@ -55,9 +57,11 @@
                 android:ems="10"
                 android:gravity="start|top"
                 android:inputType="textMultiLine"
+                android:minHeight="48dp"
+                android:textSize="20dp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/textView3"
-                tools:ignore="MissingConstraints" />
+                tools:ignore="MissingConstraints,SpeakableTextPresentCheck" />
 
             <TextView
                 android:id="@+id/textView5"
@@ -67,6 +71,7 @@
                 android:shadowColor="#130D0D"
                 android:text="Ответ:"
                 android:textColor="#979797"
+                android:textSize="17dp"
                 android:textStyle="italic"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/textComment" />
@@ -79,10 +84,12 @@
                 android:ems="10"
                 android:gravity="start|top"
                 android:inputType="textMultiLine"
+                android:minHeight="20dp"
+                android:textSize="20dp"
                 app:autoSizeTextType="uniform"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/textView5"
-                tools:ignore="MissingConstraints" />
+                tools:ignore="MissingConstraints,SpeakableTextPresentCheck" />
 
             <TextView
                 android:id="@+id/textError"
@@ -95,7 +102,6 @@
                 app:autoSizeTextType="uniform"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/textView5"
-                tools:ignore="MissingConstraints"
                 tools:visibility="gone" />
 
 
@@ -106,6 +112,7 @@
                 android:layout_marginStart="20dp"
                 android:text="@string/comment"
                 android:textColor="#979797"
+                android:textSize="17dp"
                 android:textStyle="italic"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/textQuestion" />
@@ -120,9 +127,10 @@
                 android:ems="10"
                 android:gravity="start|top"
                 android:inputType="textMultiLine"
+                android:textSize="20dp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/textView4"
-                tools:ignore="MissingConstraints" />
+                tools:ignore="MissingConstraints,SpeakableTextPresentCheck,TouchTargetSizeCheck" />
 
             <com.budiyev.android.codescanner.CodeScannerView
                 android:id="@+id/scanner_view"
@@ -155,7 +163,7 @@
                 android:text="@string/nextQuestion"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/scanner_view"
-                tools:ignore="MissingConstraints" />
+                tools:ignore="MissingConstraints,TextContrastCheck" />
 
         </LinearLayout>
     </ScrollView>

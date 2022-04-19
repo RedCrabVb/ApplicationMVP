@@ -136,6 +136,7 @@ public class TestBlankFragment extends Fragment {
                             this.getActivity().runOnUiThread(() -> {
                                 answer.setText(question.getAnswer());
                                 error.setText("");
+                                mCodeScanner.startPreview();
                             });
 
                         }

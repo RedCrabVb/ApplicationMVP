@@ -28,7 +28,6 @@ public class TestResultFragment extends Fragment {
         binding = FragmentTestResultBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
 
-        binding.saveResultTest.setOnClickListener(v -> getActivity().finish());
 
         Gson gson = new Gson();
 
@@ -42,16 +41,22 @@ public class TestResultFragment extends Fragment {
         long time = TimeUnit.MILLISECONDS.toMinutes(timeLong);
         long second = TimeUnit.MILLISECONDS.toSeconds(timeLong) % 60;
 
-        try {
 
-            requestQueue.add(Server.getInstance().saveResultTest(rt.getIdTest(),
-                    timeLong + "",
-                    rt.getCountWrongAnswer() + "",
-                    rt.getAnswer().replaceAll("\\[|\\]", ""),
-                    response -> System.out.println(response)));
-        } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
-        }
+        Runnable runnable = () -> {
+            try {
+                requestQueue.add(Server.getInstance().saveResultTest(rt.getIdTest(),
+                        timeLong + "",
+                        rt.getCountWrongAnswer() + "",
+                        rt.getAnswer().replaceAll("\\[|\\]", ""),
+                        response -> binding.saveResultTest.setOnClickListener(v -> getActivity().finish()),
+                        responseError -> System.out.println("Error")));
+            } catch (UnsupportedEncodingException e) {
+                e.printStackTrace();
+            }
+        };
+
+
+        runnable.run();
 
         binding.textViewResult.setText(gson.toJson(rt));
 
@@ -61,6 +66,11 @@ public class TestResultFragment extends Fragment {
                 + "Количество вопросов: " + rt.getCountWrongAnswer() + " \n"
                 + "Количество неверных ответов: " + rt.getCountWrongAnswer()  + "\n"
         );
+
+
+        binding.saveResultTest.setOnClickListener(v -> {
+            runnable.run();
+        });
 
         return root;
     }

@@ -85,20 +85,9 @@
             android:layout_marginRight="50dp"
             android:background="@drawable/custom_button"
             android:onClick="onClick"
-            android:text="@string/go_test" />
+            android:text="@string/go_test"
+            tools:visibility="gone" />
 
-        <!--
-        <Button
-            android:id="@+id/buttonTest"
-            android:layout_width="255dp"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="50dp"
-            android:layout_marginTop="25dp"
-            android:layout_marginRight="50dp"
-            android:background="@drawable/custom_button"
-            android:onClick="onClick"
-            android:text="@string/go_test" />
--->
 
 
         <Button
@@ -127,8 +116,8 @@
         <TextView
             android:id="@+id/versionText"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:paddingTop="20dp"
+            android:layout_height="159dp"
+            android:paddingTop="50dp"
             android:text="hello"
             android:textAlignment="center"></TextView>
-    </LinearLayout>
+</LinearLayout>

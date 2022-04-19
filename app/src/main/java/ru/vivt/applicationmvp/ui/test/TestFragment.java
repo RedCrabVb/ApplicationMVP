@@ -37,35 +37,6 @@ public class TestFragment extends Fragment {
 
         View root = binding.getRoot();
 
-        RequestQueue requestQueue = Volley.newRequestQueue(getContext());
-        requestQueue.add(Server.getInstance().getTestServer(response -> {
-            System.out.println(response);
-            ArrayAdapter<Test> arrayAdapter = new TestAdapter(binding.getRoot().getContext(), R.layout.list_tests_header,
-                    new ArrayList(Arrays.asList(Server.getInstance().getTest(response))));
-
-            testViewModel.setArrayAdapter(arrayAdapter);
-        }));
-
-        testViewModel.getArrayAdapter().observe(getViewLifecycleOwner(), playerList -> {
-            binding.listTest.setAdapter(playerList);
-        });
-        binding.listTest.setOnItemClickListener((parent, view, position, id) -> {
-            Intent intent = new Intent(binding.getRoot().getContext(), TestActivity.class);
-            intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
-            Bundle bundle = new Bundle();
-            Test test = testViewModel.getArrayAdapter().getValue().getItem(position);
-            if (test.isActive()) {
-                long idTest = test.getIdTest();
-                requestQueue.add(Server.getInstance().getQuestionServer(idTest, response -> {
-                    Question[] questions = Server.getInstance().getQuestion(response);
-                    bundle.putString("questions", new Gson().toJson(questions));
-                    bundle.putInt("idTest", (int) idTest);
-                    intent.putExtras(bundle);
-                    startActivity(intent);
-                }));
-            }
-        });
-
         return root;
     }
 

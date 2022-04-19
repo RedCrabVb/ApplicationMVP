@@ -6,14 +6,10 @@
         android:icon="@drawable/ic_home_black_24dp"
         android:title="@string/title_home" />
 
-<!--    <item-->
-<!--        android:id="@+id/navigation_qr_code_scanner"-->
-<!--        android:icon="@drawable/ic_baseline_document_scanner"-->
-<!--        android:title="@string/title_qr_cdoe" />-->
     <item
-        android:id="@+id/navigation_news"
-        android:icon="@android:drawable/ic_menu_mapmode"
-        android:title="@string/title_news" />
+        android:id="@+id/navigation_game"
+        android:icon="@drawable/ic_dashboard_black_24dp"
+        android:title="@string/title_game" />
 
     <item
         android:id="@+id/navigation_profile"
