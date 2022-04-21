@@ -8,11 +8,12 @@
     <Button
         android:id="@+id/saveResultTest"
         android:layout_width="252dp"
-        android:layout_height="45dp"
+        android:layout_height="48dp"
         android:layout_marginStart="76dp"
         android:layout_marginTop="28dp"
         android:rotationX="2"
         android:text="@string/saveResultTest"
+        android:textColor="#FFFFFF"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/imageView" />
 
@@ -31,13 +32,31 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
+
+    <TextView
+        android:id="@+id/textViewError"
+        android:layout_width="350dp"
+        android:layout_height="49dp"
+        android:layout_marginStart="32dp"
+        android:layout_marginEnd="29dp"
+        android:text="Ошибка при сохранении данных. Попробуйте сохранить ещё раз. Код ошибки: "
+        android:textColor="#E80202"
+        android:textSize="16sp"
+        android:visibility="gone"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textViewResult" />
+
     <ImageView
         android:id="@+id/imageView"
         android:layout_width="268dp"
         android:layout_height="250dp"
         android:layout_marginStart="76dp"
-        android:layout_marginTop="36dp"
+        android:layout_marginTop="24dp"
+        android:contentDescription="final"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textViewResult"
         app:srcCompat="@drawable/final_test" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,6 +1,7 @@
 package ru.vivt.applicationmvp.ui.profile;
 
 import static android.view.View.GONE;
+import static android.view.View.VISIBLE;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -57,9 +58,9 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
             binding.buttonRegestration.setVisibility(GONE);
             binding.buttonAutrization.setVisibility(GONE);
             binding.buttonResetPassword.setVisibility(GONE);
-            binding.buttonDataReset.setVisibility(View.VISIBLE);
+            binding.buttonDataReset.setVisibility(VISIBLE);
         } else {
-            binding.buttonDataReset.setVisibility(GONE);
+            binding.buttonDataReset.setVisibility(VISIBLE);
         }
 
         if (memoryValues.getUsername().isEmpty()) {

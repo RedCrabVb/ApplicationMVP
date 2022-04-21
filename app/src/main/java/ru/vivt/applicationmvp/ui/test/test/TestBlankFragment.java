@@ -77,6 +77,7 @@ public class TestBlankFragment extends Fragment {
 
 
         Bundle questionBundle = getActivity().getIntent().getExtras();
+        binding.progressBarError.setVisibility(View.GONE);
         if (questionBundle != null) {
             questions = gson.fromJson(questionBundle.get("questions").toString(), Question[].class);
             int idTest = questionBundle.getInt("idTest");
@@ -95,14 +96,14 @@ public class TestBlankFragment extends Fragment {
 
                 if (!saveAnswer(answer)) {
                     wrongAnswer += 1;
-
+                    binding.progressBarError.setVisibility(View.VISIBLE);
                     handler.postDelayed(() -> {
                         error.setText("Ответ не верный");
                         error.setVisibility(View.VISIBLE);
                         vibrator.vibrate(1000);
                         buttonNextQuestion.setEnabled(true);
+                        binding.progressBarError.setVisibility(View.GONE);
                     }, 1000 * (Math.min(wrongAnswer, 5)));
-
                 } else {
                     error.setText("");
                     currentPositionQuestion++;
@@ -125,7 +126,7 @@ public class TestBlankFragment extends Fragment {
 
         try {
             if (ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.CAMERA) == PackageManager.PERMISSION_DENIED) {
-                ActivityCompat.requestPermissions(getActivity(), new String[] { Manifest.permission.CAMERA }, 100);
+                ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.CAMERA}, 100);
             }
             if (ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.CAMERA) != PackageManager.PERMISSION_DENIED) {
                 CodeScannerView scannerView = binding.scannerView;
@@ -134,9 +135,13 @@ public class TestBlankFragment extends Fragment {
                     for (Question question : questions) {
                         if (question.getAnswer().hashCode() == Integer.parseInt(result.getText())) {
                             this.getActivity().runOnUiThread(() -> {
-                                answer.setText(question.getAnswer());
-                                error.setText("");
-                                mCodeScanner.startPreview();
+                                Handler handler = new Handler();
+
+                                handler.postDelayed(() -> {
+                                    answer.setText(question.getAnswer());
+                                    error.setText("");
+                                    mCodeScanner.startPreview();
+                                }, 1000);
                             });
 
                         }

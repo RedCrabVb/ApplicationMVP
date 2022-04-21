@@ -13,6 +13,7 @@ import com.android.volley.toolbox.Volley;
 import com.google.gson.Gson;
 
 import java.io.UnsupportedEncodingException;
+import java.util.Optional;
 import java.util.concurrent.TimeUnit;
 
 import ru.vivt.applicationmvp.databinding.FragmentTestResultBinding;
@@ -47,9 +48,30 @@ public class TestResultFragment extends Fragment {
                 requestQueue.add(Server.getInstance().saveResultTest(rt.getIdTest(),
                         timeLong + "",
                         rt.getCountWrongAnswer() + "",
-                        rt.getAnswer().replaceAll("\\[|\\]", ""),
-                        response -> binding.saveResultTest.setOnClickListener(v -> getActivity().finish()),
-                        responseError -> System.out.println("Error")));
+                        response -> {
+                            this.getActivity().runOnUiThread(() -> {
+                                binding.saveResultTest.setEnabled(true);
+                                binding.saveResultTest.setOnClickListener(v -> getActivity().finish());
+                                binding.saveResultTest.setEnabled(true);
+
+                            });
+                        },
+                        responseError -> {
+                            this.getActivity().runOnUiThread(() -> {
+                                String error;
+                                if (responseError.networkResponse != null) {
+                                    error = "Код ошибки: " + responseError.networkResponse.statusCode;
+                                } else {
+                                    error = "Нет сети";
+                                }
+                                binding.textViewError.setText("Ошибка при сохранении данных. Попробуйте сохранить ещё раз. "
+                                       + error);
+                                binding.textViewError.setVisibility(View.VISIBLE);
+                                binding.saveResultTest.setEnabled(true);
+
+                            });
+                        }));
+
             } catch (UnsupportedEncodingException e) {
                 e.printStackTrace();
             }
@@ -61,15 +83,15 @@ public class TestResultFragment extends Fragment {
         binding.textViewResult.setText(gson.toJson(rt));
 
 
-
         binding.textViewResult.setText("Время: " + time + " мин. " + second + " c.\n"
                 + "Количество вопросов: " + rt.getCountWrongAnswer() + " \n"
-                + "Количество неверных ответов: " + rt.getCountWrongAnswer()  + "\n"
+                + "Количество неверных ответов: " + rt.getCountWrongAnswer() + "\n"
         );
 
-
+        binding.saveResultTest.setEnabled(false);
         binding.saveResultTest.setOnClickListener(v -> {
             runnable.run();
+            binding.saveResultTest.setEnabled(false);
         });
 
         return root;

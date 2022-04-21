@@ -36,7 +36,6 @@ public class Server {
     private static final String apiSaveResultTest = "api/saveResultTest";
 
     private String tokenConnection = null;
-    private JsonObject jsonObjectNews = null;
 
     private Server() {
 
@@ -50,8 +49,8 @@ public class Server {
     }
 
     public static Server getInstance(String ip) {
+        url = "http://" + ip + "/%s?%s";
         if (server == null) {
-            url = "http://" + ip + "/%s?%s";
             server = new Server();
         }
         return server;
@@ -171,12 +170,11 @@ public class Server {
     public JsonObjectRequest saveResultTest(int idTest,
                                             String time,
                                             String countWrongAnswer,
-                                            String answerJson,
                                             Response.Listener<JSONObject> response, Response.ErrorListener errorListener) throws UnsupportedEncodingException {
         return new JsonObjectRequest(Request.Method.GET,
                 getUrl(apiSaveResultTest,
-                        String.format("token=%s&time=%s&idTest=%s&countRightAnswer=%s&jsonAnswer=%s",
-                                tokenConnection, time, idTest, countWrongAnswer, answerJson)),
+                        String.format("token=%s&time=%s&idTest=%s&countRightAnswer=%s",
+                                tokenConnection, time, idTest, countWrongAnswer)),
                 null,
                 response,
                 errorListener
@@ -208,7 +206,7 @@ public class Server {
         );
     }
 
-    public JsonObjectRequest getNewsRequest(Response.Listener<JSONObject> response, Response.ErrorListener  error) {
+    public JsonObjectRequest getNewsRequest(Response.Listener<JSONObject> response, Response.ErrorListener error) {
         return new JsonObjectRequest(
                 Request.Method.GET,
                 getUrl(apiNews, ""),
