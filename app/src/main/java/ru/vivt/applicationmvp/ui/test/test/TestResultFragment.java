@@ -1,5 +1,6 @@
 package ru.vivt.applicationmvp.ui.test.test;
 
+import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -23,6 +24,7 @@ import ru.vivt.applicationmvp.ui.repository.Server;
 public class TestResultFragment extends Fragment {
     private FragmentTestResultBinding binding;
 
+    @SuppressLint("SetTextI18n")
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
 
@@ -50,10 +52,8 @@ public class TestResultFragment extends Fragment {
                         rt.getCountWrongAnswer() + "",
                         response -> {
                             this.getActivity().runOnUiThread(() -> {
-                                binding.saveResultTest.setEnabled(true);
                                 binding.saveResultTest.setOnClickListener(v -> getActivity().finish());
                                 binding.saveResultTest.setEnabled(true);
-
                             });
                         },
                         responseError -> {
@@ -90,8 +90,8 @@ public class TestResultFragment extends Fragment {
 
         binding.saveResultTest.setEnabled(false);
         binding.saveResultTest.setOnClickListener(v -> {
-            runnable.run();
             binding.saveResultTest.setEnabled(false);
+            runnable.run();
         });
 
         return root;

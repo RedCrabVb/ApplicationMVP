@@ -137,11 +137,11 @@ public class TestBlankFragment extends Fragment {
                             this.getActivity().runOnUiThread(() -> {
                                 Handler handler = new Handler();
 
+                                answer.setText(question.getAnswer());
                                 handler.postDelayed(() -> {
-                                    answer.setText(question.getAnswer());
                                     error.setText("");
                                     mCodeScanner.startPreview();
-                                }, 1000);
+                                }, 1500);
                             });
 
                         }

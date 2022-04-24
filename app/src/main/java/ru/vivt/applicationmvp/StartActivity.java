@@ -20,8 +20,8 @@ import ru.vivt.applicationmvp.ui.repository.MemoryValues;
 import ru.vivt.applicationmvp.ui.repository.Server;
 
 public class StartActivity extends AppCompatActivity {
-//    private static final String serverIP = "servermvp.ru:49207";
-    private static final String serverIP = "10.0.2.2:8080";
+    private static final String serverIP = "servermvp.ru:49207";
+//    private static final String serverIP = "10.0.2.2:8080";
 
     private ActivityStartBinding binding;
 

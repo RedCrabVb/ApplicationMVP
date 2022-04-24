@@ -59,7 +59,7 @@
                 android:layout_marginStart="19dp"
                 android:text="@string/question"
                 android:textColor="#757575"
-                android:textSize="17dp"
+                android:textSize="17sp"
                 android:textStyle="italic"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
@@ -72,8 +72,8 @@
                 android:ems="10"
                 android:gravity="start|top"
                 android:minHeight="48dp"
-                android:text=""
-                android:textSize="20sp"
+                android:text="sadf"
+                android:textSize="15sp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/textView3"
                 tools:ignore="MissingConstraints,SpeakableTextPresentCheck" />
@@ -81,12 +81,12 @@
             <TextView
                 android:id="@+id/textView5"
                 android:layout_width="wrap_content"
-                android:layout_height="19dp"
+                android:layout_height="wrap_content"
                 android:layout_marginStart="20dp"
                 android:shadowColor="#130D0D"
                 android:text="Ответ:"
                 android:textColor="#757575"
-                android:textSize="17sp"
+                android:textSize="20sp"
                 android:textStyle="italic"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/textComment" />
@@ -99,7 +99,7 @@
                 android:ems="10"
                 android:gravity="start|top"
                 android:text=""
-                android:textSize="20sp"
+                android:textSize="15sp"
                 app:autoSizeTextType="uniform"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/textView5"
@@ -125,7 +125,7 @@
                 android:layout_marginStart="20dp"
                 android:text="@string/comment"
                 android:textColor="#757575"
-                android:textSize="17sp"
+                android:textSize="20sp"
                 android:textStyle="italic"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/textQuestion" />
@@ -140,7 +140,7 @@
                 android:ems="10"
                 android:gravity="start|top"
                 android:text=""
-                android:textSize="20sp"
+                android:textSize="15sp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/textView4"
                 tools:ignore="MissingConstraints,SpeakableTextPresentCheck,TouchTargetSizeCheck" />
