@@ -54,16 +54,14 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
         MemoryValues memoryValues = MemoryValues.getInstance();
 
 
-        if (!memoryValues.getEmail().isEmpty()) {
+        if (memoryValues.getEmail() == null || !memoryValues.getEmail().isEmpty()) {
             binding.buttonRegestration.setVisibility(GONE);
             binding.buttonAutrization.setVisibility(GONE);
             binding.buttonResetPassword.setVisibility(GONE);
-            binding.buttonDataReset.setVisibility(VISIBLE);
-        } else {
-            binding.buttonDataReset.setVisibility(VISIBLE);
         }
+        binding.buttonDataReset.setVisibility(VISIBLE);
 
-        if (memoryValues.getUsername().isEmpty()) {
+        if (memoryValues.getUsername() == null || memoryValues.getUsername().isEmpty()) {
             binding.textViewUsername.setVisibility(GONE);
             binding.textViewEmail.setVisibility(GONE);
             binding.textNotifications.setText("Нет данных о профиле");

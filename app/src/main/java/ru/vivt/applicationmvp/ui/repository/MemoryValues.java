@@ -14,7 +14,12 @@ import java.io.IOException;
 
 public class MemoryValues {
     private static MemoryValues memoryValues;
-    public static final String qrCode = "qrCode", fileNameConfig = "config.json", token = "token", username = "username", email = "email";
+    public static final String qrCode = "qrCode",
+            fileNameConfig = "config.json",
+            token = "token",
+            username = "username",
+            email = "email",
+            resultLastTest = "resultLastTest";
 
     private final Context context;
 
@@ -47,6 +52,10 @@ public class MemoryValues {
         return getFiled(username);
     }
 
+    public String getResultLastTest() {
+        return getFiled(resultLastTest);
+    }
+
     public String getEmail() {
         return getFiled(email);
     }
@@ -58,6 +67,10 @@ public class MemoryValues {
 
     public void setQrCode(String _qrCode) {
         setFiled(qrCode, _qrCode);
+    }
+
+    public void setResultLastTest(String _resultLastTest) {
+        setFiled(resultLastTest, _resultLastTest);
     }
 
     public void setToken(String _token) {

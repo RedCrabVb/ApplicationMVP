@@ -4,6 +4,7 @@ import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.StringRequest;
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
@@ -33,7 +34,7 @@ public class Server {
     private static final String apiResetPassword = "api/resetPassword/email";
     private static final String apiAuthorization = "api/authorization";
     private static final String apiPersonDataGet = "api/personData";
-    private static final String apiSaveResultTest = "api/saveResultTest";
+    public static final String apiSaveResultTest = "api/saveResultTest";
 
     private String tokenConnection = null;
 
@@ -56,7 +57,7 @@ public class Server {
         return server;
     }
 
-    private static String getUrl(String api, String param) {
+    public static String getUrl(String api, String param) {
         return String.format(Server.url, api, param);
     }
 
@@ -75,6 +76,10 @@ public class Server {
                     System.out.println("error when reset password");
                 }
         );
+    }
+
+    public String getTokenConnection() {
+        return tokenConnection;
     }
 
     public JsonObjectRequest updateDataAboutProfile(String userName, String email, String password,
@@ -167,15 +172,14 @@ public class Server {
         }
     }
 
-    public JsonObjectRequest saveResultTest(int idTest,
+    public StringRequest saveResultTest(int idTest,
                                             String time,
                                             String countWrongAnswer,
-                                            Response.Listener<JSONObject> response, Response.ErrorListener errorListener) throws UnsupportedEncodingException {
-        return new JsonObjectRequest(Request.Method.GET,
+                                            Response.Listener<String> response, Response.ErrorListener errorListener) {
+        return new StringRequest(Request.Method.GET,
                 getUrl(apiSaveResultTest,
                         String.format("token=%s&time=%s&idTest=%s&countRightAnswer=%s",
                                 tokenConnection, time, idTest, countWrongAnswer)),
-                null,
                 response,
                 errorListener
         );

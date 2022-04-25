@@ -8,8 +8,11 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.Toast;
 
+import com.android.volley.Request;
 import com.android.volley.RequestQueue;
+import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 
 import org.json.JSONException;
@@ -33,7 +36,6 @@ public class StartActivity extends AppCompatActivity {
         setContentView(binding.getRoot());
 
 
-
         binding.enterIP.setOnClickListener(l -> {
             connection(binding.editTextIp.getText().toString());
         });
@@ -54,6 +56,20 @@ public class StartActivity extends AppCompatActivity {
             server.setTokenConnection(tokenInMemory);
         } else {
             requestQueue.add(server.registration2(response -> server.saveDataInMemory(memoryValues, response)));
+        }
+
+        if (memoryValues.getResultLastTest() != null) {
+
+            StringRequest request = new StringRequest(Request.Method.GET,
+                    Server.getUrl(Server.apiSaveResultTest,
+                            memoryValues.getResultLastTest()),
+                    response -> this.runOnUiThread(() -> {
+                        memoryValues.setResultLastTest(null);
+                        Toast.makeText(this.getApplicationContext(), "Last test send", Toast.LENGTH_LONG);
+                    }),
+                    responseError -> this.runOnUiThread(() -> Toast.makeText(this.getApplicationContext(), "Last test not send", Toast.LENGTH_LONG)));
+
+            requestQueue.add(request);
         }
 
         server.saveDataInMemory(memoryValues);

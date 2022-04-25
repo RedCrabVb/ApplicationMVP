@@ -57,6 +57,7 @@ public class TestBlankFragment extends Fragment {
     }
 
     private boolean saveAnswer(TextView answerEditText) {
+//        return true;
         return answerEditText.getText().toString().equals(questions[currentPositionQuestion].getAnswer());
     }
 

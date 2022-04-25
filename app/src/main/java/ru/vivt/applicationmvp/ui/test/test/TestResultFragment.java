@@ -10,6 +10,7 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
 import com.android.volley.RequestQueue;
+import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.google.gson.Gson;
 
@@ -18,6 +19,7 @@ import java.util.Optional;
 import java.util.concurrent.TimeUnit;
 
 import ru.vivt.applicationmvp.databinding.FragmentTestResultBinding;
+import ru.vivt.applicationmvp.ui.repository.MemoryValues;
 import ru.vivt.applicationmvp.ui.repository.ResultTest;
 import ru.vivt.applicationmvp.ui.repository.Server;
 
@@ -44,38 +46,29 @@ public class TestResultFragment extends Fragment {
         long time = TimeUnit.MILLISECONDS.toMinutes(timeLong);
         long second = TimeUnit.MILLISECONDS.toSeconds(timeLong) % 60;
 
+        StringRequest request = Server.getInstance().saveResultTest(rt.getIdTest(),
+                timeLong + "",
+                rt.getCountWrongAnswer() + "",
+                response -> this.getActivity().runOnUiThread(() -> {
+                    binding.saveResultTest.setOnClickListener(v -> getActivity().finish());
+                    binding.saveResultTest.setEnabled(true);
+                }),
+                responseError -> this.getActivity().runOnUiThread(() -> {
+                    String error;
+                    if (responseError.networkResponse != null) {
+                        error = "Код ошибки: " + responseError.networkResponse.statusCode;
+                    } else {
+                        error = "Нет сети";
+                        MemoryValues.getInstance().setResultLastTest(String.format("token=%s&time=%s&idTest=%s&countRightAnswer=%s",
+                                Server.getInstance().getTokenConnection(), timeLong + "", rt.getIdTest(), rt.getCountWrongAnswer() + ""));
+                    }
+                    binding.textViewError.setText("Ошибка при сохранении данных. Попробуйте сохранить ещё раз. " + error + " \nmsg: " + responseError.getMessage());
+                    binding.textViewError.setVisibility(View.VISIBLE);
+                    binding.saveResultTest.setEnabled(true);
 
-        Runnable runnable = () -> {
-            try {
-                requestQueue.add(Server.getInstance().saveResultTest(rt.getIdTest(),
-                        timeLong + "",
-                        rt.getCountWrongAnswer() + "",
-                        response -> {
-                            this.getActivity().runOnUiThread(() -> {
-                                binding.saveResultTest.setOnClickListener(v -> getActivity().finish());
-                                binding.saveResultTest.setEnabled(true);
-                            });
-                        },
-                        responseError -> {
-                            this.getActivity().runOnUiThread(() -> {
-                                String error;
-                                if (responseError.networkResponse != null) {
-                                    error = "Код ошибки: " + responseError.networkResponse.statusCode;
-                                } else {
-                                    error = "Нет сети";
-                                }
-                                binding.textViewError.setText("Ошибка при сохранении данных. Попробуйте сохранить ещё раз. "
-                                       + error);
-                                binding.textViewError.setVisibility(View.VISIBLE);
-                                binding.saveResultTest.setEnabled(true);
+                }));
 
-                            });
-                        }));
-
-            } catch (UnsupportedEncodingException e) {
-                e.printStackTrace();
-            }
-        };
+        Runnable runnable = () -> requestQueue.add(request);
 
 
         runnable.run();
